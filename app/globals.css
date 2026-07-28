@@ -78,14 +78,14 @@ body {
 }
 
 .retro-hover-lift {
-  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.25s ease;
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), filter 0.3s ease;
   transform-origin: center center;
 }
 
 .retro-interactive-group:hover .retro-hover-lift,
 .desk-object:hover {
-  transform: translateY(-8px) scale(1.03);
-  filter: drop-shadow(0 12px 18px rgba(54, 40, 64, 0.35));
+  transform: translateY(-4px) scale(1.015);
+  filter: drop-shadow(0 6px 10px rgba(54, 40, 64, 0.22));
 }
 
 .key-cap {
