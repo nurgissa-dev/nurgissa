@@ -152,7 +152,7 @@ export default function Portfolio() {
 
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
               <a
-                href="Nurgissa_Resume.pdf"
+                href="Nurgissa_Resume.pdf?v=2"
                 target="_blank"
                 rel="noreferrer"
                 onClick={() => sfx.playKeyClick()}
@@ -161,7 +161,7 @@ export default function Portfolio() {
                 📄 OPEN RESUME (PDF) ↗
               </a>
               <a
-                href="Nurgissa_Resume.pdf"
+                href="Nurgissa_Resume.pdf?v=2"
                 download="Nurgissa_Resume.pdf"
                 onClick={() => sfx.playKeyClick()}
                 style={{ flex: 1, minWidth: 135, textDecoration: 'none', padding: '11px 14px', background: '#ffd166', border: '2.5px solid #362840', borderRadius: 8, fontWeight: 800, color: '#362840', fontFamily: 'monospace', fontSize: '0.82rem', textAlign: 'center', boxShadow: '3px 3px 0px #362840' }}
@@ -411,7 +411,7 @@ export default function Portfolio() {
                 {/* 📄 DIRECT RESUME (Nurgissa_Resume.pdf) DOWNLOAD / VIEW BUTTONS */}
                 <div style={{ display: 'flex', gap: 8, marginBottom: 14 }}>
                   <a
-                    href="Nurgissa_Resume.pdf"
+                    href="Nurgissa_Resume.pdf?v=2"
                     target="_blank"
                     rel="noreferrer"
                     onClick={() => sfx.playKeyClick()}
@@ -420,7 +420,7 @@ export default function Portfolio() {
                     📄 OPEN RESUME (PDF) ↗
                   </a>
                   <a
-                    href="Nurgissa_Resume.pdf"
+                    href="Nurgissa_Resume.pdf?v=2"
                     download="Nurgissa_Resume.pdf"
                     onClick={() => sfx.playKeyClick()}
                     style={{ flex: 1, textDecoration: 'none', padding: '9px 12px', background: '#ffd166', border: '2.5px solid #362840', borderRadius: 8, fontWeight: 800, color: '#362840', fontFamily: 'monospace', fontSize: '0.8rem', boxShadow: '2px 3px 0px #362840', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
