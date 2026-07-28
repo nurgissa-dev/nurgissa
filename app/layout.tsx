@@ -21,7 +21,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://nurgissa-portfolio.vercel.app"),
+  metadataBase: new URL("https://nurgissa-dev.github.io/nurgissa/"),
   title: {
     default: "Nurgissa Zhetkizgen — Software Engineer & Portfolio",
     template: "%s | Nurgissa Zhetkizgen",
@@ -48,13 +48,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://nurgissa-portfolio.vercel.app",
+    url: "https://nurgissa-dev.github.io/nurgissa/",
     title: "Nurgissa Zhetkizgen — Software Engineer Portfolio",
     description: "Interactive Retro Developer Workshop Portfolio · Software Engineering Student at Astana IT University",
     siteName: "Nurgissa Zhetkizgen Portfolio",
     images: [
       {
-        url: "/og-image.png",
+        url: "https://nurgissa-dev.github.io/nurgissa/og-image.png",
         width: 1200,
         height: 630,
         alt: "Nurgissa Zhetkizgen Portfolio Preview Banner",
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Nurgissa Zhetkizgen — Software Engineer Portfolio",
     description: "Interactive Retro Developer Workshop Portfolio · Software Engineering Student at Astana IT University",
-    images: ["/og-image.png"],
+    images: ["https://nurgissa-dev.github.io/nurgissa/og-image.png"],
     creator: "@trulondoner",
   },
 
