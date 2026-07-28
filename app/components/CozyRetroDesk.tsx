@@ -356,6 +356,17 @@ export default function CozyRetroDesk({
           <path d="M 55 150 Q 55 60 55 10 Q 65 60 55 150" fill={isDarkMode ? '#52b788' : '#95d5b2'} stroke="#362840" strokeWidth="3" />
         </g>
 
+        {/* ── 5b. SNORLAX GIF (Bottom-left corner, below plant on desk) ── */}
+        <image
+          href="snorlax.gif"
+          x="0"
+          y="490"
+          width="120"
+          height="185"
+          preserveAspectRatio="xMidYMid meet"
+          style={{ imageRendering: 'pixelated' }}
+        />
+
         {/* ── 6. RETRO CRT COMPUTER (Central-Left) ── */}
         <g id="computer-group" transform="translate(180, 170)">
           <ellipse cx="220" cy="325" rx="210" ry="20" fill="#000000" opacity="0.3" />

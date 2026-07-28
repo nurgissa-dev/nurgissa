@@ -2,6 +2,7 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
 import CozyRetroDesk, { RetroTarget } from './components/CozyRetroDesk';
+import TerminalModal from './components/TerminalModal';
 import { sfx } from './utils/retroSFX';
 
 const PROJECTS = [
@@ -517,38 +518,9 @@ export default function Portfolio() {
             </div>
           )}
 
-          {/* 🖥️ 2. TERMINAL (CRT Monitor Screen) */}
+          {/* 🖥️ 2. TERMINAL (CRT Monitor Screen) — with typewriter animation */}
           {activeModal === 'monitor' && (
-            <div className="retro-modal-overlay" onClick={closeModal}>
-              <div className="retro-card" style={{ background: isDarkMode ? '#0d1117' : '#2a2038', color: '#ffffff', border: `3.5px solid ${isDarkMode ? '#00f5d4' : '#a493e6'}`, boxShadow: '6px 8px 0px #1a1028', maxWidth: 580 }} onClick={e => e.stopPropagation()}>
-                <button
-                  onClick={closeModal}
-                  style={{ position: 'absolute', top: 14, right: 18, background: '#f4a2af', border: '2px solid #ffffff', borderRadius: '50%', width: 28, height: 28, fontSize: 16, fontWeight: 'bold', color: '#362840', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                >
-                  ×
-                </button>
-                <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: isDarkMode ? '#00f5d4' : '#a493e6', fontFamily: 'monospace', marginBottom: 14, letterSpacing: 2 }}>
-                  🖥 CRT MONITOR TERMINAL v1.0 {isDarkMode ? '[ MIDNIGHT EXEC ]' : ''}
-                </div>
-                <div style={{ background: isDarkMode ? '#161b22' : '#1c1426', border: '2px solid #3c2f4d', borderRadius: 8, padding: 16, fontFamily: 'monospace', fontSize: '0.85rem', lineHeight: 1.8 }}>
-                  <div><span style={{ color: '#ffd166' }}>nurgissa@workshop</span>:<span style={{ color: '#58A6FF' }}>~</span>$ whoami</div>
-                  <div style={{ color: isDarkMode ? '#00f5d4' : '#e0a098', paddingLeft: 12, marginBottom: 8 }}>Nurgissa Zhetkizgen — Full-Stack Developer</div>
-
-                  <div><span style={{ color: '#ffd166' }}>nurgissa@workshop</span>:<span style={{ color: '#58A6FF' }}>~</span>$ cat education.txt</div>
-                  <div style={{ color: '#b4a3e8', paddingLeft: 12, marginBottom: 8 }}>Astana IT University (https://astanait.edu.kz/en)</div>
-
-                  <div><span style={{ color: '#ffd166' }}>nurgissa@workshop</span>:<span style={{ color: '#58A6FF' }}>~</span>$ cat resume.txt</div>
-                  <div style={{ color: '#f4a2af', paddingLeft: 12, marginBottom: 8 }}>Resume File: Nurgissa_Resume.pdf</div>
-
-                  <div><span style={{ color: '#ffd166' }}>nurgissa@workshop</span>:<span style={{ color: '#58A6FF' }}>~</span>$ <span className="floating-zzz" style={{ color: '#ffd166', display: 'inline-block' }}>█</span></div>
-                </div>
-                <div style={{ textAlign: 'right', marginTop: 16 }}>
-                  <button onClick={closeModal} style={{ padding: '8px 18px', background: isDarkMode ? '#00f5d4' : '#a493e6', border: '2px solid #ffffff', borderRadius: 6, fontWeight: 'bold', color: '#2a2038', cursor: 'pointer', fontFamily: 'monospace' }}>
-                    CLOSE TERMINAL
-                  </button>
-                </div>
-              </div>
-            </div>
+            <TerminalModal isDarkMode={isDarkMode} onClose={closeModal} />
           )}
 
           {/* 📚 3. PROJECTS (Stack of Books) */}
