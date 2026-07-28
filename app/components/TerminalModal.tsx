@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { sfx } from '../utils/retroSFX';
 
 interface TerminalModalProps {
   isDarkMode: boolean;
@@ -74,6 +75,7 @@ export default function TerminalModal({ isDarkMode, onClose }: TerminalModalProp
       if (currentTyped.length < script.command.length) {
         const id = setTimeout(() => {
           setCurrentTyped(prev => script.command.slice(0, prev.length + 1));
+          sfx.playKeyClick(); // 🔊 clack on each typed character
         }, CHAR_DELAY);
         return () => clearTimeout(id);
       } else {
