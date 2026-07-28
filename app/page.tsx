@@ -41,44 +41,47 @@ const getContactItems = (isDarkMode: boolean) => [
     label: 'Telegram',
     value: '@trulondoner',
     href: 'https://t.me/trulondoner',
-    bg: isDarkMode ? 'linear-gradient(135deg, #112638, #193852)' : 'linear-gradient(135deg, #e0f2fe, #bae6fd)',
-    borderColor: isDarkMode ? '#00f5d4' : '#0284c7',
-    labelColor: isDarkMode ? '#00f5d4' : '#0369a1',
-    valueColor: isDarkMode ? '#ffffff' : '#0c4a6e',
-    badge: '✈️ TELEGRAM',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="12" fill="#24A1DE" />
+        <path d="M5.4 11.9L16.8 7.2C17.3 7 17.8 7.3 17.7 7.8L15.8 16.7C15.6 17.2 15.1 17.3 14.7 17L11.7 14.7L10.3 16.1C10.1 16.3 9.8 16.4 9.6 16.4L9.8 13.5L15.2 8.6C15.4 8.4 15.2 8.3 14.9 8.5L8.3 12.6L5.5 11.7C5 11.5 5 11 5.4 11.9Z" fill="white" />
+      </svg>
+    ),
   },
   {
     id: 'github',
     label: 'GitHub',
     value: 'nurgissa-dev',
     href: 'https://github.com/nurgissa-dev',
-    bg: isDarkMode ? 'linear-gradient(135deg, #1f1b2e, #2c2545)' : 'linear-gradient(135deg, #f3e8ff, #e9d5ff)',
-    borderColor: isDarkMode ? '#b4a3e8' : '#7e22ce',
-    labelColor: isDarkMode ? '#b4a3e8' : '#6b21a8',
-    valueColor: isDarkMode ? '#ffffff' : '#4c1d95',
-    badge: '🐙 GITHUB',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill={isDarkMode ? '#FFFFFF' : '#24292E'}>
+        <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+      </svg>
+    ),
   },
   {
     id: 'linkedin',
     label: 'LinkedIn',
     value: 'Nurgissa Zhetkizgen',
     href: 'https://www.linkedin.com/in/nurgissa-zhetkizgen-818966424/',
-    bg: isDarkMode ? 'linear-gradient(135deg, #0f2b3c, #19435e)' : 'linear-gradient(135deg, #e0f2fe, #dbeafe)',
-    borderColor: isDarkMode ? '#38bdf8' : '#1d4ed8',
-    labelColor: isDarkMode ? '#38bdf8' : '#1e40af',
-    valueColor: isDarkMode ? '#ffffff' : '#1e3a8a',
-    badge: '💼 LINKEDIN',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <rect width="24" height="24" rx="4" fill="#0A66C2" />
+        <path d="M19 19H16V13.8C16 12.3 14.8 11.2 13.3 11.2C12.1 11.2 11.2 12.1 11.2 13.3V19H8.2V9H11.2V10.3C11.8 9.4 12.9 8.8 14.2 8.8C16.8 8.8 19 11 19 13.6V19ZM5.2 7.2C4.2 7.2 3.4 6.4 3.4 5.4C3.4 4.4 4.2 3.6 5.2 3.6C6.2 3.6 7 4.4 7 5.4C7 6.4 6.2 7.2 5.2 7.2ZM3.7 19H6.7V9H3.7V19Z" fill="white" />
+      </svg>
+    ),
   },
   {
     id: 'email',
     label: 'Email',
     value: 'sholak0@mail.ru',
     href: 'mailto:sholak0@mail.ru',
-    bg: isDarkMode ? 'linear-gradient(135deg, #331c26, #4d2337)' : 'linear-gradient(135deg, #ffe4e6, #fecdd3)',
-    borderColor: isDarkMode ? '#f4a2af' : '#e11d48',
-    labelColor: isDarkMode ? '#f4a2af' : '#9f1239',
-    valueColor: isDarkMode ? '#ffffff' : '#881337',
-    badge: '✉️ EMAIL',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <rect width="24" height="24" rx="5" fill="#EA4335" />
+        <path d="M5 7L12 12.5L19 7M5 7H19V17H5V7Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
   },
 ];
 
@@ -148,7 +151,8 @@ export default function Portfolio() {
   const cardBorder = isDarkMode ? '#3b4252' : '#362840';
   const textColor = isDarkMode ? '#ececec' : '#362840';
   const subTextColor = isDarkMode ? '#8d9198' : '#9d8189';
-  const innerBoxBg = isDarkMode ? '#1a202c' : '#ffffff';
+  const innerBoxBg = isDarkMode ? '#1c2230' : '#ffffff';
+  const contactBorderColor = isDarkMode ? '#2d3748' : '#362840';
 
   return (
     <main style={{ minHeight: '100vh', width: '100%', background: isDarkMode ? '#0B0E13' : '#f5ebe0', position: 'relative', transition: 'background 0.4s ease' }}>
@@ -372,18 +376,28 @@ export default function Portfolio() {
                   onClick={() => sfx.playKeyClick()}
                   style={{
                     textDecoration: 'none',
-                    background: c.bg,
-                    border: `2px solid ${c.borderColor}`,
-                    borderRadius: 8,
+                    background: innerBoxBg,
+                    border: `2.5px solid ${contactBorderColor}`,
+                    borderRadius: 10,
                     padding: 12,
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: 3,
-                    boxShadow: isDarkMode ? `0 3px 10px ${c.borderColor}22` : '2px 2px 0px #362840'
+                    gap: 6,
+                    boxShadow: isDarkMode ? '0 4px 10px rgba(0,0,0,0.3)' : '3px 3px 0px #362840'
                   }}
                 >
-                  <span style={{ fontSize: '0.72rem', fontWeight: 'bold', color: c.labelColor, fontFamily: 'monospace' }}>{c.badge}</span>
-                  <span style={{ fontSize: '0.8rem', fontWeight: 800, color: c.valueColor, wordBreak: 'break-all' }}>{c.value}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      {c.icon}
+                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: isDarkMode ? '#a0aec0' : '#4a5568', fontFamily: 'monospace' }}>
+                        {c.label}
+                      </span>
+                    </div>
+                    <span style={{ fontSize: '0.75rem', fontWeight: 'bold', color: subTextColor }}>↗</span>
+                  </div>
+                  <span style={{ fontSize: '0.85rem', fontWeight: 800, color: textColor, wordBreak: 'break-all', fontFamily: 'sans-serif' }}>
+                    {c.value}
+                  </span>
                 </a>
               ))}
             </div>
@@ -604,32 +618,35 @@ export default function Portfolio() {
                       onClick={() => sfx.playKeyClick()}
                       style={{
                         textDecoration: 'none',
-                        background: c.bg,
-                        border: `2.5px solid ${c.borderColor}`,
+                        background: innerBoxBg,
+                        border: `2.5px solid ${contactBorderColor}`,
                         borderRadius: 10,
                         padding: 14,
                         display: 'flex',
                         flexDirection: 'column',
                         gap: 6,
-                        boxShadow: isDarkMode ? `0 4px 14px ${c.borderColor}22` : '3px 3px 0px #362840',
-                        transition: 'transform 0.2s ease, filter 0.2s ease'
+                        boxShadow: isDarkMode ? '0 4px 12px rgba(0,0,0,0.3)' : '3px 3px 0px #362840',
+                        transition: 'transform 0.2s ease, border-color 0.2s ease'
                       }}
                       onMouseEnter={e => {
-                        e.currentTarget.style.transform = 'translateY(-4px)';
-                        e.currentTarget.style.filter = 'brightness(1.1)';
+                        e.currentTarget.style.transform = 'translateY(-3px)';
+                        e.currentTarget.style.borderColor = isDarkMode ? '#00f5d4' : '#6c5ce7';
                       }}
                       onMouseLeave={e => {
                         e.currentTarget.style.transform = 'none';
-                        e.currentTarget.style.filter = 'none';
+                        e.currentTarget.style.borderColor = contactBorderColor;
                       }}
                     >
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <span style={{ fontSize: '0.78rem', fontWeight: 800, color: c.labelColor, fontFamily: 'monospace', letterSpacing: 0.5 }}>
-                          {c.badge}
-                        </span>
-                        <span style={{ fontSize: '0.75rem', fontWeight: 'bold', color: c.labelColor, opacity: 0.8 }}>↗</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          {c.icon}
+                          <span style={{ fontSize: '0.8rem', fontWeight: 800, color: isDarkMode ? '#a0aec0' : '#4a5568', fontFamily: 'monospace' }}>
+                            {c.label}
+                          </span>
+                        </div>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 'bold', color: subTextColor }}>↗</span>
                       </div>
-                      <span style={{ fontSize: '0.9rem', fontWeight: 800, color: c.valueColor, wordBreak: 'break-all', fontFamily: 'sans-serif' }}>
+                      <span style={{ fontSize: '0.9rem', fontWeight: 800, color: textColor, wordBreak: 'break-all', fontFamily: 'sans-serif' }}>
                         {c.value}
                       </span>
                     </a>
