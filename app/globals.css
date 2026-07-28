@@ -39,7 +39,7 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: 'Inter', -apple-system, sans-serif;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 @media (min-width: 768px) {
@@ -71,21 +71,70 @@ body {
 .font-mono { font-family: 'JetBrains Mono', monospace; }
 .font-serif { font-family: 'Noto Serif JP', serif; }
 
-/* ── RETRO ANIMATIONS ── */
+/* ── RETRO DESK INTERACTIVE HOVER & MOTION ── */
+
+.desk-object {
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.25s ease;
+  cursor: pointer;
+  transform-origin: center center;
+}
+
+.desk-object:hover {
+  transform: translateY(-6px) scale(1.02);
+  filter: drop-shadow(0 10px 14px rgba(54, 40, 64, 0.28));
+}
+
+.key-cap {
+  transition: transform 0.08s ease, fill 0.15s ease, filter 0.15s ease;
+  cursor: pointer;
+}
+
+.key-cap:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.12);
+}
+
+.key-cap.pressed, .key-cap:active {
+  transform: translateY(3px);
+  filter: brightness(0.85);
+}
+
+.garland-bulb {
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  transform-origin: center center;
+}
+
+.garland-bulb:hover {
+  transform: scale(1.25);
+  filter: drop-shadow(0 0 12px #ffd166);
+}
+
+/* ── ANIMATION KEYFRAMES ── */
+
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-4px); }
+  50% { transform: translateY(-6px); }
 }
 
 @keyframes pulseGlow {
   0%, 100% { opacity: 0.8; filter: drop-shadow(0 0 4px rgba(255, 209, 102, 0.6)); }
-  50% { opacity: 1; filter: drop-shadow(0 0 10px rgba(255, 209, 102, 0.9)); }
+  50% { opacity: 1; filter: drop-shadow(0 0 12px rgba(255, 209, 102, 0.95)); }
 }
 
-@keyframes keyPress {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(2.5px); }
-  100% { transform: translateY(0); }
+@keyframes sway {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(4deg); }
+}
+
+@keyframes crtBlink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0.35; }
+}
+
+@keyframes modalPop {
+  0% { opacity: 0; transform: scale(0.92) translateY(12px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 
 .floating-zzz {
@@ -96,7 +145,17 @@ body {
   animation: pulseGlow 2.5s ease-in-out infinite;
 }
 
+.plant-sway {
+  transform-origin: bottom center;
+  animation: sway 4s ease-in-out infinite;
+}
+
+.crt-blink {
+  animation: crtBlink 1.2s infinite;
+}
+
 /* ── MODAL STYLES ── */
+
 .retro-modal-overlay {
   position: fixed;
   top: 0;
@@ -104,7 +163,7 @@ body {
   right: 0;
   bottom: 0;
   background: rgba(11, 14, 19, 0.75);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(5px);
   z-index: 999;
   display: flex;
   align-items: center;
@@ -124,9 +183,4 @@ body {
   max-height: 90vh;
   overflow-y: auto;
   animation: modalPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-@keyframes modalPop {
-  0% { opacity: 0; transform: scale(0.92) translateY(10px); }
-  100% { opacity: 1; transform: scale(1) translateY(0); }
 }
