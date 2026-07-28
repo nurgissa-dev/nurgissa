@@ -104,7 +104,7 @@ export default function Portfolio() {
   if (isMobile && !forceDesktopView) {
     return (
       <div style={{ minHeight: '100vh', width: '100vw', background: isDarkMode ? '#0B0E13' : '#f5ebe0', color: textColor, padding: '16px 16px 40px 16px', overflowY: 'auto', fontFamily: 'sans-serif', transition: 'background 0.4s ease' }}>
-
+        
         {/* Mobile Header Bar */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -142,7 +142,7 @@ export default function Portfolio() {
           </p>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             <a
-              href="/Nurgissa_Resume.pdf"
+              href="Nurgissa_Resume.pdf"
               target="_blank"
               rel="noreferrer"
               onClick={() => sfx.playKeyClick()}
@@ -151,7 +151,7 @@ export default function Portfolio() {
               📄 OPEN RESUME (PDF) ↗
             </a>
             <a
-              href="/Nurgissa_Resume.pdf"
+              href="Nurgissa_Resume.pdf"
               download="Nurgissa_Resume.pdf"
               onClick={() => sfx.playKeyClick()}
               style={{ flex: 1, minWidth: 140, textDecoration: 'none', padding: '10px 14px', background: '#ffd166', border: '2px solid #362840', borderRadius: 8, fontWeight: 800, color: '#362840', fontFamily: 'monospace', fontSize: '0.8rem', textAlign: 'center', boxShadow: '2px 2px 0px #362840' }}
@@ -177,7 +177,7 @@ export default function Portfolio() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
             <span style={{ fontSize: '0.9rem', fontWeight: 800, color: textColor }}>🎓 Astana IT University</span>
             <span style={{ padding: '2px 8px', background: '#ffd166', border: '1.5px solid #362840', borderRadius: 4, fontSize: '0.7rem', fontWeight: 'bold', fontFamily: 'monospace', color: '#362840' }}>
-              2022 — 2026
+              2023 — 2026
             </span>
           </div>
           <div style={{ fontSize: '0.85rem', fontWeight: 800, color: isDarkMode ? '#00f5d4' : '#6c5ce7', marginBottom: 6, fontFamily: 'monospace' }}>
@@ -258,7 +258,7 @@ export default function Portfolio() {
   // 💻 DESKTOP 2D INTERACTIVE DESK VIEW (>= 768px or forced desktop view)
   return (
     <main style={{ width: '100vw', height: '100vh', overflow: 'hidden', background: isDarkMode ? '#0B0E13' : '#f5ebe0', position: 'relative', transition: 'background 0.4s ease' }}>
-
+      
       {/* If mobile user forced desktop view, offer back to mobile view button */}
       {isMobile && forceDesktopView && (
         <button
@@ -331,7 +331,7 @@ export default function Portfolio() {
             {/* 📄 DIRECT RESUME (Nurgissa_Resume.pdf) DOWNLOAD / VIEW BUTTONS */}
             <div style={{ display: 'flex', gap: 8, marginBottom: 14 }}>
               <a
-                href="/Nurgissa_Resume.pdf"
+                href="Nurgissa_Resume.pdf"
                 target="_blank"
                 rel="noreferrer"
                 onClick={() => sfx.playKeyClick()}
@@ -340,7 +340,7 @@ export default function Portfolio() {
                 📄 OPEN RESUME (PDF) ↗
               </a>
               <a
-                href="/Nurgissa_Resume.pdf"
+                href="Nurgissa_Resume.pdf"
                 download="Nurgissa_Resume.pdf"
                 onClick={() => sfx.playKeyClick()}
                 style={{ flex: 1, textDecoration: 'none', padding: '9px 12px', background: '#ffd166', border: '2.5px solid #362840', borderRadius: 8, fontWeight: 800, color: '#362840', fontFamily: 'monospace', fontSize: '0.8rem', boxShadow: '2px 3px 0px #362840', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
@@ -389,7 +389,7 @@ export default function Portfolio() {
               <div style={{ color: '#b4a3e8', paddingLeft: 12, marginBottom: 8 }}>Astana IT University (https://astanait.edu.kz/en)</div>
 
               <div><span style={{ color: '#ffd166' }}>nurgissa@workshop</span>:<span style={{ color: '#58A6FF' }}>~</span>$ cat resume.txt</div>
-              <div style={{ color: '#f4a2af', paddingLeft: 12, marginBottom: 8 }}>Resume File: /Nurgissa_Resume.pdf</div>
+              <div style={{ color: '#f4a2af', paddingLeft: 12, marginBottom: 8 }}>Resume File: Nurgissa_Resume.pdf</div>
 
               <div><span style={{ color: '#ffd166' }}>nurgissa@workshop</span>:<span style={{ color: '#58A6FF' }}>~</span>$ <span className="floating-zzz" style={{ color: '#ffd166', display: 'inline-block' }}>█</span></div>
             </div>
