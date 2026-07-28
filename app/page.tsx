@@ -35,6 +35,53 @@ const PROJECTS = [
   },
 ];
 
+const getContactItems = (isDarkMode: boolean) => [
+  {
+    id: 'telegram',
+    label: 'Telegram',
+    value: '@trulondoner',
+    href: 'https://t.me/trulondoner',
+    bg: isDarkMode ? 'linear-gradient(135deg, #112638, #193852)' : 'linear-gradient(135deg, #e0f2fe, #bae6fd)',
+    borderColor: isDarkMode ? '#00f5d4' : '#0284c7',
+    labelColor: isDarkMode ? '#00f5d4' : '#0369a1',
+    valueColor: isDarkMode ? '#ffffff' : '#0c4a6e',
+    badge: '✈️ TELEGRAM',
+  },
+  {
+    id: 'github',
+    label: 'GitHub',
+    value: 'nurgissa-dev',
+    href: 'https://github.com/nurgissa-dev',
+    bg: isDarkMode ? 'linear-gradient(135deg, #1f1b2e, #2c2545)' : 'linear-gradient(135deg, #f3e8ff, #e9d5ff)',
+    borderColor: isDarkMode ? '#b4a3e8' : '#7e22ce',
+    labelColor: isDarkMode ? '#b4a3e8' : '#6b21a8',
+    valueColor: isDarkMode ? '#ffffff' : '#4c1d95',
+    badge: '🐙 GITHUB',
+  },
+  {
+    id: 'linkedin',
+    label: 'LinkedIn',
+    value: 'Nurgissa Zhetkizgen',
+    href: 'https://www.linkedin.com/in/nurgissa-zhetkizgen-818966424/',
+    bg: isDarkMode ? 'linear-gradient(135deg, #0f2b3c, #19435e)' : 'linear-gradient(135deg, #e0f2fe, #dbeafe)',
+    borderColor: isDarkMode ? '#38bdf8' : '#1d4ed8',
+    labelColor: isDarkMode ? '#38bdf8' : '#1e40af',
+    valueColor: isDarkMode ? '#ffffff' : '#1e3a8a',
+    badge: '💼 LINKEDIN',
+  },
+  {
+    id: 'email',
+    label: 'Email',
+    value: 'sholak0@mail.ru',
+    href: 'mailto:sholak0@mail.ru',
+    bg: isDarkMode ? 'linear-gradient(135deg, #331c26, #4d2337)' : 'linear-gradient(135deg, #ffe4e6, #fecdd3)',
+    borderColor: isDarkMode ? '#f4a2af' : '#e11d48',
+    labelColor: isDarkMode ? '#f4a2af' : '#9f1239',
+    valueColor: isDarkMode ? '#ffffff' : '#881337',
+    badge: '✉️ EMAIL',
+  },
+];
+
 export default function Portfolio() {
   const [activeModal, setActiveModal] = useState<RetroTarget>(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -316,22 +363,27 @@ export default function Portfolio() {
               📞 CONTACTS & SOCIALS
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-              {[
-                { label: 'Telegram', value: '@trulondoner', href: 'https://t.me/trulondoner', bg: isDarkMode ? '#1e2826' : '#e2ece9' },
-                { label: 'GitHub', value: 'nurgissa-dev', href: 'https://github.com/nurgissa-dev', bg: isDarkMode ? '#282029' : '#f0e6ef' },
-                { label: 'LinkedIn', value: 'Nurgissa Zhetkizgen', href: 'https://www.linkedin.com/in/nurgissa-zhetkizgen-818966424/', bg: isDarkMode ? '#1f2924' : '#d8e2dc' },
-                { label: 'Email', value: 'sholak0@mail.ru', href: 'mailto:sholak0@mail.ru', bg: isDarkMode ? '#2c2025' : '#ffe5ec' },
-              ].map(c => (
+              {getContactItems(isDarkMode).map(c => (
                 <a
-                  key={c.label}
+                  key={c.id}
                   href={c.href}
                   target="_blank"
                   rel="noreferrer"
                   onClick={() => sfx.playKeyClick()}
-                  style={{ textDecoration: 'none', background: c.bg, border: '2px solid #362840', borderRadius: 8, padding: 12, display: 'flex', flexDirection: 'column', gap: 3 }}
+                  style={{
+                    textDecoration: 'none',
+                    background: c.bg,
+                    border: `2px solid ${c.borderColor}`,
+                    borderRadius: 8,
+                    padding: 12,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 3,
+                    boxShadow: isDarkMode ? `0 3px 10px ${c.borderColor}22` : '2px 2px 0px #362840'
+                  }}
                 >
-                  <span style={{ fontSize: '0.72rem', fontWeight: 'bold', color: subTextColor, fontFamily: 'monospace' }}>{c.label}</span>
-                  <span style={{ fontSize: '0.8rem', fontWeight: 800, color: textColor, wordBreak: 'break-all' }}>{c.value}</span>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 'bold', color: c.labelColor, fontFamily: 'monospace' }}>{c.badge}</span>
+                  <span style={{ fontSize: '0.8rem', fontWeight: 800, color: c.valueColor, wordBreak: 'break-all' }}>{c.value}</span>
                 </a>
               ))}
             </div>
@@ -529,7 +581,7 @@ export default function Portfolio() {
           {/* 📞 4. CONTACTS (Vintage Phone / Calculator) */}
           {activeModal === 'phone' && (
             <div className="retro-modal-overlay" onClick={closeModal}>
-              <div className="retro-card" style={{ background: cardBg, borderColor: cardBorder, color: textColor }} onClick={e => e.stopPropagation()}>
+              <div className="retro-card" style={{ background: cardBg, borderColor: cardBorder, color: textColor, maxWidth: 620 }} onClick={e => e.stopPropagation()}>
                 <button
                   onClick={closeModal}
                   style={{ position: 'absolute', top: 14, right: 18, background: '#f4a2af', border: '2.5px solid #362840', borderRadius: '50%', width: 28, height: 28, fontSize: 16, fontWeight: 'bold', color: '#362840', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
@@ -539,33 +591,52 @@ export default function Portfolio() {
                 <div style={{ display: 'inline-block', padding: '4px 10px', background: '#ffd166', border: '2px solid #362840', borderRadius: 6, fontSize: 12, fontWeight: 'bold', fontFamily: 'monospace', color: '#362840', marginBottom: 14 }}>
                   📞 CONTACTS & SOCIALS
                 </div>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: textColor, marginBottom: 14 }}>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: textColor, marginBottom: 16 }}>
                   Let&apos;s Connect & Build Together
                 </h3>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 16 }}>
-                  {[
-                    { label: 'Telegram', value: '@trulondoner', href: 'https://t.me/trulondoner', bg: isDarkMode ? '#1e2826' : '#e2ece9' },
-                    { label: 'GitHub', value: 'nurgissa-dev', href: 'https://github.com/nurgissa-dev', bg: isDarkMode ? '#282029' : '#f0e6ef' },
-                    { label: 'LinkedIn', value: 'Nurgissa Zhetkizgen', href: 'https://www.linkedin.com/in/nurgissa-zhetkizgen-818966424/', bg: isDarkMode ? '#1f2924' : '#d8e2dc' },
-                    { label: 'Email', value: 'sholak0@mail.ru', href: 'mailto:sholak0@mail.ru', bg: isDarkMode ? '#2c2025' : '#ffe5ec' },
-                  ].map(c => (
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 18 }}>
+                  {getContactItems(isDarkMode).map(c => (
                     <a
-                      key={c.label}
+                      key={c.id}
                       href={c.href}
                       target="_blank"
                       rel="noreferrer"
                       onClick={() => sfx.playKeyClick()}
-                      style={{ textDecoration: 'none', background: c.bg, border: '2.5px solid #362840', borderRadius: 8, padding: 12, display: 'flex', flexDirection: 'column', gap: 4, transition: 'transform 0.2s' }}
-                      onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-3px)')}
-                      onMouseLeave={e => (e.currentTarget.style.transform = 'none')}
+                      style={{
+                        textDecoration: 'none',
+                        background: c.bg,
+                        border: `2.5px solid ${c.borderColor}`,
+                        borderRadius: 10,
+                        padding: 14,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 6,
+                        boxShadow: isDarkMode ? `0 4px 14px ${c.borderColor}22` : '3px 3px 0px #362840',
+                        transition: 'transform 0.2s ease, filter 0.2s ease'
+                      }}
+                      onMouseEnter={e => {
+                        e.currentTarget.style.transform = 'translateY(-4px)';
+                        e.currentTarget.style.filter = 'brightness(1.1)';
+                      }}
+                      onMouseLeave={e => {
+                        e.currentTarget.style.transform = 'none';
+                        e.currentTarget.style.filter = 'none';
+                      }}
                     >
-                      <span style={{ fontSize: '0.75rem', fontWeight: 'bold', color: subTextColor, fontFamily: 'monospace' }}>{c.label}</span>
-                      <span style={{ fontSize: '0.85rem', fontWeight: 800, color: textColor }}>{c.value}</span>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <span style={{ fontSize: '0.78rem', fontWeight: 800, color: c.labelColor, fontFamily: 'monospace', letterSpacing: 0.5 }}>
+                          {c.badge}
+                        </span>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 'bold', color: c.labelColor, opacity: 0.8 }}>↗</span>
+                      </div>
+                      <span style={{ fontSize: '0.9rem', fontWeight: 800, color: c.valueColor, wordBreak: 'break-all', fontFamily: 'sans-serif' }}>
+                        {c.value}
+                      </span>
                     </a>
                   ))}
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                  <button onClick={closeModal} style={{ padding: '8px 18px', background: '#f4a2af', border: '2px solid #362840', borderRadius: 6, fontWeight: 'bold', color: '#362840', cursor: 'pointer', fontFamily: 'monospace' }}>
+                  <button onClick={closeModal} style={{ padding: '8px 18px', background: '#f4a2af', border: '2.5px solid #362840', borderRadius: 6, fontWeight: 'bold', color: '#362840', cursor: 'pointer', fontFamily: 'monospace' }}>
                     CLOSE ✕
                   </button>
                 </div>
