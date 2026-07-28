@@ -21,6 +21,13 @@ const PROJECTS = [
     color: '#ffd166',
   },
   {
+    id: 'ML', label: 'Machine Learning Collection', sub: 'ML / Data Science',
+    href: 'https://github.com/nurgissa-dev/ML',
+    desc: 'Collection of machine learning experiments, notebooks, and models covering classification, regression, and data analysis using scikit-learn, pandas, and neural networks.',
+    tech: 'Python · scikit-learn · pandas · NumPy · Jupyter · matplotlib',
+    color: '#00f5d4',
+  },
+  {
     id: 'RecipeFinder', label: 'Recipe Finder App', sub: 'Android Clean Architecture',
     href: 'https://github.com/nurgissa-dev/Recipe-Finder',
     desc: 'Modern Android app built with Clean Architecture (MVVM, UseCases, Repository). Features Room FTS4 full-text search, DataStore, Kotlin Flows & Coroutines, Hilt DI, and Firebase FCM.',
