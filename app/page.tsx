@@ -40,12 +40,15 @@ export default function Portfolio() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [isMobileView, setIsMobileView] = useState(false);
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [mobileTerminalCmd, setMobileTerminalCmd] = useState<'whoami' | 'skills' | 'edu' | 'contact'>('whoami');
 
   // Detect mobile screen on mount & resize
   useEffect(() => {
     const handleResize = () => {
-      setIsMobileView(window.innerWidth < 768);
+      const small = window.innerWidth < 768;
+      setIsMobileView(small);
+      setIsSmallScreen(small);
     };
     handleResize();
     window.addEventListener('resize', handleResize);
@@ -340,7 +343,7 @@ export default function Portfolio() {
         <div style={{ width: '100vw', height: '100vh', overflow: 'hidden', position: 'relative' }}>
           
           {/* If user manually switched to desktop mode on small screen, show back to mobile button */}
-          {window.innerWidth < 768 && (
+          {isSmallScreen && (
             <button
               onClick={() => setIsMobileView(true)}
               style={{ position: 'absolute', top: 20, left: 24, zIndex: 100, padding: '6px 12px', background: '#ffd166', border: '2.5px solid #362840', borderRadius: 20, fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'monospace', color: '#362840', cursor: 'pointer' }}
