@@ -25,9 +25,17 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: 'Inter', -apple-system, sans-serif;
-  overflow: hidden;
-  height: 100vh;
-  width: 100vw;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+@media (min-width: 768px) {
+  body {
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
 }
 
 ::selection { background: rgba(88,166,255,0.25); color: #fff; }
