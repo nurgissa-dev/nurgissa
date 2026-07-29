@@ -28,6 +28,13 @@ const PROJECTS = [
     color: '#00f5d4',
   },
   {
+    id: 'CheatChecker', label: 'Cheat Checker Pro', sub: 'Windows Desktop App',
+    href: 'https://github.com/nurgissa-dev/CheatChecker',
+    desc: 'Modern Windows desktop app for scanning the system for cheats and suspicious files. Features file search, activity history, hardware info, and Steam account detection. Requires admin rights.',
+    tech: 'C# · WPF · .NET 8.0 · Windows API',
+    color: '#a8dadc',
+  },
+  {
     id: 'RecipeFinder', label: 'Recipe Finder App', sub: 'Android Clean Architecture',
     href: 'https://github.com/nurgissa-dev/Recipe-Finder',
     desc: 'Modern Android app built with Clean Architecture (MVVM, UseCases, Repository). Features Room FTS4 full-text search, DataStore, Kotlin Flows & Coroutines, Hilt DI, and Firebase FCM.',
