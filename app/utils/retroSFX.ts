@@ -4,15 +4,15 @@ class RetroSFX {
   private ctx: AudioContext | null = null;
   public enabled: boolean = true;
 
-  // Real keyboard audio buffer (loaded lazily from /keyboard.mp3)
-  private keyboardBuffer: AudioBuffer | null = null;
-  private keyboardBufferLoading: boolean = false;
+
 
   private initCtx() {
     if (!this.ctx && typeof window !== 'undefined') {
       const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       if (AudioCtx) {
         this.ctx = new AudioCtx();
+        // Immediately start preloading real audio buffers so first click uses real sounds
+        this.preload();
       }
     }
     if (this.ctx && this.ctx.state === 'suspended') {
@@ -20,59 +20,89 @@ class RetroSFX {
     }
   }
 
-  // Lazy-load keyboard.mp3 into an AudioBuffer for instant, low-latency playback
-  private async loadKeyboardBuffer() {
-    if (this.keyboardBuffer || this.keyboardBufferLoading) return;
-    this.keyboardBufferLoading = true;
-    try {
-      const res = await fetch('/keyboard.mp3');
-      const arrayBuf = await res.arrayBuffer();
-      this.keyboardBuffer = await this.ctx!.decodeAudioData(arrayBuf);
-    } catch {
-      // File unavailable — fall back to synthesis
+  // Preload all real audio files into memory
+  public preload() {
+    this.initCtx();
+    if (this.ctx) {
+      this.loadMouseBuffer();
+      this.loadKeyswitchBuffer();
+      this.loadKeyboardBuffer();
     }
-    this.keyboardBufferLoading = false;
   }
-
 
   // Real mouse click audio buffer (loaded lazily from /mouseclick.mp3)
   private mouseBuffer: AudioBuffer | null = null;
   private mouseLoading: boolean = false;
 
   private async loadMouseBuffer() {
-    if (this.mouseBuffer || this.mouseLoading) return;
+    if (this.mouseBuffer || this.mouseLoading || !this.ctx) return;
     this.mouseLoading = true;
     try {
       const res = await fetch('/mouseclick.mp3');
       const arrayBuf = await res.arrayBuffer();
-      this.mouseBuffer = await this.ctx!.decodeAudioData(arrayBuf);
+      this.mouseBuffer = await this.ctx.decodeAudioData(arrayBuf);
     } catch {
       /* unavailable */
     }
     this.mouseLoading = false;
   }
 
-  // 1. Mouse / UI Click Sound — plays real mouseclick.mp3 audio file
-  playKeyClick() {
+  // Real keyswitch audio buffer (loaded lazily from /keyswitch.mp3)
+  private keyswitchBuffer: AudioBuffer | null = null;
+  private keyswitchLoading: boolean = false;
+
+  private async loadKeyswitchBuffer() {
+    if (this.keyswitchBuffer || this.keyswitchLoading || !this.ctx) return;
+    this.keyswitchLoading = true;
+    try {
+      const res = await fetch('/keyswitch.mp3');
+      const arrayBuf = await res.arrayBuffer();
+      this.keyswitchBuffer = await this.ctx.decodeAudioData(arrayBuf);
+    } catch {
+      /* unavailable */
+    }
+    this.keyswitchLoading = false;
+  }
+
+  // Real typing keyboard audio buffer (loaded lazily from /keyboard.mp3)
+  private keyboardBuffer: AudioBuffer | null = null;
+  private keyboardBufferLoading: boolean = false;
+
+  private async loadKeyboardBuffer() {
+    if (this.keyboardBuffer || this.keyboardBufferLoading || !this.ctx) return;
+    this.keyboardBufferLoading = true;
+    try {
+      const res = await fetch('/keyboard.mp3');
+      const arrayBuf = await res.arrayBuffer();
+      this.keyboardBuffer = await this.ctx.decodeAudioData(arrayBuf);
+    } catch {
+      /* unavailable */
+    }
+    this.keyboardBufferLoading = false;
+  }
+
+  // Real Mouse Click Sound (LMB & RMB distinct tactile pitch)
+  playMouseClick(isRightClick: boolean = false) {
     if (!this.enabled) return;
     try {
       this.initCtx();
       if (!this.ctx) return;
 
-      // Lazy-load the mouse audio buffer on first click
       if (!this.mouseBuffer && !this.mouseLoading) {
         this.loadMouseBuffer();
       }
 
-      // Play real mouse click audio if buffer is ready
+      // Play real mouseclick.mp3 audio if buffer is ready
       if (this.mouseBuffer) {
         const source = this.ctx.createBufferSource();
         const gainNode = this.ctx.createGain();
 
         source.buffer = this.mouseBuffer;
-        // Natural slight pitch variation (0.94–1.08x) for realistic tactile clicks
-        source.playbackRate.value = 0.94 + Math.random() * 0.14;
-        gainNode.gain.value = 0.5 + Math.random() * 0.2;
+
+        // Distinct subtle pitch difference: Left click = slightly higher snappy tick, Right click = slightly deeper click
+        const basePitch = isRightClick ? 0.90 : 1.05;
+        source.playbackRate.value = basePitch + (Math.random() - 0.5) * 0.08;
+        gainNode.gain.value = isRightClick ? 0.65 : 0.55;
 
         source.connect(gainNode);
         gainNode.connect(this.ctx.destination);
@@ -80,7 +110,23 @@ class RetroSFX {
         return;
       }
 
-      // Fallback synthesis if buffer not ready yet
+      // Fallback synthesis if buffer loading
+      this.playKeyClick();
+    } catch { /* suppressed */ }
+  }
+
+  // 1. UI Button Click Sound
+  playKeyClick() {
+    if (!this.enabled) return;
+    try {
+      this.initCtx();
+      if (!this.ctx) return;
+
+      if (this.mouseBuffer) {
+        this.playMouseClick(false);
+        return;
+      }
+
       const now = this.ctx.currentTime;
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
@@ -98,20 +144,6 @@ class RetroSFX {
 
   // 2. Mechanical Keyboard Switch Sound — real keyswitch.mp3 audio
   //    Loaded into AudioBuffer for polyphonic low-latency playback with pitch variation
-  private keyswitchBuffer: AudioBuffer | null = null;
-  private keyswitchLoading: boolean = false;
-
-  private async loadKeyswitchBuffer() {
-    if (this.keyswitchBuffer || this.keyswitchLoading) return;
-    this.keyswitchLoading = true;
-    try {
-      const res = await fetch('/keyswitch.mp3');
-      const arrayBuf = await res.arrayBuffer();
-      this.keyswitchBuffer = await this.ctx!.decodeAudioData(arrayBuf);
-    } catch { /* unavailable */ }
-    this.keyswitchLoading = false;
-  }
-
   playKeySwitchClick() {
     if (!this.enabled) return;
     try {

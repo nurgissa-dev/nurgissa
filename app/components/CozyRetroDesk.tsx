@@ -124,6 +124,9 @@ export default function CozyRetroDesk({
 
   // 3. Mouse cursor tracking & left/right click listener + Mouse Click SFX
   useEffect(() => {
+    // Preload audio buffers so first click uses real sound
+    sfx.preload();
+
     const handleMouseMove = (e: MouseEvent) => {
       const normX = (e.clientX / window.innerWidth - 0.5) * 70;
       const normY = (e.clientY / window.innerHeight - 0.5) * 30;
@@ -133,7 +136,7 @@ export default function CozyRetroDesk({
     const handleMouseDown = (e: MouseEvent) => {
       if (e.button === 0) setLeftClick(true);
       if (e.button === 2 || e.button === 1) setRightClick(true);
-      sfx.playKeyClick();
+      sfx.playMouseClick(e.button === 2);
     };
 
     const handleMouseUp = (e: MouseEvent) => {
