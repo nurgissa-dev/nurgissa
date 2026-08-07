@@ -79,14 +79,15 @@ export default function CozyRetroDesk({
   }, [soundEnabled]);
 
   // Theme color tokens
-  const wallBg = isDarkMode ? '#171B22' : '#f8f1e5';
-  const wallStripe = isDarkMode ? '#222834' : '#f0e5d5';
-  const deskBg = isDarkMode ? '#3A2A1F' : '#e2b991';
-  const deskLip = isDarkMode ? '#2c1f17' : '#d4a375';
-  const deskGrain = isDarkMode ? '#251a13' : '#cd9766';
-  const computerBox = isDarkMode ? '#252033' : '#a493e6';
-  const computerInner = isDarkMode ? '#352e47' : '#c0b3f0';
-  const computerScreen = isDarkMode ? '#0B0E13' : '#2a2038';
+  // Night Developer Room palette — dark mode is "1:37 AM" not "brightness down"
+  const wallBg = isDarkMode ? '#1a1e2a' : '#f8f1e5';
+  const wallStripe = isDarkMode ? '#232940' : '#f0e5d5';
+  const deskBg = isDarkMode ? '#4a362a' : '#e2b991';
+  const deskLip = isDarkMode ? '#3d2b1f' : '#d4a375';
+  const deskGrain = isDarkMode ? '#352518' : '#cd9766';
+  const computerBox = isDarkMode ? '#2e2848' : '#a493e6';
+  const computerInner = isDarkMode ? '#3d3560' : '#c0b3f0';
+  const computerScreen = isDarkMode ? '#0c1018' : '#2a2038';
 
   // 1. Periodic eye blinking for CRT screen
   useEffect(() => {
@@ -175,7 +176,7 @@ export default function CozyRetroDesk({
   const isSpaceActive = pressedCodes.has('space');
 
   return (
-    <div style={{ position: 'relative', width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: isDarkMode ? '#0B0E13' : '#f5ebe0', overflow: 'hidden', transition: 'background 0.4s ease' }}>
+    <div style={{ position: 'relative', width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: isDarkMode ? '#111520' : '#f5ebe0', overflow: 'hidden', transition: 'background 0.4s ease' }}>
 
       {/* Top Controls Bar: Sound Toggle & Theme Toggle */}
       <div style={{ position: 'absolute', top: 20, right: 24, zIndex: 100, display: 'flex', gap: 10 }}>
@@ -184,7 +185,7 @@ export default function CozyRetroDesk({
         <button
           onClick={onToggleSound}
           style={{
-            background: soundEnabled ? (isDarkMode ? '#222834' : '#ffffff') : '#f4a2af',
+            background: soundEnabled ? (isDarkMode ? '#1a1f2e' : '#ffffff') : '#f4a2af',
             border: '2.5px solid #362840',
             borderRadius: 24,
             padding: '6px 14px',
@@ -207,7 +208,7 @@ export default function CozyRetroDesk({
         <button
           onClick={onToggleTheme}
           style={{
-            background: isDarkMode ? '#222834' : '#ffffff',
+            background: isDarkMode ? '#1a1f2e' : '#ffffff',
             border: '2.5px solid #362840',
             borderRadius: 24,
             padding: '6px 14px',
@@ -245,6 +246,17 @@ export default function CozyRetroDesk({
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
+          {/* Monitor glow gradients for dark mode */}
+          <radialGradient id="monitorWallGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#4a8fff" stopOpacity="0.5" />
+            <stop offset="40%" stopColor="#3366cc" stopOpacity="0.2" />
+            <stop offset="100%" stopColor="#1a1e2a" stopOpacity="0" />
+          </radialGradient>
+          <radialGradient id="monitorDeskGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#5588dd" stopOpacity="0.6" />
+            <stop offset="60%" stopColor="#3355aa" stopOpacity="0.15" />
+            <stop offset="100%" stopColor="#4a362a" stopOpacity="0" />
+          </radialGradient>
         </defs>
 
         {/* ── 1. BACKGROUND WALL ── */}
@@ -275,6 +287,30 @@ export default function CozyRetroDesk({
         <line x1="450" y1="560" x2="880" y2="560" stroke={deskGrain} strokeWidth="2" strokeDasharray="80 25 50 15" />
         <line x1="150" y1="620" x2="680" y2="620" stroke={deskGrain} strokeWidth="2" strokeDasharray="100 30 70 20" />
         <line x1="780" y1="600" x2="1140" y2="600" stroke={deskGrain} strokeWidth="2" strokeDasharray="90 20 40 30" />
+
+        {/* ── MONITOR GLOW EFFECTS (Dark Mode Only) ── */}
+        {isDarkMode && (
+          <g style={{ transition: 'opacity 0.6s ease' }}>
+            {/* Ambient wall glow behind monitor — soft radial light on wall */}
+            <ellipse
+              cx="400"
+              cy="320"
+              rx="280"
+              ry="200"
+              fill="url(#monitorWallGlow)"
+              opacity="0.07"
+            />
+            {/* Desk surface light spill from monitor */}
+            <ellipse
+              cx="400"
+              cy="510"
+              rx="240"
+              ry="40"
+              fill="url(#monitorDeskGlow)"
+              opacity="0.08"
+            />
+          </g>
+        )}
 
 
 
@@ -307,9 +343,9 @@ export default function CozyRetroDesk({
           <ellipse cx="220" cy="325" rx="210" ry="20" fill="#000000" opacity="0.3" />
 
           {/* Floppy Drive Unit */}
-          <rect x="25" y="240" width="370" height="80" fill={isDarkMode ? '#2c2538' : '#eddcc8'} stroke="#362840" strokeWidth="4" rx="8" />
+          <rect x="25" y="240" width="370" height="80" fill={isDarkMode ? '#342c48' : '#eddcc8'} stroke="#362840" strokeWidth="4" rx="8" />
           <rect x="230" y="275" width="130" height="12" fill="#362840" rx="3" />
-          <rect x="230" y="255" width="60" height="8" fill={isDarkMode ? '#1c1626' : '#d8c5b0'} stroke="#362840" strokeWidth="2" rx="2" />
+          <rect x="230" y="255" width="60" height="8" fill={isDarkMode ? '#252040' : '#d8c5b0'} stroke="#362840" strokeWidth="2" rx="2" />
           <circle cx="360" cy="260" r="7" fill={isDarkMode ? '#00f5d4' : '#f4a2af'} stroke="#362840" strokeWidth="2" />
           {Array.from({ length: 6 }).map((_, i) => (
             <line key={i} x1={50 + i * 22} y1="260" x2={50 + i * 22} y2="300" stroke="#362840" strokeWidth="3.5" strokeLinecap="round" />
@@ -481,7 +517,7 @@ export default function CozyRetroDesk({
             y="0"
             width="470"
             height="136"
-            fill={isDarkMode ? '#221b2b' : '#eddcc8'}
+            fill={isDarkMode ? '#2a243a' : '#eddcc8'}
             stroke="#362840"
             strokeWidth="4"
             rx="16"
@@ -493,7 +529,7 @@ export default function CozyRetroDesk({
             y="8"
             width="450"
             height="120"
-            fill={isDarkMode ? '#16111c' : '#d5c3b0'}
+            fill={isDarkMode ? '#1e1830' : '#d5c3b0'}
             stroke="#362840"
             strokeWidth="2.5"
             rx="10"
@@ -511,10 +547,10 @@ export default function CozyRetroDesk({
 
                 const active = isKeyActive(row, col);
 
-                let baseFill = isDarkMode ? '#2c2438' : '#fefae0';
+                let baseFill = isDarkMode ? '#352d4a' : '#fefae0';
                 if (row === 0 && col === 0) baseFill = '#f4a2af';
                 else if (row === 2 && col === 12) baseFill = '#ffd166';
-                else if (col === 0 || col === 13 || row === 4) baseFill = isDarkMode ? '#4a3b60' : '#b4a3e8';
+                else if (col === 0 || col === 13 || row === 4) baseFill = isDarkMode ? '#5a4a75' : '#b4a3e8';
 
                 const keyFill = active ? '#ff4d6d' : baseFill;
                 const legendText = KEY_LEGENDS[row]?.[col] || '';
@@ -637,7 +673,7 @@ export default function CozyRetroDesk({
             y="0"
             width="64"
             height="96"
-            fill={isDarkMode ? '#252033' : '#f4f1de'}
+            fill={isDarkMode ? '#2e2845' : '#f4f1de'}
             stroke="#362840"
             strokeWidth="3.5"
             rx="30"
@@ -646,7 +682,7 @@ export default function CozyRetroDesk({
           {/* Left Mouse Button */}
           <path
             d="M 4 30 L 30 30 L 30 6 C 18 8, 8 16, 4 30 Z"
-            fill={leftClick ? '#ff4d6d' : (isDarkMode ? '#3b324d' : '#ffffff')}
+            fill={leftClick ? '#ff4d6d' : (isDarkMode ? '#3e3558' : '#ffffff')}
             stroke="#362840"
             strokeWidth="2"
             style={{ transition: 'fill 0.05s ease-out' }}
@@ -655,7 +691,7 @@ export default function CozyRetroDesk({
           {/* Right Mouse Button */}
           <path
             d="M 34 30 L 60 30 C 56 16, 46 8, 34 6 L 34 30 Z"
-            fill={rightClick ? '#ffd166' : (isDarkMode ? '#3b324d' : '#ffffff')}
+            fill={rightClick ? '#ffd166' : (isDarkMode ? '#3e3558' : '#ffffff')}
             stroke="#362840"
             strokeWidth="2"
             style={{ transition: 'fill 0.05s ease-out' }}

@@ -11,9 +11,9 @@
 }
 
 [data-theme="dark"] {
-  --bg: #0B0E13;
+  --bg: #111520;
   --text: #ececec;
-  --card: #131720;
+  --card: #1a1f2e;
   --accent: #00f5d4;
   --pink: #ff758f;
   --purple: #a493e6;
