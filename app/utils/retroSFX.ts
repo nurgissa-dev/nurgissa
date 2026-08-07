@@ -60,19 +60,52 @@ class RetroSFX {
     } catch { /* suppressed */ }
   }
 
-  // 2. Mechanical Keyboard Switch Sound — Box Navy / Clicky style
-  //    Three-layer synthesis: click transient + bottom-out thud + spring ping
+  // 2. Mechanical Keyboard Switch Sound — real keyswitch.mp3 audio
+  //    Loaded into AudioBuffer for polyphonic low-latency playback with pitch variation
+  private keyswitchBuffer: AudioBuffer | null = null;
+  private keyswitchLoading: boolean = false;
+
+  private async loadKeyswitchBuffer() {
+    if (this.keyswitchBuffer || this.keyswitchLoading) return;
+    this.keyswitchLoading = true;
+    try {
+      const res = await fetch('/keyswitch.mp3');
+      const arrayBuf = await res.arrayBuffer();
+      this.keyswitchBuffer = await this.ctx!.decodeAudioData(arrayBuf);
+    } catch { /* unavailable */ }
+    this.keyswitchLoading = false;
+  }
+
   playKeySwitchClick() {
     if (!this.enabled) return;
     try {
       this.initCtx();
       if (!this.ctx) return;
 
+      // Lazy-load the audio buffer on first call
+      if (!this.keyswitchBuffer && !this.keyswitchLoading) {
+        this.loadKeyswitchBuffer();
+      }
+
+      // Play real audio if buffer is ready
+      if (this.keyswitchBuffer) {
+        const source = this.ctx.createBufferSource();
+        const gainNode = this.ctx.createGain();
+
+        source.buffer = this.keyswitchBuffer;
+        // Slight pitch variation (0.85–1.15x) so each keypress sounds unique
+        source.playbackRate.value = 0.85 + Math.random() * 0.30;
+        gainNode.gain.value = 0.5 + Math.random() * 0.3;
+
+        source.connect(gainNode);
+        gainNode.connect(this.ctx.destination);
+        source.start(this.ctx.currentTime);
+        return;
+      }
+
+      // ── Fallback synthesis if buffer not loaded yet ──
       const now = this.ctx.currentTime;
       const dest = this.ctx.destination;
-
-      // ── Layer A: Click transient (the "click" actuating moment) ──
-      // Short, sharp burst ~1800Hz square → drops fast
       const oscA = this.ctx.createOscillator();
       const gainA = this.ctx.createGain();
       oscA.type = 'square';
@@ -82,31 +115,6 @@ class RetroSFX {
       gainA.gain.exponentialRampToValueAtTime(0.001, now + 0.012);
       oscA.connect(gainA); gainA.connect(dest);
       oscA.start(now); oscA.stop(now + 0.015);
-
-      // ── Layer B: Bottom-out thud (key hitting the PCB/plate) ──
-      // Low sine 120Hz with quick decay — the satisfying "thud"
-      const oscB = this.ctx.createOscillator();
-      const gainB = this.ctx.createGain();
-      oscB.type = 'sine';
-      oscB.frequency.setValueAtTime(130 + Math.random() * 30, now + 0.006);
-      oscB.frequency.exponentialRampToValueAtTime(55, now + 0.07);
-      gainB.gain.setValueAtTime(0.0, now);
-      gainB.gain.setValueAtTime(0.22, now + 0.006);
-      gainB.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
-      oscB.connect(gainB); gainB.connect(dest);
-      oscB.start(now); oscB.stop(now + 0.1);
-
-      // ── Layer C: Spring ping (metallic resonance of the spring) ──
-      // Very quiet sine ~700Hz, slightly randomised, fades slowly
-      const oscC = this.ctx.createOscillator();
-      const gainC = this.ctx.createGain();
-      oscC.type = 'sine';
-      oscC.frequency.setValueAtTime(680 + Math.random() * 80, now + 0.008);
-      gainC.gain.setValueAtTime(0.0, now);
-      gainC.gain.setValueAtTime(0.018, now + 0.008);
-      gainC.gain.exponentialRampToValueAtTime(0.001, now + 0.13);
-      oscC.connect(gainC); gainC.connect(dest);
-      oscC.start(now); oscC.stop(now + 0.14);
 
     } catch { /* suppressed */ }
   }
