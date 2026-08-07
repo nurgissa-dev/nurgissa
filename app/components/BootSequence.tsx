@@ -108,7 +108,7 @@ export default function BootSequence({ onComplete }: BootSequenceProps) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        fontFamily: 'monospace',
+        fontFamily: "'Press Start 2P', monospace",
         overflow: 'hidden',
         opacity: fadingOut ? 0 : 1,
         transform: fadingOut ? 'scale(1.05)' : 'scale(1)',
@@ -125,7 +125,7 @@ export default function BootSequence({ onComplete }: BootSequenceProps) {
           width: '100%',
           height: '100%',
           backgroundImage:
-            'repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 3px)',
+            'repeating-linear-gradient(0deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 3px)',
           pointerEvents: 'none',
           zIndex: 2,
         }}
@@ -157,13 +157,13 @@ export default function BootSequence({ onComplete }: BootSequenceProps) {
       >
         {/* Prompt header */}
         <div style={{ marginBottom: 20 }}>
-          <span style={{ color: '#F2C14E', fontWeight: 'bold', fontSize: '0.95rem' }}>
+          <span style={{ color: '#F2C14E', fontSize: '0.55rem' }}>
             nurgissa@workshop
           </span>
-          <span style={{ color: '#666' }}>:</span>
-          <span style={{ color: '#62C9D9' }}>~</span>
-          <span style={{ color: '#E8E3ED' }}>$ </span>
-          <span style={{ color: '#E8E3ED' }}>boot</span>
+          <span style={{ color: '#666', fontSize: '0.55rem' }}>:</span>
+          <span style={{ color: '#62C9D9', fontSize: '0.55rem' }}>~</span>
+          <span style={{ color: '#E8E3ED', fontSize: '0.55rem' }}>$ </span>
+          <span style={{ color: '#E8E3ED', fontSize: '0.55rem' }}>boot</span>
           <span
             style={{
               display: 'inline-block',
@@ -178,7 +178,7 @@ export default function BootSequence({ onComplete }: BootSequenceProps) {
         </div>
 
         {/* Boot lines */}
-        <div style={{ fontSize: '0.82rem', lineHeight: 1.8 }}>
+        <div style={{ fontSize: '0.45rem', lineHeight: 2.4 }}>
           {BOOT_LINES.slice(0, visibleLines).map((line, i) => {
             const isOK = line.text.includes('[OK]');
             const parts = isOK ? line.text.split('[OK]') : [line.text];
@@ -203,7 +203,7 @@ export default function BootSequence({ onComplete }: BootSequenceProps) {
           <div
             style={{
               marginTop: 16,
-              fontSize: '0.8rem',
+              fontSize: '0.45rem',
               color: '#F2C14E',
               opacity: 0,
               animation: 'bootLineIn 0.3s ease-out 0.1s forwards',
@@ -221,7 +221,7 @@ export default function BootSequence({ onComplete }: BootSequenceProps) {
           <div
             style={{
               marginTop: 14,
-              fontSize: '0.88rem',
+              fontSize: '0.5rem',
               fontWeight: 'bold',
               color: '#63C174',
               opacity: 0,
