@@ -1,8 +1,12 @@
-// Pure Web Audio API Synthesizer for 8-Bit Retro Sound Effects (Zero External Files)
+// Pure Web Audio API Synthesizer + Real Audio File Playback
 
 class RetroSFX {
   private ctx: AudioContext | null = null;
   public enabled: boolean = true;
+
+  // Real keyboard audio buffer (loaded lazily from /keyboard.mp3)
+  private keyboardBuffer: AudioBuffer | null = null;
+  private keyboardBufferLoading: boolean = false;
 
   private initCtx() {
     if (!this.ctx && typeof window !== 'undefined') {
@@ -15,6 +19,21 @@ class RetroSFX {
       this.ctx.resume();
     }
   }
+
+  // Lazy-load keyboard.mp3 into an AudioBuffer for instant, low-latency playback
+  private async loadKeyboardBuffer() {
+    if (this.keyboardBuffer || this.keyboardBufferLoading) return;
+    this.keyboardBufferLoading = true;
+    try {
+      const res = await fetch('/keyboard.mp3');
+      const arrayBuf = await res.arrayBuffer();
+      this.keyboardBuffer = await this.ctx!.decodeAudioData(arrayBuf);
+    } catch {
+      // File unavailable — fall back to synthesis
+    }
+    this.keyboardBufferLoading = false;
+  }
+
 
   // 1. Mouse / UI Click Sound (original 8-bit pop — used for buttons, mouse clicks, etc.)
   playKeyClick() {
@@ -93,24 +112,59 @@ class RetroSFX {
   }
 
 
-  // 3. Typewriter Typing Sound — tuned for terminal animation (light, fast, varied)
-  //    Simulates a real membrane/tactile keyboard being typed at speed
+  // 3. Typewriter Typing Sound — plays real keyboard.mp3 audio file
+  //    Loads the buffer once, then plays a random slice with pitch/volume variation
   playTypingClick(char?: string) {
     if (!this.enabled) return;
     try {
       this.initCtx();
       if (!this.ctx) return;
 
+      // Trigger buffer load on first call (async, non-blocking)
+      if (!this.keyboardBuffer && !this.keyboardBufferLoading) {
+        this.loadKeyboardBuffer();
+        return; // skip first sound, buffer not ready yet
+      }
+
+      // If buffer loaded — play a random slice of the real recording
+      if (this.keyboardBuffer) {
+        const buf = this.keyboardBuffer;
+        const duration = buf.duration;
+
+        // Space/Enter = slightly slower playback (deeper pitch feel)
+        const isHeavy = char === ' ' || char === '\n';
+
+        // Random start point in the recording (avoid last 0.15s)
+        const maxStart = Math.max(0, duration - 0.15);
+        const offset = Math.random() * maxStart;
+
+        // Each keystroke plays a 65–110ms slice — short enough to not overlap
+        const sliceDuration = isHeavy ? 0.11 : 0.065 + Math.random() * 0.04;
+
+        // Slight pitch variation: 0.90–1.12x (mimics different keys)
+        const playbackRate = isHeavy
+          ? 0.88 + Math.random() * 0.08
+          : 0.92 + Math.random() * 0.20;
+
+        // Volume: light touch, slightly random
+        const gainNode = this.ctx.createGain();
+        gainNode.gain.setValueAtTime(isHeavy ? 0.55 : 0.45 + Math.random() * 0.15, this.ctx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + sliceDuration);
+        gainNode.connect(this.ctx.destination);
+
+        const source = this.ctx.createBufferSource();
+        source.buffer = buf;
+        source.playbackRate.value = playbackRate;
+        source.connect(gainNode);
+        source.start(this.ctx.currentTime, offset, sliceDuration / playbackRate);
+        return;
+      }
+
+      // ── Fallback synthesis (if file not available) ──
       const now = this.ctx.currentTime;
       const dest = this.ctx.destination;
-
-      // Space bar and Enter get a slightly deeper thud
       const isHeavy = char === ' ' || char === '\n';
-      // Punctuation gets a softer shorter tap
       const isSoft = char ? /[.,;:\-\'"!?@#]/.test(char) : false;
-
-      // ── Main tone: quick sine blip with pitch randomisation ──
-      // Real keys vary ~±15% in pitch due to finger angle/force
       const basePitch = isHeavy ? 95 : isSoft ? 160 : 130;
       const pitchVar = (Math.random() - 0.5) * basePitch * 0.25;
       const osc = this.ctx.createOscillator();
@@ -122,19 +176,6 @@ class RetroSFX {
       gain.gain.exponentialRampToValueAtTime(0.001, now + (isHeavy ? 0.07 : 0.045));
       osc.connect(gain); gain.connect(dest);
       osc.start(now); osc.stop(now + 0.08);
-
-      // ── Transient click layer (only on regular keys, not space) ──
-      if (!isHeavy) {
-        const oscT = this.ctx.createOscillator();
-        const gainT = this.ctx.createGain();
-        oscT.type = 'square';
-        oscT.frequency.setValueAtTime(1200 + Math.random() * 400, now);
-        oscT.frequency.exponentialRampToValueAtTime(300, now + 0.007);
-        gainT.gain.setValueAtTime(isSoft ? 0.018 : 0.032, now);
-        gainT.gain.exponentialRampToValueAtTime(0.001, now + 0.01);
-        oscT.connect(gainT); gainT.connect(dest);
-        oscT.start(now); oscT.stop(now + 0.012);
-      }
 
     } catch { /* suppressed */ }
   }
