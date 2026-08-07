@@ -54,7 +54,7 @@ export default function TerminalModal({ onClose }: TerminalModalProps) {
       } catch { /* fallback */ }
     }
     const audio = new Audio(url);
-    audio.volume = 0.5;
+    audio.volume = 0.325;
     typingAudioRef.current = audio;
   }, []);
 

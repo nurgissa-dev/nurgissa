@@ -124,7 +124,8 @@ class RetroSFX {
         // Distinct subtle pitch difference: Left click = slightly higher snappy tick, Right click = slightly deeper click
         const basePitch = isRightClick ? 0.90 : 1.05;
         source.playbackRate.value = basePitch + (Math.random() - 0.5) * 0.08;
-        gainNode.gain.value = isRightClick ? 0.65 : 0.55;
+        // Reduced volume by 35% (was 0.65 / 0.55)
+        gainNode.gain.value = isRightClick ? 0.42 : 0.36;
 
         source.connect(gainNode);
         gainNode.connect(this.ctx.destination);
@@ -155,7 +156,7 @@ class RetroSFX {
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(700 + Math.random() * 250, now);
       osc.frequency.exponentialRampToValueAtTime(120, now + 0.035);
-      gain.gain.setValueAtTime(0.08, now);
+      gain.gain.setValueAtTime(0.052, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
       osc.connect(gain);
       gain.connect(this.ctx.destination);
@@ -185,7 +186,8 @@ class RetroSFX {
         source.buffer = this.keyswitchBuffer;
         // Slight pitch variation (0.85–1.15x) so each keypress sounds unique
         source.playbackRate.value = 0.85 + Math.random() * 0.30;
-        gainNode.gain.value = 0.5 + Math.random() * 0.3;
+        // Reduced volume by 35% (was 0.5 + 0.3 * rand)
+        gainNode.gain.value = 0.32 + Math.random() * 0.20;
 
         source.connect(gainNode);
         gainNode.connect(this.ctx.destination);
@@ -201,7 +203,7 @@ class RetroSFX {
       oscA.type = 'square';
       oscA.frequency.setValueAtTime(1800 + Math.random() * 200, now);
       oscA.frequency.exponentialRampToValueAtTime(400, now + 0.008);
-      gainA.gain.setValueAtTime(0.055, now);
+      gainA.gain.setValueAtTime(0.035, now);
       gainA.gain.exponentialRampToValueAtTime(0.001, now + 0.012);
       oscA.connect(gainA); gainA.connect(dest);
       oscA.start(now); oscA.stop(now + 0.015);
@@ -244,9 +246,9 @@ class RetroSFX {
           ? 0.88 + Math.random() * 0.08
           : 0.92 + Math.random() * 0.20;
 
-        // Volume: light touch, slightly random
+        // Volume reduced by 35%
         const gainNode = this.ctx.createGain();
-        gainNode.gain.setValueAtTime(isHeavy ? 0.55 : 0.45 + Math.random() * 0.15, this.ctx.currentTime);
+        gainNode.gain.setValueAtTime(isHeavy ? 0.36 : 0.29 + Math.random() * 0.10, this.ctx.currentTime);
         gainNode.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + sliceDuration);
         gainNode.connect(this.ctx.destination);
 
