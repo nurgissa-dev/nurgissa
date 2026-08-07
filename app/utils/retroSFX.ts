@@ -35,24 +35,60 @@ class RetroSFX {
   }
 
 
-  // 1. Mouse / UI Click Sound (original 8-bit pop — used for buttons, mouse clicks, etc.)
+  // Real mouse click audio buffer (loaded lazily from /mouseclick.mp3)
+  private mouseBuffer: AudioBuffer | null = null;
+  private mouseLoading: boolean = false;
+
+  private async loadMouseBuffer() {
+    if (this.mouseBuffer || this.mouseLoading) return;
+    this.mouseLoading = true;
+    try {
+      const res = await fetch('/mouseclick.mp3');
+      const arrayBuf = await res.arrayBuffer();
+      this.mouseBuffer = await this.ctx!.decodeAudioData(arrayBuf);
+    } catch {
+      /* unavailable */
+    }
+    this.mouseLoading = false;
+  }
+
+  // 1. Mouse / UI Click Sound — plays real mouseclick.mp3 audio file
   playKeyClick() {
     if (!this.enabled) return;
     try {
       this.initCtx();
       if (!this.ctx) return;
 
+      // Lazy-load the mouse audio buffer on first click
+      if (!this.mouseBuffer && !this.mouseLoading) {
+        this.loadMouseBuffer();
+      }
+
+      // Play real mouse click audio if buffer is ready
+      if (this.mouseBuffer) {
+        const source = this.ctx.createBufferSource();
+        const gainNode = this.ctx.createGain();
+
+        source.buffer = this.mouseBuffer;
+        // Natural slight pitch variation (0.94–1.08x) for realistic tactile clicks
+        source.playbackRate.value = 0.94 + Math.random() * 0.14;
+        gainNode.gain.value = 0.5 + Math.random() * 0.2;
+
+        source.connect(gainNode);
+        gainNode.connect(this.ctx.destination);
+        source.start(this.ctx.currentTime);
+        return;
+      }
+
+      // Fallback synthesis if buffer not ready yet
       const now = this.ctx.currentTime;
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
-
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(700 + Math.random() * 250, now);
       osc.frequency.exponentialRampToValueAtTime(120, now + 0.035);
-
       gain.gain.setValueAtTime(0.08, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
-
       osc.connect(gain);
       gain.connect(this.ctx.destination);
       osc.start(now);
