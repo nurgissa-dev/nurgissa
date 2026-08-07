@@ -56,6 +56,11 @@ export default function TerminalModal({ onClose }: TerminalModalProps) {
     const audio = new Audio(url);
     audio.volume = 0.325;
     typingAudioRef.current = audio;
+
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+    };
   }, []);
 
   // Cursor blinking

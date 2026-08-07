@@ -3,6 +3,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import CozyRetroDesk, { RetroTarget } from './components/CozyRetroDesk';
 import TerminalModal from './components/TerminalModal';
+import BootSequence from './components/BootSequence';
 import { sfx } from './utils/retroSFX';
 
 const PROJECTS = [
@@ -106,6 +107,7 @@ export default function Portfolio() {
   const [isMobileView, setIsMobileView] = useState(false);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [mobileTerminalCmd, setMobileTerminalCmd] = useState<'whoami' | 'skills' | 'edu' | 'contact'>('whoami');
+  const [booting, setBooting] = useState(true);
 
   // Detect mobile screen on mount & resize
   useEffect(() => {
@@ -163,8 +165,15 @@ export default function Portfolio() {
   const innerBoxBg = '#ffffff';
   const contactBorderColor = '#362840';
 
+  const handleBootComplete = useCallback(() => {
+    setBooting(false);
+  }, []);
+
   return (
     <main style={{ minHeight: '100vh', width: '100%', background: '#f5ebe0', position: 'relative' }}>
+      
+      {/* 🖥️ BOOT SEQUENCE — CRT terminal boot animation (first visit only) */}
+      {booting && <BootSequence onComplete={handleBootComplete} />}
       
       {/* 📱 MOBILE DASHBOARD VIEW (Visible when screen < 768px and isMobileView is true) */}
       {isMobileView ? (
