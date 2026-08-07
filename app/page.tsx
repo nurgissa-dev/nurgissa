@@ -108,6 +108,13 @@ export default function Portfolio() {
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [mobileTerminalCmd, setMobileTerminalCmd] = useState<'whoami' | 'skills' | 'edu' | 'contact'>('whoami');
 
+  // Sync data-theme attribute on <html> element for CSS variables
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+    }
+  }, [isDarkMode]);
+
   // Detect mobile screen on mount & resize
   useEffect(() => {
     const handleResize = () => {

@@ -79,15 +79,15 @@ export default function CozyRetroDesk({
   }, [soundEnabled]);
 
   // Theme color tokens
-  // Night Developer Room palette — dark mode is "1:37 AM" not "brightness down"
-  const wallBg = isDarkMode ? '#1a1e2a' : '#f8f1e5';
-  const wallStripe = isDarkMode ? '#232940' : '#f0e5d5';
-  const deskBg = isDarkMode ? '#4a362a' : '#e2b991';
-  const deskLip = isDarkMode ? '#3d2b1f' : '#d4a375';
-  const deskGrain = isDarkMode ? '#352518' : '#cd9766';
-  const computerBox = isDarkMode ? '#2e2848' : '#a493e6';
-  const computerInner = isDarkMode ? '#3d3560' : '#c0b3f0';
-  const computerScreen = isDarkMode ? '#0c1018' : '#2a2038';
+  // Night Developer Room palette — dark mode is "1:37 AM" quiet developer room
+  const wallBg = isDarkMode ? '#0d111a' : '#f8f1e5';
+  const wallStripe = isDarkMode ? '#161c2b' : '#f0e5d5';
+  const deskBg = isDarkMode ? '#5a3a28' : '#e2b991';
+  const deskLip = isDarkMode ? '#422a1c' : '#d4a375';
+  const deskGrain = isDarkMode ? '#382215' : '#cd9766';
+  const computerBox = isDarkMode ? '#241e33' : '#a493e6';
+  const computerInner = isDarkMode ? '#332b47' : '#c0b3f0';
+  const computerScreen = isDarkMode ? '#060a12' : '#2a2038';
 
   // 1. Periodic eye blinking for CRT screen
   useEffect(() => {
@@ -240,23 +240,30 @@ export default function CozyRetroDesk({
         <defs>
           {/* Filters for soft glow */}
           <filter id="bulbGlow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation={isDarkMode ? 8 : 4} result="blur" />
+            <feGaussianBlur stdDeviation={isDarkMode ? 12 : 4} result="blur" />
             <feMerge>
               <feMergeNode in="blur" />
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
-          {/* Monitor glow gradients for dark mode */}
+          {/* Monitor wall glow gradient */}
           <radialGradient id="monitorWallGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#4a8fff" stopOpacity="0.5" />
-            <stop offset="40%" stopColor="#3366cc" stopOpacity="0.2" />
-            <stop offset="100%" stopColor="#1a1e2a" stopOpacity="0" />
+            <stop offset="0%" stopColor="#00f5d4" stopOpacity="0.4" />
+            <stop offset="45%" stopColor="#3a7bd5" stopOpacity="0.2" />
+            <stop offset="100%" stopColor="#0d111a" stopOpacity="0" />
           </radialGradient>
+          {/* Monitor desk spill gradient */}
           <radialGradient id="monitorDeskGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#5588dd" stopOpacity="0.6" />
-            <stop offset="60%" stopColor="#3355aa" stopOpacity="0.15" />
-            <stop offset="100%" stopColor="#4a362a" stopOpacity="0" />
+            <stop offset="0%" stopColor="#00f5d4" stopOpacity="0.32" />
+            <stop offset="60%" stopColor="#3a7bd5" stopOpacity="0.12" />
+            <stop offset="100%" stopColor="#5a3a28" stopOpacity="0" />
           </radialGradient>
+          {/* Lamp light cone gradient */}
+          <linearGradient id="lampConeGlow" x1="50%" y1="0%" x2="50%" y2="100%">
+            <stop offset="0%" stopColor="#ffb703" stopOpacity="0.45" />
+            <stop offset="50%" stopColor="#ff9e00" stopOpacity="0.18" />
+            <stop offset="100%" stopColor="#ff9e00" stopOpacity="0" />
+          </linearGradient>
         </defs>
 
         {/* ── 1. BACKGROUND WALL ── */}
@@ -276,6 +283,33 @@ export default function CozyRetroDesk({
           />
         ))}
 
+        {/* ── MONITOR & LAMP GLOW LIGHTING EFFECTS (Dark Mode Only) ── */}
+        {isDarkMode && (
+          <g style={{ transition: 'opacity 0.6s ease' }} pointerEvents="none">
+            {/* Ambient wall glow behind CRT monitor — cool cyan/indigo aura */}
+            <ellipse
+              cx="380"
+              cy="270"
+              rx="340"
+              ry="220"
+              fill="url(#monitorWallGlow)"
+            />
+            {/* Desk surface light pool in front of monitor */}
+            <ellipse
+              cx="380"
+              cy="530"
+              rx="280"
+              ry="60"
+              fill="url(#monitorDeskGlow)"
+            />
+            {/* Cozy desk lamp warm golden light cone on right desk */}
+            <polygon
+              points="1065,340 910,675 1200,675 1100,340"
+              fill="url(#lampConeGlow)"
+            />
+          </g>
+        )}
+
         {/* ── 2. DESK SURFACE ── */}
         <rect x="0" y="490" width="1200" height="185" fill={deskBg} stroke="#362840" strokeWidth="4" style={{ transition: 'fill 0.4s ease' }} />
         
@@ -287,30 +321,6 @@ export default function CozyRetroDesk({
         <line x1="450" y1="560" x2="880" y2="560" stroke={deskGrain} strokeWidth="2" strokeDasharray="80 25 50 15" />
         <line x1="150" y1="620" x2="680" y2="620" stroke={deskGrain} strokeWidth="2" strokeDasharray="100 30 70 20" />
         <line x1="780" y1="600" x2="1140" y2="600" stroke={deskGrain} strokeWidth="2" strokeDasharray="90 20 40 30" />
-
-        {/* ── MONITOR GLOW EFFECTS (Dark Mode Only) ── */}
-        {isDarkMode && (
-          <g style={{ transition: 'opacity 0.6s ease' }}>
-            {/* Ambient wall glow behind monitor — soft radial light on wall */}
-            <ellipse
-              cx="400"
-              cy="320"
-              rx="280"
-              ry="200"
-              fill="url(#monitorWallGlow)"
-              opacity="0.07"
-            />
-            {/* Desk surface light spill from monitor */}
-            <ellipse
-              cx="400"
-              cy="510"
-              rx="240"
-              ry="40"
-              fill="url(#monitorDeskGlow)"
-              opacity="0.08"
-            />
-          </g>
-        )}
 
 
 
@@ -493,6 +503,26 @@ export default function CozyRetroDesk({
             ))}
             <path d="M -10 20 Q -30 10 -20 50 Q -10 80 0 70" fill="none" stroke="#362840" strokeWidth="3" />
           </g>
+        </g>
+
+        {/* ── 8b. COZY RETRO DESK LAMP ── */}
+        <g id="desk-lamp-group" transform="translate(1060, 310)">
+          {/* Lamp Base Shadow */}
+          <ellipse cx="30" cy="180" rx="28" ry="8" fill="#000000" opacity="0.3" />
+          {/* Lamp Base */}
+          <path d="M 12 180 L 15 174 C 20 168, 40 168, 45 174 L 48 180 Z" fill={isDarkMode ? '#3e3558' : '#ffd166'} stroke="#362840" strokeWidth="3" />
+          {/* Arm Curved Stem */}
+          <path d="M 30 172 Q 42 100 12 65" fill="none" stroke="#362840" strokeWidth="4.5" strokeLinecap="round" />
+          <path d="M 30 172 Q 42 100 12 65" fill="none" stroke={isDarkMode ? '#ffd166' : '#b4a3e8'} strokeWidth="2.5" strokeLinecap="round" />
+          {/* Lamp Shade Dome Head */}
+          <path d="M -12 80 L 26 50 C 32 72, 2 92, -12 80 Z" fill={isDarkMode ? '#e76f51' : '#f4a2af'} stroke="#362840" strokeWidth="3.5" />
+          
+          {/* Glowing Bulb inside Shade */}
+          {isDarkMode ? (
+            <circle cx="8" cy="74" r="8" fill="#ffea00" filter="url(#bulbGlow)" />
+          ) : (
+            <circle cx="8" cy="74" r="6" fill="#fefae0" stroke="#362840" strokeWidth="1.5" />
+          )}
         </g>
 
         {/* ── 9. AESTHETIC COMPLETE 5-ROW CUSTOM 65% MECHANICAL KEYBOARD ── */}
