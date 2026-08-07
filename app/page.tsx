@@ -257,13 +257,13 @@ export default function Portfolio() {
           </div>
 
           {/* Mobile Terminal Card */}
-          <div style={{ background: '#1c1426', border: '3.5px solid #362840', borderRadius: 12, padding: 16, marginBottom: 16, boxShadow: '4px 4px 0px #362840', fontFamily: 'monospace' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12, borderBottom: '1px solid #362840', paddingBottom: 8 }}>
-              <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#ffd166' }}>🖥 MOBILE CRT TERMINAL v1.0</span>
+          <div style={{ background: '#2A2138', border: '3.5px solid #362840', borderRadius: 12, padding: 16, marginBottom: 16, boxShadow: '4px 4px 0px #362840', fontFamily: 'monospace' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12, borderBottom: '1px solid rgba(242, 193, 78, 0.25)', paddingBottom: 8 }}>
+              <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#F2C14E' }}>🖥 MOBILE CRT TERMINAL v1.0</span>
               <div style={{ display: 'flex', gap: 4 }}>
                 <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#f4a2af' }} />
-                <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#ffd166' }} />
-                <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#68c078' }} />
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#F2C14E' }} />
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#63C174' }} />
               </div>
             </div>
 
@@ -286,8 +286,8 @@ export default function Portfolio() {
                     fontWeight: 'bold',
                     fontFamily: 'monospace',
                     cursor: 'pointer',
-                    background: mobileTerminalCmd === cmd.id ? '#ffd166' : '#2a2038',
-                    color: mobileTerminalCmd === cmd.id ? '#362840' : '#ffffff',
+                    background: mobileTerminalCmd === cmd.id ? '#F2C14E' : '#392d4b',
+                    color: mobileTerminalCmd === cmd.id ? '#2A2138' : '#E8E3ED',
                     whiteSpace: 'nowrap'
                   }}
                 >
@@ -297,36 +297,37 @@ export default function Portfolio() {
             </div>
 
             {/* Command Output Window */}
-            <div style={{ background: '#0d1117', borderRadius: 8, padding: 12, fontSize: '0.8rem', lineHeight: 1.6, color: '#ffffff' }}>
+            <div style={{ background: '#191424', borderRadius: 8, padding: 12, fontSize: '0.82rem', lineHeight: 1.65, color: '#E8E3ED' }}>
               {mobileTerminalCmd === 'whoami' && (
                 <div>
-                  <div style={{ color: '#888' }}>$ whoami</div>
-                  <div style={{ color: '#00f5d4', fontWeight: 'bold', marginTop: 4 }}>
-                    Nurgissa Zhetkizgen — Full-Stack Developer & Software Engineering Student
+                  <div style={{ color: '#F2C14E', fontWeight: 'bold' }}>nurgissa@workshop:~$ whoami</div>
+                  <div style={{ marginTop: 6 }}>
+                    <span style={{ color: '#E8E3ED', fontWeight: 'bold' }}>Nurgissa Zhetkizgen </span>
+                    <span style={{ color: '#62C9D9', fontWeight: 'bold' }}>— Full-Stack Developer</span>
                   </div>
                 </div>
               )}
               {mobileTerminalCmd === 'skills' && (
                 <div>
-                  <div style={{ color: '#888' }}>$ cat skills.txt</div>
-                  <div style={{ color: '#ffd166', fontWeight: 'bold', marginTop: 4 }}>
+                  <div style={{ color: '#F2C14E', fontWeight: 'bold' }}>nurgissa@workshop:~$ cat skills.txt</div>
+                  <div style={{ color: '#E8E3ED', marginTop: 6 }}>
                     Python · FastAPI · React · Next.js · TypeScript · PostgreSQL · Docker · Git
                   </div>
                 </div>
               )}
               {mobileTerminalCmd === 'edu' && (
                 <div>
-                  <div style={{ color: '#888' }}>$ cat education.txt</div>
-                  <div style={{ color: '#b4a3e8', fontWeight: 'bold', marginTop: 4 }}>
+                  <div style={{ color: '#F2C14E', fontWeight: 'bold' }}>nurgissa@workshop:~$ cat education.txt</div>
+                  <div style={{ color: '#E8E3ED', marginTop: 6 }}>
                     Astana IT University — B.S. Software Engineering (2023–2026)
                   </div>
                 </div>
               )}
               {mobileTerminalCmd === 'contact' && (
                 <div>
-                  <div style={{ color: '#888' }}>$ cat contact.txt</div>
-                  <div style={{ color: '#f4a2af', fontWeight: 'bold', marginTop: 4 }}>
-                    Telegram: @trulondoner | Email: sholak0@mail.ru | GitHub: nurgissa-dev
+                  <div style={{ color: '#F2C14E', fontWeight: 'bold' }}>nurgissa@workshop:~$ cat contact.txt</div>
+                  <div style={{ color: '#E8E3ED', marginTop: 6 }}>
+                    Telegram: <span style={{ color: '#62C9D9' }}>@trulondoner</span> | GitHub: <span style={{ color: '#62C9D9' }}>nurgissa-dev</span> | Email: <span style={{ color: '#62C9D9' }}>sholak0@mail.ru</span>
                   </div>
                 </div>
               )}

@@ -7,44 +7,31 @@ interface TerminalModalProps {
   onClose: () => void;
 }
 
-// Each "scene" = prompt types the command, then the response appears
 const TERMINAL_SCRIPT = [
   {
     command: 'whoami',
-    response: 'Nurgissa Zhetkizgen — Full-Stack Developer',
-    responseColor: '#00f5d4',
+    type: 'whoami',
   },
   {
     command: 'cat skills.txt',
-    response: 'Python · FastAPI · React · Next.js · TypeScript · PostgreSQL · Docker · Git',
-    responseColor: '#ffd166',
+    type: 'skills',
   },
   {
     command: 'cat education.txt',
-    response: 'Astana IT University — B.S. Software Engineering (2023–2026)',
-    responseColor: '#b4a3e8',
+    type: 'edu',
   },
   {
     command: 'cat contact.txt',
-    response: 'Telegram: @trulondoner  |  GitHub: nurgissa-dev  |  Email: sholak0@mail.ru',
-    responseColor: '#f4a2af',
+    type: 'contact',
   },
   {
     command: 'echo "Available for hire 🚀"',
-    response: 'Available for hire 🚀',
-    responseColor: '#68c078',
+    type: 'hire',
   },
 ];
 
-type LineType =
-  | { kind: 'typing'; partial: string; cmdIdx: number }
-  | { kind: 'done'; cmd: string; response: string; responseColor: string }
-  | { kind: 'idle' };
-
 export default function TerminalModal({ onClose }: TerminalModalProps) {
-  // completedLines = fully typed commands+responses shown above current
-  const [completedLines, setCompletedLines] = useState<{ cmd: string; response: string; responseColor: string }[]>([]);
-  // current typing state
+  const [completedLines, setCompletedLines] = useState<{ cmd: string; type: string }[]>([]);
   const [currentTyped, setCurrentTyped] = useState('');
   const [currentIdx, setCurrentIdx] = useState(0);
   const [phase, setPhase] = useState<'typing' | 'responding' | 'pausing' | 'done'>('typing');
@@ -52,14 +39,12 @@ export default function TerminalModal({ onClose }: TerminalModalProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const typingAudioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Sound duration ~2s → typing should finish slightly before it ends
-  const TYPING_SOUND_DURATION = 1800; // ms — effective typing window from the 2s sound
-  const RESPONSE_DELAY = 250; // ms pause before response appears
-  const NEXT_CMD_DELAY = 700; // ms pause before next command starts
+  const TYPING_SOUND_DURATION = 1800; // ms
+  const RESPONSE_DELAY = 250; // ms
+  const NEXT_CMD_DELAY = 700; // ms
 
   // Preload typing audio element once on mount
   useEffect(() => {
-    // Detect audioUrl basePath
     let url = '/typing.mp3';
     if (typeof document !== 'undefined') {
       try {
@@ -93,7 +78,6 @@ export default function TerminalModal({ onClose }: TerminalModalProps) {
     const charDelay = TYPING_SOUND_DURATION / Math.max(fullText.length, 1);
 
     if (phase === 'typing') {
-      // Play real typing audio loop when starting typing
       if (currentTyped.length === 0 && typingAudioRef.current && sfx.enabled) {
         typingAudioRef.current.currentTime = 0;
         typingAudioRef.current.play().catch(() => {});
@@ -105,7 +89,6 @@ export default function TerminalModal({ onClose }: TerminalModalProps) {
         }, charDelay);
         return () => clearTimeout(timer);
       } else {
-        // Finished typing this command → pause briefly then show response
         setPhase('responding');
       }
     }
@@ -114,7 +97,7 @@ export default function TerminalModal({ onClose }: TerminalModalProps) {
       const timer = setTimeout(() => {
         setCompletedLines(prev => [
           ...prev,
-          { cmd: item.command, response: item.response, responseColor: item.responseColor },
+          { cmd: item.command, type: item.type },
         ]);
         setCurrentTyped('');
         setPhase('pausing');
@@ -138,18 +121,53 @@ export default function TerminalModal({ onClose }: TerminalModalProps) {
     }
   }, [completedLines, currentTyped, phase]);
 
-  const promptColor = '#a493e6';
-  const accentColor = '#a493e6';
+  const renderResponseContent = (type: string) => {
+    switch (type) {
+      case 'whoami':
+        return (
+          <div style={{ paddingLeft: 14, marginBottom: 8, lineHeight: 1.6 }}>
+            <span style={{ color: '#E8E3ED', fontWeight: 'bold' }}>Nurgissa Zhetkizgen </span>
+            <span style={{ color: '#62C9D9', fontWeight: 'bold' }}>— Full-Stack Developer</span>
+          </div>
+        );
+      case 'skills':
+        return (
+          <div style={{ color: '#E8E3ED', paddingLeft: 14, marginBottom: 8, lineHeight: 1.6 }}>
+            Python · FastAPI · React · Next.js · TypeScript · PostgreSQL · Docker · Git
+          </div>
+        );
+      case 'edu':
+        return (
+          <div style={{ color: '#E8E3ED', paddingLeft: 14, marginBottom: 8, lineHeight: 1.6 }}>
+            Astana IT University — B.S. Software Engineering (2023–2026)
+          </div>
+        );
+      case 'contact':
+        return (
+          <div style={{ color: '#E8E3ED', paddingLeft: 14, marginBottom: 8, lineHeight: 1.6 }}>
+            Telegram: <span style={{ color: '#62C9D9' }}>@trulondoner</span> | GitHub: <span style={{ color: '#62C9D9' }}>nurgissa-dev</span> | Email: <span style={{ color: '#62C9D9' }}>sholak0@mail.ru</span>
+          </div>
+        );
+      case 'hire':
+        return (
+          <div style={{ color: '#63C174', fontWeight: 'bold', paddingLeft: 14, marginBottom: 8, lineHeight: 1.6 }}>
+            Available for hire 🚀
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="retro-modal-overlay" onClick={onClose}>
       <div
         className="retro-card"
         style={{
-          background: '#1c1426',
-          color: '#ffffff',
-          border: `3.5px solid ${accentColor}`,
-          boxShadow: '6px 8px 0px #1a1028',
+          background: '#2A2138',
+          color: '#E8E3ED',
+          border: '3.5px solid #F2C14E',
+          boxShadow: '6px 8px 0px #191424',
           maxWidth: 640,
           width: '100%',
           padding: 0,
@@ -158,22 +176,22 @@ export default function TerminalModal({ onClose }: TerminalModalProps) {
         }}
         onClick={e => e.stopPropagation()}
       >
-        {/* Terminal title bar */}
+        {/* Terminal Title Bar */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: '10px 16px',
-          background: '#2a2038',
-          borderBottom: `2px solid ${accentColor}22`,
+          background: '#2A2138',
+          borderBottom: '2px solid rgba(242, 193, 78, 0.25)',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <div style={{ display: 'flex', gap: 6 }}>
               <div style={{ width: 11, height: 11, borderRadius: '50%', background: '#f4a2af' }} />
-              <div style={{ width: 11, height: 11, borderRadius: '50%', background: '#ffd166' }} />
-              <div style={{ width: 11, height: 11, borderRadius: '50%', background: '#68c078' }} />
+              <div style={{ width: 11, height: 11, borderRadius: '50%', background: '#F2C14E' }} />
+              <div style={{ width: 11, height: 11, borderRadius: '50%', background: '#63C174' }} />
             </div>
-            <span style={{ fontSize: '0.78rem', fontWeight: 'bold', fontFamily: 'monospace', color: accentColor, letterSpacing: 1.5 }}>
+            <span style={{ fontSize: '0.82rem', fontWeight: 'bold', fontFamily: 'monospace', color: '#F2C14E', letterSpacing: 1.2 }}>
               nurgissa@workshop: ~
             </span>
           </div>
@@ -181,7 +199,7 @@ export default function TerminalModal({ onClose }: TerminalModalProps) {
             onClick={onClose}
             style={{
               background: '#f4a2af',
-              border: '2px solid #ffffff',
+              border: '2px solid #362840',
               borderRadius: '50%',
               width: 26,
               height: 26,
@@ -199,70 +217,59 @@ export default function TerminalModal({ onClose }: TerminalModalProps) {
           </button>
         </div>
 
-        {/* Terminal body */}
+        {/* Terminal Body */}
         <div
           ref={scrollRef}
           style={{
-            padding: '16px 18px',
+            padding: '18px 20px',
             fontFamily: 'monospace',
             fontSize: '0.88rem',
             lineHeight: 1.85,
-            minHeight: 260,
-            maxHeight: 340,
+            minHeight: 270,
+            maxHeight: 350,
             overflowY: 'auto',
-            background: '#1c1426',
+            background: '#191424',
           }}
         >
-          {/* Completed lines */}
+          {/* Completed Lines */}
           {completedLines.map((line, i) => (
             <div key={i}>
-              <div>
-                <span style={{ color: '#ffd166' }}>nurgissa@workshop</span>
-                <span style={{ color: '#aaaaaa' }}>:</span>
-                <span style={{ color: '#58A6FF' }}>~</span>
-                <span style={{ color: '#ffffff' }}>$ </span>
-                <span style={{ color: '#ffffff' }}>{line.cmd}</span>
+              <div style={{ marginBottom: 4 }}>
+                <span style={{ color: '#F2C14E', fontWeight: 'bold' }}>nurgissa@workshop:~$ </span>
+                <span style={{ color: '#F2C14E' }}>{line.cmd}</span>
               </div>
-              <div style={{ color: line.responseColor, paddingLeft: 14, marginBottom: 6, opacity: 0.95 }}>
-                {line.response}
-              </div>
+              {renderResponseContent(line.type)}
             </div>
           ))}
 
-          {/* Currently typing line */}
+          {/* Currently Typing Line */}
           {phase !== 'done' && currentIdx < TERMINAL_SCRIPT.length && (
             <div>
-              <span style={{ color: '#ffd166' }}>nurgissa@workshop</span>
-              <span style={{ color: '#aaaaaa' }}>:</span>
-              <span style={{ color: '#58A6FF' }}>~</span>
-              <span style={{ color: '#ffffff' }}>$ </span>
-              <span style={{ color: '#ffffff' }}>{currentTyped}</span>
+              <span style={{ color: '#F2C14E', fontWeight: 'bold' }}>nurgissa@workshop:~$ </span>
+              <span style={{ color: '#F2C14E' }}>{currentTyped}</span>
               <span style={{
                 display: 'inline-block',
-                width: 9,
+                width: 8,
                 height: '1em',
-                background: cursorVisible ? promptColor : 'transparent',
+                background: cursorVisible ? '#F2C14E' : 'transparent',
                 verticalAlign: 'text-bottom',
-                marginLeft: 1,
+                marginLeft: 2,
                 transition: 'background 0.1s',
               }} />
             </div>
           )}
 
-          {/* Idle cursor after all done */}
+          {/* Idle Cursor After All Done */}
           {phase === 'done' && (
             <div>
-              <span style={{ color: '#ffd166' }}>nurgissa@workshop</span>
-              <span style={{ color: '#aaaaaa' }}>:</span>
-              <span style={{ color: '#58A6FF' }}>~</span>
-              <span style={{ color: '#ffffff' }}>$ </span>
+              <span style={{ color: '#F2C14E', fontWeight: 'bold' }}>nurgissa@workshop:~$ </span>
               <span style={{
                 display: 'inline-block',
-                width: 9,
+                width: 8,
                 height: '1em',
-                background: cursorVisible ? promptColor : 'transparent',
+                background: cursorVisible ? '#F2C14E' : 'transparent',
                 verticalAlign: 'text-bottom',
-                marginLeft: 1,
+                marginLeft: 2,
               }} />
             </div>
           )}
@@ -274,21 +281,21 @@ export default function TerminalModal({ onClose }: TerminalModalProps) {
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: '10px 18px',
-          background: '#2a2038',
-          borderTop: `2px solid ${accentColor}22`,
+          background: '#2A2138',
+          borderTop: '2px solid rgba(242, 193, 78, 0.25)',
         }}>
-          <span style={{ fontSize: '0.7rem', fontWeight: 'bold', fontFamily: 'monospace', color: '#555e6e' }}>
+          <span style={{ fontSize: '0.72rem', fontWeight: 'bold', fontFamily: 'monospace', color: '#9d8189' }}>
             🖥 CRT TERMINAL v1.0 — READ ONLY MODE
           </span>
           <button
             onClick={onClose}
             style={{
               padding: '6px 16px',
-              background: accentColor,
-              border: '2.5px solid #ffffff',
+              background: '#F2C14E',
+              border: '2.5px solid #362840',
               borderRadius: 6,
               fontWeight: 'bold',
-              color: '#1c1426',
+              color: '#2A2138',
               cursor: 'pointer',
               fontFamily: 'monospace',
               fontSize: '0.8rem',
