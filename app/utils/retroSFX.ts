@@ -16,7 +16,7 @@ class RetroSFX {
     }
   }
 
-  // 1. Deep "Thock" Keyboard Sound (premium mechanical switch feel)
+  // 1. Mouse / UI Click Sound (original 8-bit pop — used for buttons, mouse clicks, etc.)
   playKeyClick() {
     if (!this.enabled) return;
     try {
@@ -24,37 +24,74 @@ class RetroSFX {
       if (!this.ctx) return;
 
       const now = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
 
-      // Layer 1: Deep low-end thump (the "thock" body)
-      const osc1 = this.ctx.createOscillator();
-      const gain1 = this.ctx.createGain();
-      osc1.type = 'sine';
-      osc1.frequency.setValueAtTime(180 + Math.random() * 40, now);
-      osc1.frequency.exponentialRampToValueAtTime(60, now + 0.06);
-      gain1.gain.setValueAtTime(0.18, now);
-      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
-      osc1.connect(gain1);
-      gain1.connect(this.ctx.destination);
-      osc1.start(now);
-      osc1.stop(now + 0.08);
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(700 + Math.random() * 250, now);
+      osc.frequency.exponentialRampToValueAtTime(120, now + 0.035);
 
-      // Layer 2: Short click transient on top (the "tick")
-      const osc2 = this.ctx.createOscillator();
-      const gain2 = this.ctx.createGain();
-      osc2.type = 'square';
-      osc2.frequency.setValueAtTime(900 + Math.random() * 200, now);
-      osc2.frequency.exponentialRampToValueAtTime(200, now + 0.015);
-      gain2.gain.setValueAtTime(0.04, now);
-      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.018);
-      osc2.connect(gain2);
-      gain2.connect(this.ctx.destination);
-      osc2.start(now);
-      osc2.stop(now + 0.018);
+      gain.gain.setValueAtTime(0.08, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
 
-    } catch {
-      // Audio context suppressed
-    }
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.035);
+    } catch { /* suppressed */ }
   }
+
+  // 2. Mechanical Keyboard Switch Sound — Box Navy / Clicky style
+  //    Three-layer synthesis: click transient + bottom-out thud + spring ping
+  playKeySwitchClick() {
+    if (!this.enabled) return;
+    try {
+      this.initCtx();
+      if (!this.ctx) return;
+
+      const now = this.ctx.currentTime;
+      const dest = this.ctx.destination;
+
+      // ── Layer A: Click transient (the "click" actuating moment) ──
+      // Short, sharp burst ~1800Hz square → drops fast
+      const oscA = this.ctx.createOscillator();
+      const gainA = this.ctx.createGain();
+      oscA.type = 'square';
+      oscA.frequency.setValueAtTime(1800 + Math.random() * 200, now);
+      oscA.frequency.exponentialRampToValueAtTime(400, now + 0.008);
+      gainA.gain.setValueAtTime(0.055, now);
+      gainA.gain.exponentialRampToValueAtTime(0.001, now + 0.012);
+      oscA.connect(gainA); gainA.connect(dest);
+      oscA.start(now); oscA.stop(now + 0.015);
+
+      // ── Layer B: Bottom-out thud (key hitting the PCB/plate) ──
+      // Low sine 120Hz with quick decay — the satisfying "thud"
+      const oscB = this.ctx.createOscillator();
+      const gainB = this.ctx.createGain();
+      oscB.type = 'sine';
+      oscB.frequency.setValueAtTime(130 + Math.random() * 30, now + 0.006);
+      oscB.frequency.exponentialRampToValueAtTime(55, now + 0.07);
+      gainB.gain.setValueAtTime(0.0, now);
+      gainB.gain.setValueAtTime(0.22, now + 0.006);
+      gainB.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+      oscB.connect(gainB); gainB.connect(dest);
+      oscB.start(now); oscB.stop(now + 0.1);
+
+      // ── Layer C: Spring ping (metallic resonance of the spring) ──
+      // Very quiet sine ~700Hz, slightly randomised, fades slowly
+      const oscC = this.ctx.createOscillator();
+      const gainC = this.ctx.createGain();
+      oscC.type = 'sine';
+      oscC.frequency.setValueAtTime(680 + Math.random() * 80, now + 0.008);
+      gainC.gain.setValueAtTime(0.0, now);
+      gainC.gain.setValueAtTime(0.018, now + 0.008);
+      gainC.gain.exponentialRampToValueAtTime(0.001, now + 0.13);
+      oscC.connect(gainC); gainC.connect(dest);
+      oscC.start(now); oscC.stop(now + 0.14);
+
+    } catch { /* suppressed */ }
+  }
+
 
   // 2. Modal Open 8-Bit Arpeggio Chirp
   playModalOpen() {

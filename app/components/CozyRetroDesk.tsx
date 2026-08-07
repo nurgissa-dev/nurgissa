@@ -102,7 +102,7 @@ export default function CozyRetroDesk({
     const handleKeyDown = (e: KeyboardEvent) => {
       const code = e.code.toLowerCase();
       setPressedCodes(prev => new Set(prev).add(code));
-      sfx.playKeyClick();
+      sfx.playKeySwitchClick(); // 🎹 Box Navy clicky switch sound
     };
 
     const handleKeyUp = (e: KeyboardEvent) => {
