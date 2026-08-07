@@ -74,8 +74,9 @@ export default function TerminalModal({ isDarkMode, onClose }: TerminalModalProp
     if (phase === 'typing') {
       if (currentTyped.length < script.command.length) {
         const id = setTimeout(() => {
+          const nextChar = script.command[currentTyped.length];
           setCurrentTyped(prev => script.command.slice(0, prev.length + 1));
-          sfx.playKeyClick(); // 🔊 clack on each typed character
+          sfx.playTypingClick(nextChar); // ⌨️ realistic typing sound per character
         }, CHAR_DELAY);
         return () => clearTimeout(id);
       } else {
