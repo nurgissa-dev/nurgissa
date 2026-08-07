@@ -157,42 +157,40 @@ export default function Portfolio() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [closeModal, selectObject, toggleSound]);
 
-  // Pixel Art Style Tokens
-  const PX = "'Press Start 2P', monospace";
+  // Clean Light Theme Style Tokens
   const cardBg = '#fefae0';
   const cardBorder = '#362840';
   const textColor = '#362840';
   const subTextColor = '#9d8189';
   const innerBoxBg = '#ffffff';
   const contactBorderColor = '#362840';
-  const pixelShadow = '4px 4px 0px #362840';
 
   const handleBootComplete = useCallback(() => {
     setBooting(false);
   }, []);
 
   return (
-    <main style={{ minHeight: '100vh', width: '100%', background: '#f5ebe0', position: 'relative', fontFamily: PX }}>
+    <main style={{ minHeight: '100vh', width: '100%', background: '#f5ebe0', position: 'relative' }}>
       
       {/* 🖥️ BOOT SEQUENCE — CRT terminal boot animation (first visit only) */}
       {booting && <BootSequence onComplete={handleBootComplete} />}
       
       {/* 📱 MOBILE DASHBOARD VIEW (Visible when screen < 768px and isMobileView is true) */}
       {isMobileView ? (
-        <div style={{ width: '100%', minHeight: '100vh', background: '#f5ebe0', color: textColor, padding: '16px 16px 60px 16px', overflowY: 'visible', fontFamily: PX }}>
+        <div style={{ width: '100%', minHeight: '100vh', background: '#f5ebe0', color: textColor, padding: '16px 16px 60px 16px', overflowY: 'visible', fontFamily: 'sans-serif' }}>
           
           {/* Mobile Header Bar */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
               <span style={{ fontSize: '1.4rem' }}>🎓</span>
-              <span style={{ fontSize: '0.85rem', fontWeight: 800, fontFamily: PX, color: '#6c5ce7' }}>
+              <span style={{ fontSize: '0.85rem', fontWeight: 800, fontFamily: 'monospace', color: '#6c5ce7' }}>
                 ASTANA IT UNIVERSITY
               </span>
             </div>
             <div style={{ display: 'flex', gap: 6 }}>
               <button
                 onClick={toggleSound}
-                style={{ padding: '6px 12px', background: soundEnabled ? '#ffffff' : '#f4a2af', border: '2.5px solid #362840', borderRadius: 0, fontSize: '0.8rem', fontWeight: 'bold', fontFamily: PX, color: '#362840', boxShadow: '2px 2px 0px #362840' }}
+                style={{ padding: '6px 12px', background: soundEnabled ? '#ffffff' : '#f4a2af', border: '2.5px solid #362840', borderRadius: 20, fontSize: '0.8rem', fontWeight: 'bold', fontFamily: 'monospace', color: '#362840', boxShadow: '2px 2px 0px #362840' }}
               >
                 {soundEnabled ? '🔊 SFX' : '🔇 MUTED'}
               </button>
@@ -200,14 +198,14 @@ export default function Portfolio() {
           </div>
 
           {/* Hero Card */}
-          <div style={{ background: cardBg, border: '3.5px solid #362840', borderRadius: 0, padding: 20, marginBottom: 16, boxShadow: pixelShadow }}>
-            <div style={{ display: 'inline-block', padding: '4px 10px', background: '#ffd166', border: '2px solid #362840', borderRadius: 0, fontSize: '0.75rem', fontWeight: 'bold', fontFamily: PX, color: '#362840', marginBottom: 10 }}>
+          <div style={{ background: cardBg, border: '3.5px solid #362840', borderRadius: 14, padding: 20, marginBottom: 16, boxShadow: '4px 6px 0px #362840' }}>
+            <div style={{ display: 'inline-block', padding: '4px 10px', background: '#ffd166', border: '2px solid #362840', borderRadius: 6, fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'monospace', color: '#362840', marginBottom: 10 }}>
               👋 WELCOME TO MY WORKSPACE
             </div>
             <h1 style={{ fontSize: '1.6rem', fontWeight: 900, color: textColor, marginBottom: 4, letterSpacing: '-0.5px' }}>
               Nurgissa Zhetkizgen
             </h1>
-            <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#6c5ce7', fontFamily: PX, marginBottom: 12 }}>
+            <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#6c5ce7', fontFamily: 'monospace', marginBottom: 12 }}>
               Full-Stack Software Engineer
             </div>
             <p style={{ fontSize: '0.88rem', lineHeight: 1.6, color: textColor, marginBottom: 14 }}>
@@ -218,7 +216,7 @@ export default function Portfolio() {
                 href="Nurgissa_Resume.pdf?v=2"
                 target="_blank"
                 rel="noreferrer"
-                style={{ flex: 1, textDecoration: 'none', padding: '10px', background: '#f4a2af', border: '2.5px solid #362840', borderRadius: 0, fontWeight: 800, color: '#362840', fontFamily: PX, fontSize: '0.8rem', textAlign: 'center', boxShadow: pixelShadow }}
+                style={{ flex: 1, textDecoration: 'none', padding: '10px', background: '#f4a2af', border: '2.5px solid #362840', borderRadius: 8, fontWeight: 800, color: '#362840', fontFamily: 'monospace', fontSize: '0.8rem', textAlign: 'center', boxShadow: '2px 3px 0px #362840' }}
               >
                 📄 RESUME (PDF)
               </a>
@@ -226,7 +224,7 @@ export default function Portfolio() {
                 href="https://t.me/trulondoner"
                 target="_blank"
                 rel="noreferrer"
-                style={{ flex: 1, textDecoration: 'none', padding: '10px', background: '#ffd166', border: '2.5px solid #362840', borderRadius: 0, fontWeight: 800, color: '#362840', fontFamily: PX, fontSize: '0.8rem', textAlign: 'center', boxShadow: pixelShadow }}
+                style={{ flex: 1, textDecoration: 'none', padding: '10px', background: '#ffd166', border: '2.5px solid #362840', borderRadius: 8, fontWeight: 800, color: '#362840', fontFamily: 'monospace', fontSize: '0.8rem', textAlign: 'center', boxShadow: '2px 3px 0px #362840' }}
               >
                 💬 TELEGRAM
               </a>
@@ -236,23 +234,23 @@ export default function Portfolio() {
           {/* Switch to Desktop 2D Canvas Button for Mobile users */}
           <button
             onClick={() => setIsMobileView(false)}
-            style={{ width: '100%', padding: '12px', background: '#b4a3e8', border: '3px solid #362840', borderRadius: 0, fontWeight: 800, color: '#362840', fontFamily: PX, fontSize: '0.85rem', marginBottom: 16, cursor: 'pointer', boxShadow: pixelShadow, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
+            style={{ width: '100%', padding: '12px', background: '#b4a3e8', border: '3px solid #362840', borderRadius: 10, fontWeight: 800, color: '#362840', fontFamily: 'monospace', fontSize: '0.85rem', marginBottom: 16, cursor: 'pointer', boxShadow: '4px 4px 0px #362840', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
           >
             <span>🖥 EXPLORE INTERACTIVE 2D CANVAS SCENE</span>
           </button>
 
           {/* Mobile Education Card */}
-          <div style={{ background: 'linear-gradient(135deg, #f0ebff, #e2d5ff)', border: '3.5px solid #362840', borderRadius: 0, padding: 18, marginBottom: 16, boxShadow: pixelShadow }}>
+          <div style={{ background: 'linear-gradient(135deg, #f0ebff, #e2d5ff)', border: '3.5px solid #362840', borderRadius: 12, padding: 18, marginBottom: 16, boxShadow: '4px 4px 0px #362840' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 <span style={{ fontSize: '1.4rem' }}>🎓</span>
                 <span style={{ fontSize: '1rem', fontWeight: 900, color: textColor }}>Astana IT University</span>
               </div>
-              <span style={{ padding: '3px 8px', background: '#ffd166', border: '1.5px solid #362840', borderRadius: 0, fontSize: '0.7rem', fontWeight: 'bold', fontFamily: PX, color: '#362840' }}>
+              <span style={{ padding: '3px 8px', background: '#ffd166', border: '1.5px solid #362840', borderRadius: 4, fontSize: '0.7rem', fontWeight: 'bold', fontFamily: 'monospace', color: '#362840' }}>
                 2023–2026
               </span>
             </div>
-            <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#6c5ce7', marginBottom: 8, fontFamily: PX }}>
+            <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#6c5ce7', marginBottom: 8, fontFamily: 'monospace' }}>
               B.S. Software Engineering
             </div>
             <p style={{ fontSize: '0.82rem', color: textColor, lineHeight: 1.5, marginBottom: 10 }}>
@@ -262,20 +260,20 @@ export default function Portfolio() {
               href="https://astanait.edu.kz/en"
               target="_blank"
               rel="noreferrer"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '5px 10px', background: '#362840', color: '#ffffff', textDecoration: 'none', borderRadius: 0, fontSize: '0.75rem', fontWeight: 'bold', fontFamily: PX }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '5px 10px', background: '#362840', color: '#ffffff', textDecoration: 'none', borderRadius: 6, fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'monospace' }}
             >
               Visit astanait.edu.kz ↗
             </a>
           </div>
 
           {/* Mobile Terminal Card */}
-          <div style={{ background: '#2A2138', border: '3.5px solid #362840', borderRadius: 0, padding: 16, marginBottom: 16, boxShadow: pixelShadow, fontFamily: PX }}>
+          <div style={{ background: '#2A2138', border: '3.5px solid #362840', borderRadius: 12, padding: 16, marginBottom: 16, boxShadow: '4px 4px 0px #362840', fontFamily: 'monospace' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12, borderBottom: '1px solid rgba(242, 193, 78, 0.25)', paddingBottom: 8 }}>
               <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#F2C14E' }}>🖥 MOBILE CRT TERMINAL v1.0</span>
               <div style={{ display: 'flex', gap: 4 }}>
-                <div style={{ width: 8, height: 8, borderRadius: 0, background: '#f4a2af' }} />
-                <div style={{ width: 8, height: 8, borderRadius: 0, background: '#F2C14E' }} />
-                <div style={{ width: 8, height: 8, borderRadius: 0, background: '#63C174' }} />
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#f4a2af' }} />
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#F2C14E' }} />
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#63C174' }} />
               </div>
             </div>
 
@@ -292,11 +290,11 @@ export default function Portfolio() {
                   onClick={() => setMobileTerminalCmd(cmd.id as typeof mobileTerminalCmd)}
                   style={{
                     padding: '4px 10px',
-                    borderRadius: 0,
+                    borderRadius: 6,
                     border: '1.5px solid #362840',
                     fontSize: '0.75rem',
                     fontWeight: 'bold',
-                    fontFamily: PX,
+                    fontFamily: 'monospace',
                     cursor: 'pointer',
                     background: mobileTerminalCmd === cmd.id ? '#F2C14E' : '#392d4b',
                     color: mobileTerminalCmd === cmd.id ? '#2A2138' : '#E8E3ED',
@@ -309,7 +307,7 @@ export default function Portfolio() {
             </div>
 
             {/* Command Output Window */}
-            <div style={{ background: '#191424', borderRadius: 0, padding: 12, fontSize: '0.82rem', lineHeight: 1.65, color: '#E8E3ED' }}>
+            <div style={{ background: '#191424', borderRadius: 8, padding: 12, fontSize: '0.82rem', lineHeight: 1.65, color: '#E8E3ED' }}>
               {mobileTerminalCmd === 'whoami' && (
                 <div>
                   <div style={{ color: '#F2C14E', fontWeight: 'bold' }}>nurgissa@workshop:~$ whoami</div>
@@ -348,27 +346,27 @@ export default function Portfolio() {
 
           {/* Mobile Projects List */}
           <div style={{ marginBottom: 16 }}>
-            <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#362840', fontFamily: PX, marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
+            <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#362840', fontFamily: 'monospace', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
               <span>📚 FEATURED PROJECTS ({PROJECTS.length})</span>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               {PROJECTS.map(p => (
-                <div key={p.id} style={{ background: cardBg, border: '3px solid #362840', borderRadius: 0, padding: 14, boxShadow: pixelShadow }}>
+                <div key={p.id} style={{ background: cardBg, border: '3px solid #362840', borderRadius: 10, padding: 14, boxShadow: '3px 3px 0px #362840' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
                     <h3 style={{ fontSize: '1rem', fontWeight: 900, color: textColor }}>{p.label}</h3>
-                    <span style={{ padding: '2px 6px', background: p.color, border: '1.5px solid #362840', borderRadius: 0, fontSize: '0.68rem', fontWeight: 'bold', fontFamily: PX, color: '#362840' }}>
+                    <span style={{ padding: '2px 6px', background: p.color, border: '1.5px solid #362840', borderRadius: 4, fontSize: '0.68rem', fontWeight: 'bold', fontFamily: 'monospace', color: '#362840' }}>
                       {p.sub}
                     </span>
                   </div>
                   <p style={{ fontSize: '0.82rem', color: textColor, lineHeight: 1.5, marginBottom: 8 }}>{p.desc}</p>
-                  <div style={{ fontSize: '0.7rem', fontWeight: 'bold', color: subTextColor, fontFamily: PX, marginBottom: 10 }}>{p.tech}</div>
+                  <div style={{ fontSize: '0.7rem', fontWeight: 'bold', color: subTextColor, fontFamily: 'monospace', marginBottom: 10 }}>{p.tech}</div>
                   <div style={{ display: 'flex', gap: 8 }}>
-                    <a href={p.href} target="_blank" rel="noreferrer" style={{ textDecoration: 'none', padding: '5px 12px', background: '#f4a2af', border: '2px solid #362840', borderRadius: 0, fontSize: '0.75rem', fontWeight: 'bold', color: '#362840', fontFamily: PX }}>
+                    <a href={p.href} target="_blank" rel="noreferrer" style={{ textDecoration: 'none', padding: '5px 12px', background: '#f4a2af', border: '2px solid #362840', borderRadius: 4, fontSize: '0.75rem', fontWeight: 'bold', color: '#362840', fontFamily: 'monospace' }}>
                       GitHub ↗
                     </a>
                     {p.demo && (
-                      <a href={p.demo} target="_blank" rel="noreferrer" style={{ textDecoration: 'none', padding: '5px 12px', background: '#ffd166', border: '2px solid #362840', borderRadius: 0, fontSize: '0.75rem', fontWeight: 'bold', color: '#362840', fontFamily: PX }}>
+                      <a href={p.demo} target="_blank" rel="noreferrer" style={{ textDecoration: 'none', padding: '5px 12px', background: '#ffd166', border: '2px solid #362840', borderRadius: 4, fontSize: '0.75rem', fontWeight: 'bold', color: '#362840', fontFamily: 'monospace' }}>
                         Live Demo ↗
                       </a>
                     )}
@@ -380,7 +378,7 @@ export default function Portfolio() {
 
           {/* Mobile Contacts Grid */}
           <div>
-            <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#362840', fontFamily: PX, marginBottom: 10 }}>
+            <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#362840', fontFamily: 'monospace', marginBottom: 10 }}>
               📞 GET IN TOUCH
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
@@ -394,24 +392,24 @@ export default function Portfolio() {
                     textDecoration: 'none',
                     background: innerBoxBg,
                     border: `2.5px solid ${contactBorderColor}`,
-                    borderRadius: 0,
+                    borderRadius: 10,
                     padding: 12,
                     display: 'flex',
                     flexDirection: 'column',
                     gap: 6,
-                    boxShadow: pixelShadow
+                    boxShadow: '3px 3px 0px #362840'
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                       {c.icon}
-                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#4a5568', fontFamily: PX }}>
+                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#4a5568', fontFamily: 'monospace' }}>
                         {c.label}
                       </span>
                     </div>
                     <span style={{ fontSize: '0.75rem', fontWeight: 'bold', color: subTextColor }}>↗</span>
                   </div>
-                  <span style={{ fontSize: '0.85rem', fontWeight: 800, color: textColor, wordBreak: 'break-all', fontFamily: PX }}>
+                  <span style={{ fontSize: '0.85rem', fontWeight: 800, color: textColor, wordBreak: 'break-all', fontFamily: 'sans-serif' }}>
                     {c.value}
                   </span>
                 </a>
@@ -428,7 +426,7 @@ export default function Portfolio() {
           {isSmallScreen && (
             <button
               onClick={() => setIsMobileView(true)}
-              style={{ position: 'absolute', top: 20, left: 24, zIndex: 100, padding: '6px 12px', background: '#ffd166', border: '2.5px solid #362840', borderRadius: 0, fontSize: '0.75rem', fontWeight: 'bold', fontFamily: PX, color: '#362840', cursor: 'pointer' }}
+              style={{ position: 'absolute', top: 20, left: 24, zIndex: 100, padding: '6px 12px', background: '#ffd166', border: '2.5px solid #362840', borderRadius: 20, fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'monospace', color: '#362840', cursor: 'pointer' }}
             >
               📱 SWITCH TO MOBILE VIEW
             </button>
@@ -449,39 +447,39 @@ export default function Portfolio() {
               <div className="retro-card" style={{ maxWidth: 580, background: cardBg, borderColor: cardBorder, color: textColor }} onClick={e => e.stopPropagation()}>
                 <button
                   onClick={closeModal}
-                  style={{ position: 'absolute', top: 14, right: 18, background: '#f4a2af', border: '2.5px solid #362840', borderRadius: 0, width: 28, height: 28, fontSize: 16, fontWeight: 'bold', color: '#362840', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  style={{ position: 'absolute', top: 14, right: 18, background: '#f4a2af', border: '2.5px solid #362840', borderRadius: '50%', width: 28, height: 28, fontSize: 16, fontWeight: 'bold', color: '#362840', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                 >
                   ×
                 </button>
-                <div style={{ display: 'inline-block', padding: '4px 10px', background: '#ffd166', border: '2px solid #362840', borderRadius: 0, fontSize: 12, fontWeight: 'bold', fontFamily: PX, color: '#362840', marginBottom: 12 }}>
+                <div style={{ display: 'inline-block', padding: '4px 10px', background: '#ffd166', border: '2px solid #362840', borderRadius: 6, fontSize: 12, fontWeight: 'bold', fontFamily: 'monospace', color: '#362840', marginBottom: 12 }}>
                   🟡 ABOUT ME / BIO
                 </div>
-                <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: textColor, marginBottom: 4, fontFamily: PX }}>
+                <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: textColor, marginBottom: 4, fontFamily: 'sans-serif' }}>
                   Nurgissa Zhetkizgen
                 </h2>
-                <div style={{ fontSize: '0.85rem', fontWeight: 600, color: subTextColor, marginBottom: 14, fontFamily: PX }}>
+                <div style={{ fontSize: '0.85rem', fontWeight: 600, color: subTextColor, marginBottom: 14, fontFamily: 'monospace' }}>
                   Software Engineer · Astana, Kazakhstan
                 </div>
 
                 {/* 🎓 ASTANA IT UNIVERSITY BADGE */}
-                <div style={{ background: 'linear-gradient(135deg, #f0ebff, #e8deff)', border: '2.5px solid #362840', borderRadius: 0, padding: 12, marginBottom: 14, boxShadow: pixelShadow }}>
+                <div style={{ background: 'linear-gradient(135deg, #f0ebff, #e8deff)', border: '2.5px solid #362840', borderRadius: 8, padding: 12, marginBottom: 14, boxShadow: '3px 3px 0px #362840' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                       <span style={{ fontSize: '1.2rem' }}>🎓</span>
                       <span style={{ fontSize: '0.95rem', fontWeight: 800, color: '#362840' }}>Astana IT University</span>
                     </div>
-                    <span style={{ padding: '2px 8px', background: '#ffd166', border: '1.5px solid #362840', borderRadius: 0, fontSize: '0.7rem', fontWeight: 'bold', fontFamily: PX, color: '#362840' }}>
+                    <span style={{ padding: '2px 8px', background: '#ffd166', border: '1.5px solid #362840', borderRadius: 4, fontSize: '0.7rem', fontWeight: 'bold', fontFamily: 'monospace', color: '#362840' }}>
                       2023 — 2026
                     </span>
                   </div>
-                  <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#6c5ce7', marginBottom: 6, fontFamily: PX }}>
+                  <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#6c5ce7', marginBottom: 6, fontFamily: 'monospace' }}>
                     B.S. Software Engineering Student
                   </div>
                   <a
                     href="https://astanait.edu.kz/en"
                     target="_blank"
                     rel="noreferrer"
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 10px', background: '#362840', color: '#ffffff', textDecoration: 'none', borderRadius: 0, fontSize: '0.72rem', fontWeight: 'bold', fontFamily: PX }}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 10px', background: '#362840', color: '#ffffff', textDecoration: 'none', borderRadius: 6, fontSize: '0.72rem', fontWeight: 'bold', fontFamily: 'monospace' }}
                   >
                     Visit Astana IT University Website ↗
                   </a>
@@ -498,7 +496,7 @@ export default function Portfolio() {
                     target="_blank"
                     rel="noreferrer"
                     onClick={() => sfx.playKeyClick()}
-                    style={{ flex: 1, textDecoration: 'none', padding: '9px 12px', background: '#f4a2af', border: '2.5px solid #362840', borderRadius: 0, fontWeight: 800, color: '#362840', fontFamily: PX, fontSize: '0.8rem', boxShadow: pixelShadow, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
+                    style={{ flex: 1, textDecoration: 'none', padding: '9px 12px', background: '#f4a2af', border: '2.5px solid #362840', borderRadius: 8, fontWeight: 800, color: '#362840', fontFamily: 'monospace', fontSize: '0.8rem', boxShadow: '2px 3px 0px #362840', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
                   >
                     📄 OPEN RESUME (PDF) ↗
                   </a>
@@ -506,24 +504,24 @@ export default function Portfolio() {
                     href="Nurgissa_Resume.pdf?v=2"
                     download="Nurgissa_Resume.pdf"
                     onClick={() => sfx.playKeyClick()}
-                    style={{ flex: 1, textDecoration: 'none', padding: '9px 12px', background: '#ffd166', border: '2.5px solid #362840', borderRadius: 0, fontWeight: 800, color: '#362840', fontFamily: PX, fontSize: '0.8rem', boxShadow: pixelShadow, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
+                    style={{ flex: 1, textDecoration: 'none', padding: '9px 12px', background: '#ffd166', border: '2.5px solid #362840', borderRadius: 8, fontWeight: 800, color: '#362840', fontFamily: 'monospace', fontSize: '0.8rem', boxShadow: '2px 3px 0px #362840', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
                   >
                     📥 DOWNLOAD CV ↗
                   </a>
                 </div>
 
-                <div style={{ background: innerBoxBg, border: '2px stroke #362840', borderStyle: 'solid', borderRadius: 0, padding: 10, marginBottom: 14 }}>
-                  <div style={{ fontSize: '0.72rem', fontWeight: 'bold', color: '#362840', marginBottom: 6, fontFamily: PX }}>TECH TOOLKIT</div>
+                <div style={{ background: innerBoxBg, border: '2px stroke #362840', borderStyle: 'solid', borderRadius: 8, padding: 10, marginBottom: 14 }}>
+                  <div style={{ fontSize: '0.72rem', fontWeight: 'bold', color: '#362840', marginBottom: 6, fontFamily: 'monospace' }}>TECH TOOLKIT</div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
                     {['Python', 'FastAPI', 'React', 'Next.js', 'PostgreSQL', 'Docker', 'OpenAI', 'Git'].map(t => (
-                      <span key={t} style={{ padding: '3px 8px', background: '#e0a09822', border: '1.5px solid #362840', borderRadius: 0, fontSize: '0.72rem', fontWeight: 600, color: '#362840', fontFamily: PX }}>
+                      <span key={t} style={{ padding: '3px 8px', background: '#e0a09822', border: '1.5px solid #362840', borderRadius: 4, fontSize: '0.72rem', fontWeight: 600, color: '#362840', fontFamily: 'monospace' }}>
                         {t}
                       </span>
                     ))}
                   </div>
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                  <button onClick={closeModal} style={{ padding: '8px 18px', background: '#b4a3e8', border: '2px solid #362840', borderRadius: 0, fontWeight: 'bold', color: '#362840', cursor: 'pointer', fontFamily: PX }}>
+                  <button onClick={closeModal} style={{ padding: '8px 18px', background: '#b4a3e8', border: '2px solid #362840', borderRadius: 6, fontWeight: 'bold', color: '#362840', cursor: 'pointer', fontFamily: 'monospace' }}>
                     CLOSE ✕
                   </button>
                 </div>
@@ -542,30 +540,30 @@ export default function Portfolio() {
               <div className="retro-card" style={{ maxWidth: 640, background: cardBg, borderColor: cardBorder, color: textColor }} onClick={e => e.stopPropagation()}>
                 <button
                   onClick={closeModal}
-                  style={{ position: 'absolute', top: 14, right: 18, background: '#f4a2af', border: '2.5px solid #362840', borderRadius: 0, width: 28, height: 28, fontSize: 16, fontWeight: 'bold', color: '#362840', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  style={{ position: 'absolute', top: 14, right: 18, background: '#f4a2af', border: '2.5px solid #362840', borderRadius: '50%', width: 28, height: 28, fontSize: 16, fontWeight: 'bold', color: '#362840', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                 >
                   ×
                 </button>
-                <div style={{ display: 'inline-block', padding: '4px 10px', background: '#b4a3e8', border: '2px solid #362840', borderRadius: 0, fontSize: 12, fontWeight: 'bold', fontFamily: PX, color: '#362840', marginBottom: 14 }}>
+                <div style={{ display: 'inline-block', padding: '4px 10px', background: '#b4a3e8', border: '2px solid #362840', borderRadius: 6, fontSize: 12, fontWeight: 'bold', fontFamily: 'monospace', color: '#362840', marginBottom: 14 }}>
                   📚 PROJECTS & CASE STUDIES
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxHeight: '60vh', overflowY: 'auto', paddingRight: 4 }}>
                   {PROJECTS.map(p => (
-                    <div key={p.id} style={{ background: innerBoxBg, border: '2.5px solid #362840', borderRadius: 0, padding: 14, boxShadow: pixelShadow }}>
+                    <div key={p.id} style={{ background: innerBoxBg, border: '2.5px solid #362840', borderRadius: 8, padding: 14, boxShadow: '3px 4px 0px #362840' }}>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
                         <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: textColor }}>{p.label}</h3>
-                        <span style={{ padding: '2px 8px', background: p.color, border: '1.5px solid #362840', borderRadius: 0, fontSize: '0.7rem', fontWeight: 'bold', fontFamily: PX, color: '#362840' }}>
+                        <span style={{ padding: '2px 8px', background: p.color, border: '1.5px solid #362840', borderRadius: 4, fontSize: '0.7rem', fontWeight: 'bold', fontFamily: 'monospace', color: '#362840' }}>
                           {p.sub}
                         </span>
                       </div>
                       <p style={{ fontSize: '0.85rem', color: textColor, lineHeight: 1.5, marginBottom: 8 }}>{p.desc}</p>
-                      <div style={{ fontSize: '0.72rem', fontWeight: 'bold', color: subTextColor, fontFamily: PX, marginBottom: 10 }}>{p.tech}</div>
+                      <div style={{ fontSize: '0.72rem', fontWeight: 'bold', color: subTextColor, fontFamily: 'monospace', marginBottom: 10 }}>{p.tech}</div>
                       <div style={{ display: 'flex', gap: 8 }}>
-                        <a href={p.href} target="_blank" rel="noreferrer" onClick={() => sfx.playKeyClick()} style={{ textDecoration: 'none', padding: '5px 12px', background: '#f4a2af', border: '2px solid #362840', borderRadius: 0, fontSize: '0.75rem', fontWeight: 'bold', color: '#362840', fontFamily: PX }}>
+                        <a href={p.href} target="_blank" rel="noreferrer" onClick={() => sfx.playKeyClick()} style={{ textDecoration: 'none', padding: '5px 12px', background: '#f4a2af', border: '2px solid #362840', borderRadius: 4, fontSize: '0.75rem', fontWeight: 'bold', color: '#362840', fontFamily: 'monospace' }}>
                           GitHub ↗
                         </a>
                         {p.demo && (
-                          <a href={p.demo} target="_blank" rel="noreferrer" onClick={() => sfx.playKeyClick()} style={{ textDecoration: 'none', padding: '5px 12px', background: '#ffd166', border: '2px solid #362840', borderRadius: 0, fontSize: '0.75rem', fontWeight: 'bold', color: '#362840', fontFamily: PX }}>
+                          <a href={p.demo} target="_blank" rel="noreferrer" onClick={() => sfx.playKeyClick()} style={{ textDecoration: 'none', padding: '5px 12px', background: '#ffd166', border: '2px solid #362840', borderRadius: 4, fontSize: '0.75rem', fontWeight: 'bold', color: '#362840', fontFamily: 'monospace' }}>
                             Live Demo ↗
                           </a>
                         )}
@@ -583,11 +581,11 @@ export default function Portfolio() {
               <div className="retro-card" style={{ background: cardBg, borderColor: cardBorder, color: textColor, maxWidth: 620 }} onClick={e => e.stopPropagation()}>
                 <button
                   onClick={closeModal}
-                  style={{ position: 'absolute', top: 14, right: 18, background: '#f4a2af', border: '2.5px solid #362840', borderRadius: 0, width: 28, height: 28, fontSize: 16, fontWeight: 'bold', color: '#362840', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  style={{ position: 'absolute', top: 14, right: 18, background: '#f4a2af', border: '2.5px solid #362840', borderRadius: '50%', width: 28, height: 28, fontSize: 16, fontWeight: 'bold', color: '#362840', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                 >
                   ×
                 </button>
-                <div style={{ display: 'inline-block', padding: '4px 10px', background: '#ffd166', border: '2px solid #362840', borderRadius: 0, fontSize: 12, fontWeight: 'bold', fontFamily: PX, color: '#362840', marginBottom: 14 }}>
+                <div style={{ display: 'inline-block', padding: '4px 10px', background: '#ffd166', border: '2px solid #362840', borderRadius: 6, fontSize: 12, fontWeight: 'bold', fontFamily: 'monospace', color: '#362840', marginBottom: 14 }}>
                   📞 CONTACTS & SOCIALS
                 </div>
                 <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: textColor, marginBottom: 16 }}>
@@ -605,12 +603,12 @@ export default function Portfolio() {
                         textDecoration: 'none',
                         background: innerBoxBg,
                         border: `2.5px solid ${contactBorderColor}`,
-                        borderRadius: 0,
+                        borderRadius: 10,
                         padding: 14,
                         display: 'flex',
                         flexDirection: 'column',
                         gap: 6,
-                        boxShadow: pixelShadow,
+                        boxShadow: '3px 3px 0px #362840',
                         transition: 'transform 0.2s ease, border-color 0.2s ease'
                       }}
                       onMouseEnter={e => {
@@ -625,20 +623,20 @@ export default function Portfolio() {
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                           {c.icon}
-                          <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#4a5568', fontFamily: PX }}>
+                          <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#4a5568', fontFamily: 'monospace' }}>
                             {c.label}
                           </span>
                         </div>
                         <span style={{ fontSize: '0.75rem', fontWeight: 'bold', color: subTextColor }}>↗</span>
                       </div>
-                      <span style={{ fontSize: '0.9rem', fontWeight: 800, color: textColor, wordBreak: 'break-all', fontFamily: PX }}>
+                      <span style={{ fontSize: '0.9rem', fontWeight: 800, color: textColor, wordBreak: 'break-all', fontFamily: 'sans-serif' }}>
                         {c.value}
                       </span>
                     </a>
                   ))}
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                  <button onClick={closeModal} style={{ padding: '8px 18px', background: '#f4a2af', border: '2.5px solid #362840', borderRadius: 0, fontWeight: 'bold', color: '#362840', cursor: 'pointer', fontFamily: PX }}>
+                  <button onClick={closeModal} style={{ padding: '8px 18px', background: '#f4a2af', border: '2.5px solid #362840', borderRadius: 6, fontWeight: 'bold', color: '#362840', cursor: 'pointer', fontFamily: 'monospace' }}>
                     CLOSE ✕
                   </button>
                 </div>
@@ -652,24 +650,24 @@ export default function Portfolio() {
               <div className="retro-card" style={{ maxWidth: 620, background: cardBg, borderColor: cardBorder, color: textColor }} onClick={e => e.stopPropagation()}>
                 <button
                   onClick={closeModal}
-                  style={{ position: 'absolute', top: 14, right: 18, background: '#f4a2af', border: '2.5px solid #362840', borderRadius: 0, width: 28, height: 28, fontSize: 16, fontWeight: 'bold', color: '#362840', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  style={{ position: 'absolute', top: 14, right: 18, background: '#f4a2af', border: '2.5px solid #362840', borderRadius: '50%', width: 28, height: 28, fontSize: 16, fontWeight: 'bold', color: '#362840', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                 >
                   ×
                 </button>
-                <div style={{ display: 'inline-block', padding: '4px 10px', background: '#b4a3e8', border: '2px solid #362840', borderRadius: 0, fontSize: 12, fontWeight: 'bold', fontFamily: PX, color: '#362840', marginBottom: 14 }}>
+                <div style={{ display: 'inline-block', padding: '4px 10px', background: '#b4a3e8', border: '2px solid #362840', borderRadius: 6, fontSize: 12, fontWeight: 'bold', fontFamily: 'monospace', color: '#362840', marginBottom: 14 }}>
                   🎓 ASTANA IT UNIVERSITY DIPLOMA
                 </div>
 
-                <div style={{ background: 'linear-gradient(135deg, #f0ebff, #e2d5ff)', border: '3px solid #362840', borderRadius: 0, padding: 18, marginBottom: 16, boxShadow: pixelShadow }}>
+                <div style={{ background: 'linear-gradient(135deg, #f0ebff, #e2d5ff)', border: '3px solid #362840', borderRadius: 10, padding: 18, marginBottom: 16, boxShadow: '4px 4px 0px #362840' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                       <span style={{ fontSize: '1.8rem' }}>🎓</span>
                       <div>
                         <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: textColor }}>Astana IT University</h3>
-                        <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#6c5ce7', fontFamily: PX }}>Astana, Kazakhstan</div>
+                        <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#6c5ce7', fontFamily: 'monospace' }}>Astana, Kazakhstan</div>
                       </div>
                     </div>
-                    <span style={{ padding: '4px 12px', background: '#ffd166', border: '2px solid #362840', borderRadius: 0, fontSize: '0.8rem', fontWeight: 'bold', fontFamily: PX, color: '#362840' }}>
+                    <span style={{ padding: '4px 12px', background: '#ffd166', border: '2px solid #362840', borderRadius: 6, fontSize: '0.8rem', fontWeight: 'bold', fontFamily: 'monospace', color: '#362840' }}>
                       2023 — 2026
                     </span>
                   </div>
@@ -684,14 +682,14 @@ export default function Portfolio() {
                     target="_blank"
                     rel="noreferrer"
                     onClick={() => sfx.playKeyClick()}
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '9px 16px', background: '#362840', color: '#ffffff', textDecoration: 'none', borderRadius: 0, fontSize: '0.85rem', fontWeight: 'bold', fontFamily: PX, boxShadow: '2px 3px 0px #6c5ce7' }}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '9px 16px', background: '#362840', color: '#ffffff', textDecoration: 'none', borderRadius: 6, fontSize: '0.85rem', fontWeight: 'bold', fontFamily: 'monospace', boxShadow: '2px 3px 0px #6c5ce7' }}
                   >
                     Visit Astana IT University Website (astanait.edu.kz) ↗
                   </a>
                 </div>
 
                 <div style={{ textAlign: 'right' }}>
-                  <button onClick={closeModal} style={{ padding: '8px 18px', background: '#ffd166', border: '2px solid #362840', borderRadius: 0, fontWeight: 'bold', color: '#362840', cursor: 'pointer', fontFamily: PX }}>
+                  <button onClick={closeModal} style={{ padding: '8px 18px', background: '#ffd166', border: '2px solid #362840', borderRadius: 6, fontWeight: 'bold', color: '#362840', cursor: 'pointer', fontFamily: 'monospace' }}>
                     CLOSE DIPLOMA ✕
                   </button>
                 </div>

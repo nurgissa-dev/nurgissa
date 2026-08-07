@@ -8,9 +8,6 @@
   --pink: #f4a2af;
   --purple: #b4a3e8;
   --mint: #68c078;
-  --font-pixel: 'Press Start 2P', monospace;
-  --pixel-shadow: 4px 4px 0px #362840;
-  --pixel-border: 3px solid #362840;
 }
 
 * {
@@ -26,13 +23,12 @@ html, body {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   touch-action: manipulation;
-  image-rendering: auto;
 }
 
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: var(--font-pixel);
+  font-family: 'Inter', -apple-system, sans-serif;
   transition: background-color 0.4s ease, color 0.4s ease;
 }
 
@@ -49,26 +45,21 @@ body {
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f0e5d5;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #362840;
-  border: 2px solid #f0e5d5;
+  background: rgba(54, 40, 64, 0.2);
+  border-radius: 4px;
 }
 
-.font-pixel { font-family: var(--font-pixel); }
-
-/* ── PIXEL ART SVG RENDERING ── */
-
-svg {
-  shape-rendering: crispEdges;
-}
+.font-mono { font-family: 'JetBrains Mono', monospace; }
+.font-serif { font-family: 'Noto Serif JP', serif; }
 
 /* ── RETRO DESK INTERACTIVE HOVER & LIFT ANIMATIONS ── */
 
@@ -77,31 +68,57 @@ svg {
 }
 
 .retro-hover-lift {
-  transition: transform 0.15s ease, filter 0.15s ease;
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), filter 0.3s ease;
   transform-origin: center center;
 }
 
 .retro-interactive-group:hover .retro-hover-lift,
 .desk-object:hover {
-  transform: translateY(-4px);
-  filter: drop-shadow(0 4px 0px rgba(54, 40, 64, 0.4));
+  transform: translateY(-4px) scale(1.015);
+  filter: drop-shadow(0 6px 10px rgba(54, 40, 64, 0.22));
+}
+
+.key-cap {
+  transition: transform 0.08s ease, fill 0.15s ease, filter 0.15s ease;
+  cursor: pointer;
+}
+
+.key-cap:hover {
+  transform: translateY(-3px);
+  filter: brightness(1.15);
+}
+
+.key-cap.pressed, .key-cap:active {
+  transform: translateY(3px);
+  filter: brightness(0.85);
+}
+
+.garland-bulb {
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  transform-origin: center center;
+}
+
+.garland-bulb:hover {
+  transform: scale(1.3);
+  filter: drop-shadow(0 0 14px #ffd166);
 }
 
 /* ── ANIMATION KEYFRAMES ── */
 
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-5px); }
+  50% { transform: translateY(-6px); }
 }
 
 @keyframes pulseGlow {
-  0%, 100% { opacity: 0.8; }
-  50% { opacity: 1; }
+  0%, 100% { opacity: 0.8; filter: drop-shadow(0 0 4px rgba(255, 209, 102, 0.6)); }
+  50% { opacity: 1; filter: drop-shadow(0 0 12px rgba(255, 209, 102, 0.95)); }
 }
 
 @keyframes sway {
   0%, 100% { transform: rotate(0deg); }
-  50% { transform: rotate(3deg); }
+  50% { transform: rotate(4deg); }
 }
 
 @keyframes crtBlink {
@@ -110,12 +127,16 @@ svg {
 }
 
 @keyframes modalPop {
-  0% { opacity: 0; transform: scale(0.95) translateY(8px); }
+  0% { opacity: 0; transform: scale(0.92) translateY(12px); }
   100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 
 .floating-zzz {
   animation: float 3s ease-in-out infinite;
+}
+
+.garland-light {
+  animation: pulseGlow 2.5s ease-in-out infinite;
 }
 
 .plant-sway {
@@ -127,7 +148,7 @@ svg {
   animation: crtBlink 1.2s infinite;
 }
 
-/* ── MODAL STYLES (PIXEL ART) ── */
+/* ── MODAL STYLES ── */
 
 .retro-modal-overlay {
   position: fixed;
@@ -135,8 +156,8 @@ svg {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(10, 12, 20, 0.8);
-  backdrop-filter: blur(3px);
+  background: rgba(11, 14, 19, 0.75);
+  backdrop-filter: blur(5px);
   z-index: 999;
   display: flex;
   align-items: center;
@@ -148,12 +169,12 @@ svg {
 .retro-card {
   position: relative;
   width: 100%;
-  border-radius: 0;
-  border: 4px solid #362840;
-  box-shadow: 6px 6px 0px #362840;
+  border-radius: 14px;
+  border-style: solid;
+  border-width: 3.5px;
+  box-shadow: 6px 8px 0px #362840;
   padding: 24px;
   max-height: 90vh;
   overflow-y: auto;
-  animation: modalPop 0.2s ease-out;
-  image-rendering: auto;
+  animation: modalPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }

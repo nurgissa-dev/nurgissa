@@ -126,15 +126,13 @@ export default function TerminalModal({ onClose }: TerminalModalProps) {
     }
   }, [completedLines, currentTyped, phase]);
 
-  const PX = "'Press Start 2P', monospace";
-
   const renderResponseContent = (type: string) => {
     switch (type) {
       case 'whoami':
         return (
-          <div style={{ paddingLeft: 14, marginBottom: 10, lineHeight: 2 }}>
-            <span style={{ color: '#E8E3ED' }}>Nurgissa Zhetkizgen </span>
-            <span style={{ color: '#62C9D9' }}>— Full-Stack Developer</span>
+          <div style={{ paddingLeft: 14, marginBottom: 8, lineHeight: 1.6 }}>
+            <span style={{ color: '#E8E3ED', fontWeight: 'bold' }}>Nurgissa Zhetkizgen </span>
+            <span style={{ color: '#62C9D9', fontWeight: 'bold' }}>— Full-Stack Developer</span>
           </div>
         );
       case 'skills':
@@ -173,12 +171,12 @@ export default function TerminalModal({ onClose }: TerminalModalProps) {
         style={{
           background: '#2A2138',
           color: '#E8E3ED',
-          border: '4px solid #F2C14E',
-          boxShadow: '6px 6px 0px #191424',
+          border: '3.5px solid #F2C14E',
+          boxShadow: '6px 8px 0px #191424',
           maxWidth: 640,
           width: '100%',
           padding: 0,
-          borderRadius: 0,
+          borderRadius: 14,
           overflow: 'hidden',
         }}
         onClick={e => e.stopPropagation()}
@@ -193,12 +191,12 @@ export default function TerminalModal({ onClose }: TerminalModalProps) {
           borderBottom: '2px solid rgba(242, 193, 78, 0.25)',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{ display: 'flex', gap: 4 }}>
-              <div style={{ width: 10, height: 10, background: '#f4a2af', border: '2px solid #362840' }} />
-              <div style={{ width: 10, height: 10, background: '#F2C14E', border: '2px solid #362840' }} />
-              <div style={{ width: 10, height: 10, background: '#63C174', border: '2px solid #362840' }} />
+            <div style={{ display: 'flex', gap: 6 }}>
+              <div style={{ width: 11, height: 11, borderRadius: '50%', background: '#f4a2af' }} />
+              <div style={{ width: 11, height: 11, borderRadius: '50%', background: '#F2C14E' }} />
+              <div style={{ width: 11, height: 11, borderRadius: '50%', background: '#63C174' }} />
             </div>
-            <span style={{ fontSize: '0.5rem', fontFamily: PX, color: '#F2C14E', letterSpacing: 1 }}>
+            <span style={{ fontSize: '0.82rem', fontWeight: 'bold', fontFamily: 'monospace', color: '#F2C14E', letterSpacing: 1.2 }}>
               nurgissa@workshop: ~
             </span>
           </div>
@@ -206,12 +204,12 @@ export default function TerminalModal({ onClose }: TerminalModalProps) {
             onClick={onClose}
             style={{
               background: '#f4a2af',
-              border: '3px solid #362840',
-              borderRadius: 0,
-              width: 24,
-              height: 24,
-              fontSize: '0.5rem',
-              fontFamily: PX,
+              border: '2px solid #362840',
+              borderRadius: '50%',
+              width: 26,
+              height: 26,
+              fontSize: 14,
+              fontWeight: 'bold',
               color: '#362840',
               cursor: 'pointer',
               display: 'flex',
@@ -220,7 +218,7 @@ export default function TerminalModal({ onClose }: TerminalModalProps) {
               lineHeight: 1,
             }}
           >
-            X
+            ×
           </button>
         </div>
 
@@ -229,8 +227,8 @@ export default function TerminalModal({ onClose }: TerminalModalProps) {
           ref={scrollRef}
           style={{
             padding: '18px 20px',
-            fontFamily: PX,
-            fontSize: '0.5rem',
+            fontFamily: 'monospace',
+            fontSize: '0.88rem',
             lineHeight: 1.85,
             minHeight: 270,
             maxHeight: 350,
@@ -291,21 +289,21 @@ export default function TerminalModal({ onClose }: TerminalModalProps) {
           background: '#2A2138',
           borderTop: '2px solid rgba(242, 193, 78, 0.25)',
         }}>
-          <span style={{ fontSize: '0.4rem', fontFamily: PX, color: '#9d8189' }}>
-            CRT TERMINAL v1.0
+          <span style={{ fontSize: '0.72rem', fontWeight: 'bold', fontFamily: 'monospace', color: '#9d8189' }}>
+            🖥 CRT TERMINAL v1.0 — READ ONLY MODE
           </span>
           <button
             onClick={onClose}
             style={{
-              padding: '6px 14px',
+              padding: '6px 16px',
               background: '#F2C14E',
-              border: '3px solid #362840',
-              borderRadius: 0,
+              border: '2.5px solid #362840',
+              borderRadius: 6,
+              fontWeight: 'bold',
               color: '#2A2138',
               cursor: 'pointer',
-              fontFamily: PX,
-              fontSize: '0.45rem',
-              boxShadow: '3px 3px 0px #362840',
+              fontFamily: 'monospace',
+              fontSize: '0.8rem',
             }}
           >
             CLOSE
