@@ -278,30 +278,32 @@ export default function CozyRetroDesk({
           <path
             d="M 30 20 Q 200 90 380 30 Q 580 95 780 30 Q 980 90 1170 20"
             fill="none"
-            stroke="#4a3b52"
+            stroke={isDarkMode ? '#3a3050' : '#c4a882'}
             strokeWidth="2.5"
           />
-          {/* Garland Bulbs */}
+          {/* Decorative lantern-style bulbs — no hover transform, no SVG filter = zero lag */}
           {[
             [80, 48], [150, 64], [230, 68], [310, 52],
             [440, 68], [520, 72], [600, 68], [680, 52],
             [840, 66], [920, 70], [1000, 62], [1090, 42]
-          ].map(([bx, by], i) => (
-            <g key={i}>
-              <rect x={bx - 3} y={by - 8} width="6" height="8" fill="#4a3b52" rx="1" />
-              <circle
-                cx={bx}
-                cy={by + 4}
-                r="11"
-                fill={isDarkMode ? (i % 2 === 0 ? '#00f5d4' : '#7b2cbf') : (i % 2 === 0 ? '#ffea9f' : '#ffd166')}
-                stroke="#362840"
-                strokeWidth="2"
-                filter="url(#bulbGlow)"
-                className="garland-bulb"
-                style={{ animationDelay: `${i * 0.25}s`, transition: 'fill 0.4s ease' }}
-              />
-            </g>
-          ))}
+          ].map(([bx, by], i) => {
+            const colors = isDarkMode
+              ? ['#00f5d4', '#7b2cbf', '#ffd166', '#f4a2af']
+              : ['#ffd166', '#f4a2af', '#b4a3e8', '#68c078'];
+            const c = colors[i % colors.length];
+            return (
+              <g key={i}>
+                {/* Cap */}
+                <rect x={bx - 3} y={by - 8} width="6" height="7" fill={isDarkMode ? '#3a3050' : '#8d7b6a'} rx="1" />
+                {/* Bulb body — lantern shape */}
+                <ellipse cx={bx} cy={by + 6} rx="9" ry="11" fill={c} stroke={isDarkMode ? '#1a1226' : '#362840'} strokeWidth="1.5"
+                  style={{ opacity: isDarkMode ? 0.92 : 0.88 }}
+                />
+                {/* Shine dot */}
+                <ellipse cx={bx - 3} cy={by + 2} rx="2.5" ry="3" fill="white" style={{ opacity: 0.35 }} />
+              </g>
+            );
+          })}
         </g>
 
         {/* ── 4. ASTANA IT UNIVERSITY DIPLOMA BOARD (Right Wall -> Clickable) ── */}

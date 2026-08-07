@@ -16,7 +16,7 @@ class RetroSFX {
     }
   }
 
-  // 1. Mechanical Keyboard Switch Click (8-Bit Pop)
+  // 1. Deep "Thock" Keyboard Sound (premium mechanical switch feel)
   playKeyClick() {
     if (!this.enabled) return;
     try {
@@ -24,22 +24,33 @@ class RetroSFX {
       if (!this.ctx) return;
 
       const now = this.ctx.currentTime;
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
 
-      osc.type = 'triangle';
-      // Crisp mechanical key switch frequency pop
-      osc.frequency.setValueAtTime(700 + Math.random() * 250, now);
-      osc.frequency.exponentialRampToValueAtTime(120, now + 0.035);
+      // Layer 1: Deep low-end thump (the "thock" body)
+      const osc1 = this.ctx.createOscillator();
+      const gain1 = this.ctx.createGain();
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(180 + Math.random() * 40, now);
+      osc1.frequency.exponentialRampToValueAtTime(60, now + 0.06);
+      gain1.gain.setValueAtTime(0.18, now);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+      osc1.connect(gain1);
+      gain1.connect(this.ctx.destination);
+      osc1.start(now);
+      osc1.stop(now + 0.08);
 
-      gain.gain.setValueAtTime(0.08, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
+      // Layer 2: Short click transient on top (the "tick")
+      const osc2 = this.ctx.createOscillator();
+      const gain2 = this.ctx.createGain();
+      osc2.type = 'square';
+      osc2.frequency.setValueAtTime(900 + Math.random() * 200, now);
+      osc2.frequency.exponentialRampToValueAtTime(200, now + 0.015);
+      gain2.gain.setValueAtTime(0.04, now);
+      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.018);
+      osc2.connect(gain2);
+      gain2.connect(this.ctx.destination);
+      osc2.start(now);
+      osc2.stop(now + 0.018);
 
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-
-      osc.start(now);
-      osc.stop(now + 0.035);
     } catch {
       // Audio context suppressed
     }
