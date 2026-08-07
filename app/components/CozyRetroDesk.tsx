@@ -96,6 +96,7 @@ export default function CozyRetroDesk({
   // 2. Physical keypress listener mapping e.code strictly 1-to-1 + Trigger Key Click SFX
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.repeat) return; // Prevent OS key auto-repeat audio spam when holding down a key
       const code = e.code.toLowerCase();
       setPressedCodes(prev => new Set(prev).add(code));
       sfx.playKeySwitchClick();
