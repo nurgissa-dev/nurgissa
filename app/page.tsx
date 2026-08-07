@@ -50,7 +50,7 @@ const PROJECTS = [
   },
 ];
 
-const getContactItems = (isDarkMode: boolean) => [
+const CONTACT_ITEMS = [
   {
     id: 'telegram',
     label: 'Telegram',
@@ -69,7 +69,7 @@ const getContactItems = (isDarkMode: boolean) => [
     value: 'nurgissa-dev',
     href: 'https://github.com/nurgissa-dev',
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill={isDarkMode ? '#FFFFFF' : '#24292E'}>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="#24292E">
         <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
       </svg>
     ),
@@ -102,18 +102,10 @@ const getContactItems = (isDarkMode: boolean) => [
 
 export default function Portfolio() {
   const [activeModal, setActiveModal] = useState<RetroTarget>(null);
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [isMobileView, setIsMobileView] = useState(false);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [mobileTerminalCmd, setMobileTerminalCmd] = useState<'whoami' | 'skills' | 'edu' | 'contact'>('whoami');
-
-  // Sync data-theme attribute on <html> element for CSS variables
-  useEffect(() => {
-    if (typeof document !== 'undefined') {
-      document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
-    }
-  }, [isDarkMode]);
 
   // Detect mobile screen on mount & resize
   useEffect(() => {
@@ -139,11 +131,6 @@ export default function Portfolio() {
     sfx.playModalClose();
   }, []);
 
-  const toggleTheme = useCallback(() => {
-    setIsDarkMode(prev => !prev);
-    sfx.playKeyClick();
-  }, []);
-
   const toggleSound = useCallback(() => {
     setSoundEnabled(prev => !prev);
   }, []);
@@ -159,162 +146,149 @@ export default function Portfolio() {
       else if (k === '3') selectObject('books');
       else if (k === '4') selectObject('phone');
       else if (k === '5') selectObject('university');
-      else if (k === 't') toggleTheme();
       else if (k === 'm') toggleSound();
       else if (k === 'escape') closeModal();
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [closeModal, selectObject, toggleSound, toggleTheme]);
+  }, [closeModal, selectObject, toggleSound]);
 
-  // Dark Mode Style Tokens
-  const cardBg = isDarkMode ? '#131720' : '#fefae0';
-  const cardBorder = isDarkMode ? '#3b4252' : '#362840';
-  const textColor = isDarkMode ? '#ececec' : '#362840';
-  const subTextColor = isDarkMode ? '#8d9198' : '#9d8189';
-  const innerBoxBg = isDarkMode ? '#1c2230' : '#ffffff';
-  const contactBorderColor = isDarkMode ? '#2d3748' : '#362840';
+  // Clean Light Theme Style Tokens
+  const cardBg = '#fefae0';
+  const cardBorder = '#362840';
+  const textColor = '#362840';
+  const subTextColor = '#9d8189';
+  const innerBoxBg = '#ffffff';
+  const contactBorderColor = '#362840';
 
   return (
-    <main style={{ minHeight: '100vh', width: '100%', background: isDarkMode ? '#0B0E13' : '#f5ebe0', position: 'relative', transition: 'background 0.4s ease' }}>
+    <main style={{ minHeight: '100vh', width: '100%', background: '#f5ebe0', position: 'relative' }}>
       
       {/* 📱 MOBILE DASHBOARD VIEW (Visible when screen < 768px and isMobileView is true) */}
       {isMobileView ? (
-        <div style={{ width: '100%', minHeight: '100vh', background: isDarkMode ? '#0B0E13' : '#f5ebe0', color: textColor, padding: '16px 16px 60px 16px', overflowY: 'visible', fontFamily: 'sans-serif' }}>
+        <div style={{ width: '100%', minHeight: '100vh', background: '#f5ebe0', color: textColor, padding: '16px 16px 60px 16px', overflowY: 'visible', fontFamily: 'sans-serif' }}>
           
           {/* Mobile Header Bar */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
               <span style={{ fontSize: '1.4rem' }}>🎓</span>
-              <span style={{ fontSize: '0.85rem', fontWeight: 800, fontFamily: 'monospace', color: isDarkMode ? '#00f5d4' : '#6c5ce7' }}>
+              <span style={{ fontSize: '0.85rem', fontWeight: 800, fontFamily: 'monospace', color: '#6c5ce7' }}>
                 ASTANA IT UNIVERSITY
               </span>
             </div>
             <div style={{ display: 'flex', gap: 6 }}>
               <button
                 onClick={toggleSound}
-                style={{ padding: '6px 12px', background: soundEnabled ? (isDarkMode ? '#222834' : '#ffffff') : '#f4a2af', border: '2.5px solid #362840', borderRadius: 20, fontSize: '0.8rem', fontWeight: 'bold', fontFamily: 'monospace', color: '#362840', boxShadow: '2px 2px 0px #362840' }}
+                style={{ padding: '6px 12px', background: soundEnabled ? '#ffffff' : '#f4a2af', border: '2.5px solid #362840', borderRadius: 20, fontSize: '0.8rem', fontWeight: 'bold', fontFamily: 'monospace', color: '#362840', boxShadow: '2px 2px 0px #362840' }}
               >
                 {soundEnabled ? '🔊 SFX' : '🔇 MUTED'}
-              </button>
-              <button
-                onClick={toggleTheme}
-                style={{ padding: '6px 12px', background: isDarkMode ? '#222834' : '#ffffff', border: '2.5px solid #362840', borderRadius: 20, fontSize: '0.8rem', fontWeight: 'bold', fontFamily: 'monospace', color: isDarkMode ? '#ffd166' : '#362840', boxShadow: '2px 2px 0px #362840' }}
-              >
-                {isDarkMode ? '🌙 DARK' : '☀️ DAY'}
               </button>
             </div>
           </div>
 
           {/* Hero Card */}
-          <div style={{ background: cardBg, border: '3.5px solid #362840', borderRadius: 14, padding: 20, marginBottom: 16, boxShadow: '5px 5px 0px #362840' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
-              <span style={{ padding: '3px 8px', background: '#68c078', border: '1.5px solid #362840', borderRadius: 12, fontSize: '0.7rem', fontWeight: 'bold', color: '#362840', fontFamily: 'monospace' }}>
-                🟢 AVAILABLE FOR HIRE
-              </span>
-              <span style={{ fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'monospace', color: subTextColor }}>ASTANA, KZ</span>
+          <div style={{ background: cardBg, border: '3.5px solid #362840', borderRadius: 14, padding: 20, marginBottom: 16, boxShadow: '4px 6px 0px #362840' }}>
+            <div style={{ display: 'inline-block', padding: '4px 10px', background: '#ffd166', border: '2px solid #362840', borderRadius: 6, fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'monospace', color: '#362840', marginBottom: 10 }}>
+              👋 WELCOME TO MY WORKSPACE
             </div>
-
-            <h1 style={{ fontSize: '1.6rem', fontWeight: 800, color: textColor, marginBottom: 4 }}>
+            <h1 style={{ fontSize: '1.6rem', fontWeight: 900, color: textColor, marginBottom: 4, letterSpacing: '-0.5px' }}>
               Nurgissa Zhetkizgen
             </h1>
-            <div style={{ fontSize: '0.88rem', fontWeight: 700, color: isDarkMode ? '#00f5d4' : '#6c5ce7', fontFamily: 'monospace', marginBottom: 12 }}>
-              Software Engineer & Full-Stack Developer
+            <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#6c5ce7', fontFamily: 'monospace', marginBottom: 12 }}>
+              Full-Stack Software Engineer
             </div>
-            <p style={{ fontSize: '0.88rem', lineHeight: 1.6, color: textColor, marginBottom: 16 }}>
-              Software Engineering student at Astana IT University. Specialized in Python backend engineering (FastAPI), modern frontend platforms (React/Next.js), and AI integration.
+            <p style={{ fontSize: '0.88rem', lineHeight: 1.6, color: textColor, marginBottom: 14 }}>
+              Software Engineering student at Astana IT University specializing in Python backend (FastAPI), Next.js frontend, AI integrations, and mobile development.
             </p>
-
-            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: 8 }}>
               <a
                 href="Nurgissa_Resume.pdf?v=2"
                 target="_blank"
                 rel="noreferrer"
-                onClick={() => sfx.playKeyClick()}
-                style={{ flex: 1, minWidth: 135, textDecoration: 'none', padding: '11px 14px', background: '#f4a2af', border: '2.5px solid #362840', borderRadius: 8, fontWeight: 800, color: '#362840', fontFamily: 'monospace', fontSize: '0.82rem', textAlign: 'center', boxShadow: '3px 3px 0px #362840' }}
+                style={{ flex: 1, textDecoration: 'none', padding: '10px', background: '#f4a2af', border: '2.5px solid #362840', borderRadius: 8, fontWeight: 800, color: '#362840', fontFamily: 'monospace', fontSize: '0.8rem', textAlign: 'center', boxShadow: '2px 3px 0px #362840' }}
               >
-                📄 OPEN RESUME (PDF) ↗
+                📄 RESUME (PDF)
               </a>
               <a
-                href="Nurgissa_Resume.pdf?v=2"
-                download="Nurgissa_Resume.pdf"
-                onClick={() => sfx.playKeyClick()}
-                style={{ flex: 1, minWidth: 135, textDecoration: 'none', padding: '11px 14px', background: '#ffd166', border: '2.5px solid #362840', borderRadius: 8, fontWeight: 800, color: '#362840', fontFamily: 'monospace', fontSize: '0.82rem', textAlign: 'center', boxShadow: '3px 3px 0px #362840' }}
+                href="https://t.me/trulondoner"
+                target="_blank"
+                rel="noreferrer"
+                style={{ flex: 1, textDecoration: 'none', padding: '10px', background: '#ffd166', border: '2.5px solid #362840', borderRadius: 8, fontWeight: 800, color: '#362840', fontFamily: 'monospace', fontSize: '0.8rem', textAlign: 'center', boxShadow: '2px 3px 0px #362840' }}
               >
-                📥 DOWNLOAD CV ↗
+                💬 TELEGRAM
               </a>
             </div>
           </div>
 
-          {/* Option to Switch to 2D Desk View */}
+          {/* Switch to Desktop 2D Canvas Button for Mobile users */}
           <button
-            onClick={() => {
-              setIsMobileView(false);
-              sfx.playKeyClick();
-            }}
-            style={{ width: '100%', padding: '12px', background: isDarkMode ? '#1e2432' : '#b4a3e8', border: '3px solid #362840', borderRadius: 10, fontWeight: 800, color: isDarkMode ? '#ececec' : '#362840', fontFamily: 'monospace', fontSize: '0.85rem', marginBottom: 16, cursor: 'pointer', boxShadow: '4px 4px 0px #362840', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
+            onClick={() => setIsMobileView(false)}
+            style={{ width: '100%', padding: '12px', background: '#b4a3e8', border: '3px solid #362840', borderRadius: 10, fontWeight: 800, color: '#362840', fontFamily: 'monospace', fontSize: '0.85rem', marginBottom: 16, cursor: 'pointer', boxShadow: '4px 4px 0px #362840', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
           >
-            <span>💻 SWITCH TO 2D DESK SCENE</span>
-            <span style={{ padding: '2px 6px', background: '#ffd166', color: '#362840', borderRadius: 4, fontSize: '0.7rem' }}>INTERACTIVE</span>
+            <span>🖥 EXPLORE INTERACTIVE 2D CANVAS SCENE</span>
           </button>
 
-          {/* 🎓 Astana IT University Section */}
-          <div style={{ background: isDarkMode ? '#1e2432' : 'linear-gradient(135deg, #f0ebff, #e2d5ff)', border: '3.5px solid #362840', borderRadius: 12, padding: 18, marginBottom: 16, boxShadow: '4px 4px 0px #362840' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ fontSize: '1.3rem' }}>🎓</span>
-                <span style={{ fontSize: '0.95rem', fontWeight: 800, color: textColor }}>Astana IT University</span>
+          {/* Mobile Education Card */}
+          <div style={{ background: 'linear-gradient(135deg, #f0ebff, #e2d5ff)', border: '3.5px solid #362840', borderRadius: 12, padding: 18, marginBottom: 16, boxShadow: '4px 4px 0px #362840' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ fontSize: '1.4rem' }}>🎓</span>
+                <span style={{ fontSize: '1rem', fontWeight: 900, color: textColor }}>Astana IT University</span>
               </div>
-              <span style={{ padding: '3px 8px', background: '#ffd166', border: '1.5px solid #362840', borderRadius: 6, fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'monospace', color: '#362840' }}>
-                2023 — 2026
+              <span style={{ padding: '3px 8px', background: '#ffd166', border: '1.5px solid #362840', borderRadius: 4, fontSize: '0.7rem', fontWeight: 'bold', fontFamily: 'monospace', color: '#362840' }}>
+                2023–2026
               </span>
             </div>
-            <div style={{ fontSize: '0.88rem', fontWeight: 800, color: isDarkMode ? '#00f5d4' : '#6c5ce7', marginBottom: 8, fontFamily: 'monospace' }}>
-              B.S. Software Engineering Degree Student
+            <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#6c5ce7', marginBottom: 8, fontFamily: 'monospace' }}>
+              B.S. Software Engineering
             </div>
             <p style={{ fontSize: '0.82rem', color: textColor, lineHeight: 1.5, marginBottom: 10 }}>
-              Specialization in Software Architecture, Data Structures, FastAPI Backend Systems, React Frontend, and Cloud Infrastructure.
+              Astana, Kazakhstan · Focused on Software Architecture, Backend Systems, Cloud Databases, and Data Structures.
             </p>
             <a
               href="https://astanait.edu.kz/en"
               target="_blank"
               rel="noreferrer"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '7px 14px', background: '#362840', color: '#ffffff', textDecoration: 'none', borderRadius: 6, fontSize: '0.78rem', fontWeight: 'bold', fontFamily: 'monospace' }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '5px 10px', background: '#362840', color: '#ffffff', textDecoration: 'none', borderRadius: 6, fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'monospace' }}
             >
-              Visit University Website (astanait.edu.kz) ↗
+              Visit astanait.edu.kz ↗
             </a>
           </div>
 
-          {/* 🖥️ Interactive Mobile CRT Terminal */}
-          <div style={{ background: isDarkMode ? '#0d1117' : '#1c1426', border: '3.5px solid #362840', borderRadius: 12, padding: 16, marginBottom: 16, boxShadow: '4px 4px 0px #362840', fontFamily: 'monospace' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10, borderBottom: '1.5px solid #3c2f4d', paddingBottom: 8 }}>
-              <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: isDarkMode ? '#00f5d4' : '#ffd166' }}>🖥 MOBILE CRT TERMINAL v1.0</span>
-              <span style={{ fontSize: '0.68rem', color: '#8d9198' }}>INTERACTIVE</span>
+          {/* Mobile Terminal Card */}
+          <div style={{ background: '#1c1426', border: '3.5px solid #362840', borderRadius: 12, padding: 16, marginBottom: 16, boxShadow: '4px 4px 0px #362840', fontFamily: 'monospace' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12, borderBottom: '1px solid #362840', paddingBottom: 8 }}>
+              <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#ffd166' }}>🖥 MOBILE CRT TERMINAL v1.0</span>
+              <div style={{ display: 'flex', gap: 4 }}>
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#f4a2af' }} />
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#ffd166' }} />
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#68c078' }} />
+              </div>
             </div>
 
-            <div style={{ display: 'flex', gap: 6, marginBottom: 10, flexWrap: 'wrap' }}>
+            {/* Quick Command Selector Tabs */}
+            <div style={{ display: 'flex', gap: 6, marginBottom: 12, overflowX: 'auto' }}>
               {[
                 { id: 'whoami', label: '$ whoami' },
-                { id: 'skills', label: '$ skills' },
-                { id: 'edu', label: '$ education' },
-                { id: 'contact', label: '$ contact' },
+                { id: 'skills', label: '$ cat skills' },
+                { id: 'edu', label: '$ cat edu' },
+                { id: 'contact', label: '$ cat contact' }
               ].map(cmd => (
                 <button
                   key={cmd.id}
-                  onClick={() => {
-                    setMobileTerminalCmd(cmd.id as any);
-                    sfx.playKeyClick();
-                  }}
+                  onClick={() => setMobileTerminalCmd(cmd.id as typeof mobileTerminalCmd)}
                   style={{
-                    padding: '4px 8px',
-                    background: mobileTerminalCmd === cmd.id ? (isDarkMode ? '#00f5d4' : '#ffd166') : '#2a2038',
-                    color: mobileTerminalCmd === cmd.id ? '#1c1426' : '#ffffff',
-                    border: '1.5px solid #3c2f4d',
-                    borderRadius: 4,
-                    fontSize: '0.72rem',
+                    padding: '4px 10px',
+                    borderRadius: 6,
+                    border: '1.5px solid #362840',
+                    fontSize: '0.75rem',
                     fontWeight: 'bold',
-                    cursor: 'pointer'
+                    fontFamily: 'monospace',
+                    cursor: 'pointer',
+                    background: mobileTerminalCmd === cmd.id ? '#ffd166' : '#2a2038',
+                    color: mobileTerminalCmd === cmd.id ? '#362840' : '#ffffff',
+                    whiteSpace: 'nowrap'
                   }}
                 >
                   {cmd.label}
@@ -322,58 +296,66 @@ export default function Portfolio() {
               ))}
             </div>
 
-            <div style={{ fontSize: '0.8rem', lineHeight: 1.7, color: '#ececec', background: '#0a0d14', padding: 12, borderRadius: 6, border: '1px solid #2a3240' }}>
+            {/* Command Output Window */}
+            <div style={{ background: '#0d1117', borderRadius: 8, padding: 12, fontSize: '0.8rem', lineHeight: 1.6, color: '#ffffff' }}>
               {mobileTerminalCmd === 'whoami' && (
                 <div>
-                  <span style={{ color: '#ffd166' }}>&gt; whoami</span><br />
-                  <span style={{ color: '#00f5d4' }}>Nurgissa Zhetkizgen</span> — Software Engineer & Full-Stack Developer.<br />
-                  Passionate about building scalable backends & clean interactive web products.
+                  <div style={{ color: '#888' }}>$ whoami</div>
+                  <div style={{ color: '#00f5d4', fontWeight: 'bold', marginTop: 4 }}>
+                    Nurgissa Zhetkizgen — Full-Stack Developer & Software Engineering Student
+                  </div>
                 </div>
               )}
               {mobileTerminalCmd === 'skills' && (
                 <div>
-                  <span style={{ color: '#ffd166' }}>&gt; skills</span><br />
-                  Python · FastAPI · React · Next.js · TypeScript · PostgreSQL · Docker · Hilt · Room FTS4 · Git
+                  <div style={{ color: '#888' }}>$ cat skills.txt</div>
+                  <div style={{ color: '#ffd166', fontWeight: 'bold', marginTop: 4 }}>
+                    Python · FastAPI · React · Next.js · TypeScript · PostgreSQL · Docker · Git
+                  </div>
                 </div>
               )}
               {mobileTerminalCmd === 'edu' && (
                 <div>
-                  <span style={{ color: '#ffd166' }}>&gt; education</span><br />
-                  Astana IT University (2023–2026)<br />
-                  Degree: B.S. Software Engineering
+                  <div style={{ color: '#888' }}>$ cat education.txt</div>
+                  <div style={{ color: '#b4a3e8', fontWeight: 'bold', marginTop: 4 }}>
+                    Astana IT University — B.S. Software Engineering (2023–2026)
+                  </div>
                 </div>
               )}
               {mobileTerminalCmd === 'contact' && (
                 <div>
-                  <span style={{ color: '#ffd166' }}>&gt; contact</span><br />
-                  Telegram: @trulondoner | Email: sholak0@mail.ru | GitHub: nurgissa-dev
+                  <div style={{ color: '#888' }}>$ cat contact.txt</div>
+                  <div style={{ color: '#f4a2af', fontWeight: 'bold', marginTop: 4 }}>
+                    Telegram: @trulondoner | Email: sholak0@mail.ru | GitHub: nurgissa-dev
+                  </div>
                 </div>
               )}
             </div>
           </div>
 
-          {/* 📚 Projects Section */}
+          {/* Mobile Projects List */}
           <div style={{ marginBottom: 16 }}>
-            <div style={{ display: 'inline-block', padding: '5px 12px', background: '#b4a3e8', border: '2.5px solid #362840', borderRadius: 8, fontSize: 13, fontWeight: 'bold', fontFamily: 'monospace', color: '#362840', marginBottom: 12 }}>
-              📚 FEATURED PROJECTS & CODE
+            <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#362840', fontFamily: 'monospace', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span>📚 FEATURED PROJECTS ({PROJECTS.length})</span>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               {PROJECTS.map(p => (
-                <div key={p.id} style={{ background: innerBoxBg, border: '3px solid #362840', borderRadius: 10, padding: 16, boxShadow: '4px 4px 0px #362840' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
-                    <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: textColor }}>{p.label}</h3>
-                    <span style={{ padding: '3px 8px', background: p.color, border: '1.5px solid #362840', borderRadius: 4, fontSize: '0.68rem', fontWeight: 'bold', fontFamily: 'monospace', color: '#362840' }}>
+                <div key={p.id} style={{ background: cardBg, border: '3px solid #362840', borderRadius: 10, padding: 14, boxShadow: '3px 3px 0px #362840' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+                    <h3 style={{ fontSize: '1rem', fontWeight: 900, color: textColor }}>{p.label}</h3>
+                    <span style={{ padding: '2px 6px', background: p.color, border: '1.5px solid #362840', borderRadius: 4, fontSize: '0.68rem', fontWeight: 'bold', fontFamily: 'monospace', color: '#362840' }}>
                       {p.sub}
                     </span>
                   </div>
-                  <p style={{ fontSize: '0.84rem', color: textColor, lineHeight: 1.55, marginBottom: 10 }}>{p.desc}</p>
-                  <div style={{ fontSize: '0.72rem', fontWeight: 'bold', color: subTextColor, fontFamily: 'monospace', marginBottom: 12 }}>{p.tech}</div>
-                  <div style={{ display: 'flex', gap: 10 }}>
-                    <a href={p.href} target="_blank" rel="noreferrer" onClick={() => sfx.playKeyClick()} style={{ flex: 1, textDecoration: 'none', padding: '8px 12px', background: '#f4a2af', border: '2px solid #362840', borderRadius: 6, fontSize: '0.78rem', fontWeight: 'bold', color: '#362840', fontFamily: 'monospace', textAlign: 'center' }}>
-                      GitHub Repo ↗
+                  <p style={{ fontSize: '0.82rem', color: textColor, lineHeight: 1.5, marginBottom: 8 }}>{p.desc}</p>
+                  <div style={{ fontSize: '0.7rem', fontWeight: 'bold', color: subTextColor, fontFamily: 'monospace', marginBottom: 10 }}>{p.tech}</div>
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    <a href={p.href} target="_blank" rel="noreferrer" style={{ textDecoration: 'none', padding: '5px 12px', background: '#f4a2af', border: '2px solid #362840', borderRadius: 4, fontSize: '0.75rem', fontWeight: 'bold', color: '#362840', fontFamily: 'monospace' }}>
+                      GitHub ↗
                     </a>
                     {p.demo && (
-                      <a href={p.demo} target="_blank" rel="noreferrer" onClick={() => sfx.playKeyClick()} style={{ flex: 1, textDecoration: 'none', padding: '8px 12px', background: '#ffd166', border: '2px solid #362840', borderRadius: 6, fontSize: '0.78rem', fontWeight: 'bold', color: '#362840', fontFamily: 'monospace', textAlign: 'center' }}>
+                      <a href={p.demo} target="_blank" rel="noreferrer" style={{ textDecoration: 'none', padding: '5px 12px', background: '#ffd166', border: '2px solid #362840', borderRadius: 4, fontSize: '0.75rem', fontWeight: 'bold', color: '#362840', fontFamily: 'monospace' }}>
                         Live Demo ↗
                       </a>
                     )}
@@ -383,19 +365,18 @@ export default function Portfolio() {
             </div>
           </div>
 
-          {/* 📞 Contacts & Socials Section */}
-          <div style={{ background: cardBg, border: '3.5px solid #362840', borderRadius: 12, padding: 18, boxShadow: '4px 4px 0px #362840' }}>
-            <div style={{ display: 'inline-block', padding: '5px 12px', background: '#ffd166', border: '2.5px solid #362840', borderRadius: 8, fontSize: 13, fontWeight: 'bold', fontFamily: 'monospace', color: '#362840', marginBottom: 14 }}>
-              📞 CONTACTS & SOCIALS
+          {/* Mobile Contacts Grid */}
+          <div>
+            <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#362840', fontFamily: 'monospace', marginBottom: 10 }}>
+              📞 GET IN TOUCH
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-              {getContactItems(isDarkMode).map(c => (
+              {CONTACT_ITEMS.map(c => (
                 <a
                   key={c.id}
                   href={c.href}
                   target="_blank"
                   rel="noreferrer"
-                  onClick={() => sfx.playKeyClick()}
                   style={{
                     textDecoration: 'none',
                     background: innerBoxBg,
@@ -405,13 +386,13 @@ export default function Portfolio() {
                     display: 'flex',
                     flexDirection: 'column',
                     gap: 6,
-                    boxShadow: isDarkMode ? '0 4px 10px rgba(0,0,0,0.3)' : '3px 3px 0px #362840'
+                    boxShadow: '3px 3px 0px #362840'
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                       {c.icon}
-                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: isDarkMode ? '#a0aec0' : '#4a5568', fontFamily: 'monospace' }}>
+                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#4a5568', fontFamily: 'monospace' }}>
                         {c.label}
                       </span>
                     </div>
@@ -443,8 +424,6 @@ export default function Portfolio() {
           {/* ── COZY RETRO 2D DESK INTERACTIVE SCENE ── */}
           <CozyRetroDesk
             onSelectObject={selectObject}
-            isDarkMode={isDarkMode}
-            onToggleTheme={toggleTheme}
             soundEnabled={soundEnabled}
             onToggleSound={toggleSound}
           />
@@ -472,17 +451,17 @@ export default function Portfolio() {
                 </div>
 
                 {/* 🎓 ASTANA IT UNIVERSITY BADGE */}
-                <div style={{ background: isDarkMode ? '#1c2230' : 'linear-gradient(135deg, #f0ebff, #e8deff)', border: '2.5px solid #362840', borderRadius: 8, padding: 12, marginBottom: 14, boxShadow: '3px 3px 0px #362840' }}>
+                <div style={{ background: 'linear-gradient(135deg, #f0ebff, #e8deff)', border: '2.5px solid #362840', borderRadius: 8, padding: 12, marginBottom: 14, boxShadow: '3px 3px 0px #362840' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                       <span style={{ fontSize: '1.2rem' }}>🎓</span>
-                      <span style={{ fontSize: '0.95rem', fontWeight: 800, color: isDarkMode ? '#ececec' : '#362840' }}>Astana IT University</span>
+                      <span style={{ fontSize: '0.95rem', fontWeight: 800, color: '#362840' }}>Astana IT University</span>
                     </div>
                     <span style={{ padding: '2px 8px', background: '#ffd166', border: '1.5px solid #362840', borderRadius: 4, fontSize: '0.7rem', fontWeight: 'bold', fontFamily: 'monospace', color: '#362840' }}>
                       2023 — 2026
                     </span>
                   </div>
-                  <div style={{ fontSize: '0.82rem', fontWeight: 700, color: isDarkMode ? '#00f5d4' : '#6c5ce7', marginBottom: 6, fontFamily: 'monospace' }}>
+                  <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#6c5ce7', marginBottom: 6, fontFamily: 'monospace' }}>
                     B.S. Software Engineering Student
                   </div>
                   <a
@@ -521,10 +500,10 @@ export default function Portfolio() {
                 </div>
 
                 <div style={{ background: innerBoxBg, border: '2px stroke #362840', borderStyle: 'solid', borderRadius: 8, padding: 10, marginBottom: 14 }}>
-                  <div style={{ fontSize: '0.72rem', fontWeight: 'bold', color: isDarkMode ? '#a493e6' : '#362840', marginBottom: 6, fontFamily: 'monospace' }}>TECH TOOLKIT</div>
+                  <div style={{ fontSize: '0.72rem', fontWeight: 'bold', color: '#362840', marginBottom: 6, fontFamily: 'monospace' }}>TECH TOOLKIT</div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
                     {['Python', 'FastAPI', 'React', 'Next.js', 'PostgreSQL', 'Docker', 'OpenAI', 'Git'].map(t => (
-                      <span key={t} style={{ padding: '3px 8px', background: isDarkMode ? '#222834' : '#e0a09822', border: '1.5px solid #362840', borderRadius: 4, fontSize: '0.72rem', fontWeight: 600, color: isDarkMode ? '#ececec' : '#362840', fontFamily: 'monospace' }}>
+                      <span key={t} style={{ padding: '3px 8px', background: '#e0a09822', border: '1.5px solid #362840', borderRadius: 4, fontSize: '0.72rem', fontWeight: 600, color: '#362840', fontFamily: 'monospace' }}>
                         {t}
                       </span>
                     ))}
@@ -541,7 +520,7 @@ export default function Portfolio() {
 
           {/* 🖥️ 2. TERMINAL (CRT Monitor Screen) — with typewriter animation */}
           {activeModal === 'monitor' && (
-            <TerminalModal isDarkMode={isDarkMode} onClose={closeModal} />
+            <TerminalModal onClose={closeModal} />
           )}
 
           {/* 📚 3. PROJECTS (Stack of Books) */}
@@ -602,7 +581,7 @@ export default function Portfolio() {
                   Let&apos;s Connect & Build Together
                 </h3>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 18 }}>
-                  {getContactItems(isDarkMode).map(c => (
+                  {CONTACT_ITEMS.map(c => (
                     <a
                       key={c.id}
                       href={c.href}
@@ -618,12 +597,12 @@ export default function Portfolio() {
                         display: 'flex',
                         flexDirection: 'column',
                         gap: 6,
-                        boxShadow: isDarkMode ? '0 4px 12px rgba(0,0,0,0.3)' : '3px 3px 0px #362840',
+                        boxShadow: '3px 3px 0px #362840',
                         transition: 'transform 0.2s ease, border-color 0.2s ease'
                       }}
                       onMouseEnter={e => {
                         e.currentTarget.style.transform = 'translateY(-3px)';
-                        e.currentTarget.style.borderColor = isDarkMode ? '#00f5d4' : '#6c5ce7';
+                        e.currentTarget.style.borderColor = '#6c5ce7';
                       }}
                       onMouseLeave={e => {
                         e.currentTarget.style.transform = 'none';
@@ -633,7 +612,7 @@ export default function Portfolio() {
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                           {c.icon}
-                          <span style={{ fontSize: '0.8rem', fontWeight: 800, color: isDarkMode ? '#a0aec0' : '#4a5568', fontFamily: 'monospace' }}>
+                          <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#4a5568', fontFamily: 'monospace' }}>
                             {c.label}
                           </span>
                         </div>
@@ -668,13 +647,13 @@ export default function Portfolio() {
                   🎓 ASTANA IT UNIVERSITY DIPLOMA
                 </div>
 
-                <div style={{ background: isDarkMode ? '#1e2432' : 'linear-gradient(135deg, #f0ebff, #e2d5ff)', border: '3px solid #362840', borderRadius: 10, padding: 18, marginBottom: 16, boxShadow: '4px 4px 0px #362840' }}>
+                <div style={{ background: 'linear-gradient(135deg, #f0ebff, #e2d5ff)', border: '3px solid #362840', borderRadius: 10, padding: 18, marginBottom: 16, boxShadow: '4px 4px 0px #362840' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                       <span style={{ fontSize: '1.8rem' }}>🎓</span>
                       <div>
                         <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: textColor }}>Astana IT University</h3>
-                        <div style={{ fontSize: '0.8rem', fontWeight: 700, color: isDarkMode ? '#00f5d4' : '#6c5ce7', fontFamily: 'monospace' }}>Astana, Kazakhstan</div>
+                        <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#6c5ce7', fontFamily: 'monospace' }}>Astana, Kazakhstan</div>
                       </div>
                     </div>
                     <span style={{ padding: '4px 12px', background: '#ffd166', border: '2px solid #362840', borderRadius: 6, fontSize: '0.8rem', fontWeight: 'bold', fontFamily: 'monospace', color: '#362840' }}>

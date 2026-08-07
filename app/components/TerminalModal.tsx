@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { sfx } from '../utils/retroSFX';
 
 interface TerminalModalProps {
-  isDarkMode: boolean;
   onClose: () => void;
 }
 
@@ -42,7 +41,7 @@ type LineType =
   | { kind: 'done'; cmd: string; response: string; responseColor: string }
   | { kind: 'idle' };
 
-export default function TerminalModal({ isDarkMode, onClose }: TerminalModalProps) {
+export default function TerminalModal({ onClose }: TerminalModalProps) {
   // completedLines = fully typed commands+responses shown above current
   const [completedLines, setCompletedLines] = useState<{ cmd: string; response: string; responseColor: string }[]>([]);
   // current typing state
@@ -58,95 +57,77 @@ export default function TerminalModal({ isDarkMode, onClose }: TerminalModalProp
   const RESPONSE_DELAY = 250; // ms pause before response appears
   const NEXT_CMD_DELAY = 700; // ms pause before next command starts
 
-  // Calculate per-character delay based on command length so the whole command
-  // finishes typing in ~TYPING_SOUND_DURATION ms
-  const getCharDelay = (cmdLength: number) => {
-    const delay = Math.floor(TYPING_SOUND_DURATION / Math.max(cmdLength, 1));
-    // Clamp between 30ms (fast) and 120ms (slow for very short commands)
-    return Math.max(30, Math.min(delay, 120));
-  };
-
-  // Preload typing.mp3
+  // Preload typing audio element once on mount
   useEffect(() => {
-    const audio = new Audio('typing.mp3');
-    audio.volume = 0.6;
-    audio.preload = 'auto';
+    // Detect audioUrl basePath
+    let url = '/typing.mp3';
+    if (typeof document !== 'undefined') {
+      try {
+        const base = new URL(document.baseURI);
+        const path = base.pathname.replace(/\/+$/, '');
+        if (path) url = `${path}/typing.mp3`;
+      } catch { /* fallback */ }
+    }
+    const audio = new Audio(url);
+    audio.volume = 0.5;
     typingAudioRef.current = audio;
-    return () => {
-      audio.pause();
-      audio.src = '';
-    };
   }, []);
 
-  // Play typing sound from the start
-  const playTypingSound = () => {
-    const audio = typingAudioRef.current;
-    if (audio && sfx.enabled) {
-      audio.currentTime = 0;
-      audio.play().catch(() => { /* autoplay blocked */ });
-    }
-  };
-
-  // Stop typing sound
-  const stopTypingSound = () => {
-    const audio = typingAudioRef.current;
-    if (audio) {
-      audio.pause();
-      audio.currentTime = 0;
-    }
-  };
-
-  // Blinking cursor
+  // Cursor blinking
   useEffect(() => {
-    const id = setInterval(() => setCursorVisible(v => !v), 530);
-    return () => clearInterval(id);
+    const interval = setInterval(() => {
+      setCursorVisible(v => !v);
+    }, 450);
+    return () => clearInterval(interval);
   }, []);
 
-  // Typewriter engine
+  // Main typing state machine
   useEffect(() => {
     if (currentIdx >= TERMINAL_SCRIPT.length) {
       setPhase('done');
       return;
     }
 
-    const script = TERMINAL_SCRIPT[currentIdx];
+    const item = TERMINAL_SCRIPT[currentIdx];
+    const fullText = item.command;
+    const charDelay = TYPING_SOUND_DURATION / Math.max(fullText.length, 1);
 
     if (phase === 'typing') {
-      // Start sound when first character begins
-      if (currentTyped.length === 0) {
-        playTypingSound();
+      // Play real typing audio loop when starting typing
+      if (currentTyped.length === 0 && typingAudioRef.current && sfx.enabled) {
+        typingAudioRef.current.currentTime = 0;
+        typingAudioRef.current.play().catch(() => {});
       }
 
-      if (currentTyped.length < script.command.length) {
-        const charDelay = getCharDelay(script.command.length);
-        const id = setTimeout(() => {
-          setCurrentTyped(prev => script.command.slice(0, prev.length + 1));
+      if (currentTyped.length < fullText.length) {
+        const timer = setTimeout(() => {
+          setCurrentTyped(fullText.slice(0, currentTyped.length + 1));
         }, charDelay);
-        return () => clearTimeout(id);
+        return () => clearTimeout(timer);
       } else {
-        // Full command typed — stop sound, pause then show response
-        stopTypingSound();
-        const id = setTimeout(() => setPhase('responding'), RESPONSE_DELAY);
-        return () => clearTimeout(id);
+        // Finished typing this command → pause briefly then show response
+        setPhase('responding');
       }
     }
 
     if (phase === 'responding') {
-      // Move to completed, start pause before next
-      setCompletedLines(prev => [
-        ...prev,
-        { cmd: script.command, response: script.response, responseColor: script.responseColor },
-      ]);
-      setCurrentTyped('');
-      setPhase('pausing');
+      const timer = setTimeout(() => {
+        setCompletedLines(prev => [
+          ...prev,
+          { cmd: item.command, response: item.response, responseColor: item.responseColor },
+        ]);
+        setCurrentTyped('');
+        setPhase('pausing');
+      }, RESPONSE_DELAY);
+      return () => clearTimeout(timer);
     }
 
     if (phase === 'pausing') {
-      const id = setTimeout(() => {
+      const timer = setTimeout(() => {
         setCurrentIdx(i => i + 1);
         setPhase('typing');
       }, NEXT_CMD_DELAY);
-      return () => clearTimeout(id);
+      return () => clearTimeout(timer);
     }
   }, [phase, currentTyped, currentIdx]);
 
@@ -157,18 +138,18 @@ export default function TerminalModal({ isDarkMode, onClose }: TerminalModalProp
     }
   }, [completedLines, currentTyped, phase]);
 
-  const promptColor = isDarkMode ? '#00f5d4' : '#a493e6';
-  const accentColor = isDarkMode ? '#00f5d4' : '#a493e6';
+  const promptColor = '#a493e6';
+  const accentColor = '#a493e6';
 
   return (
     <div className="retro-modal-overlay" onClick={onClose}>
       <div
         className="retro-card"
         style={{
-          background: isDarkMode ? '#0d1117' : '#1c1426',
+          background: '#1c1426',
           color: '#ffffff',
           border: `3.5px solid ${accentColor}`,
-          boxShadow: `6px 8px 0px ${isDarkMode ? '#001a14' : '#1a1028'}`,
+          boxShadow: '6px 8px 0px #1a1028',
           maxWidth: 640,
           width: '100%',
           padding: 0,
@@ -183,7 +164,7 @@ export default function TerminalModal({ isDarkMode, onClose }: TerminalModalProp
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: '10px 16px',
-          background: isDarkMode ? '#161b22' : '#2a2038',
+          background: '#2a2038',
           borderBottom: `2px solid ${accentColor}22`,
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -229,7 +210,7 @@ export default function TerminalModal({ isDarkMode, onClose }: TerminalModalProp
             minHeight: 260,
             maxHeight: 340,
             overflowY: 'auto',
-            background: isDarkMode ? '#0d1117' : '#1c1426',
+            background: '#1c1426',
           }}
         >
           {/* Completed lines */}
@@ -293,7 +274,7 @@ export default function TerminalModal({ isDarkMode, onClose }: TerminalModalProp
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: '10px 18px',
-          background: isDarkMode ? '#161b22' : '#2a2038',
+          background: '#2a2038',
           borderTop: `2px solid ${accentColor}22`,
         }}>
           <span style={{ fontSize: '0.7rem', fontWeight: 'bold', fontFamily: 'monospace', color: '#555e6e' }}>
@@ -304,7 +285,7 @@ export default function TerminalModal({ isDarkMode, onClose }: TerminalModalProp
             style={{
               padding: '6px 16px',
               background: accentColor,
-              border: '2px solid #ffffff',
+              border: '2.5px solid #ffffff',
               borderRadius: 6,
               fontWeight: 'bold',
               color: '#1c1426',

@@ -7,8 +7,6 @@ export type RetroTarget = 'sticker' | 'monitor' | 'books' | 'phone' | 'universit
 
 interface CozyRetroDeskProps {
   onSelectObject: (target: RetroTarget) => void;
-  isDarkMode: boolean;
-  onToggleTheme: () => void;
   soundEnabled: boolean;
   onToggleSound: () => void;
 }
@@ -62,8 +60,6 @@ const KEY_LEGENDS = [
 
 export default function CozyRetroDesk({
   onSelectObject,
-  isDarkMode,
-  onToggleTheme,
   soundEnabled,
   onToggleSound
 }: CozyRetroDeskProps) {
@@ -78,16 +74,15 @@ export default function CozyRetroDesk({
     sfx.enabled = soundEnabled;
   }, [soundEnabled]);
 
-  // Theme color tokens
-  // Night Developer Room palette — dark mode is "1:37 AM" quiet developer room
-  const wallBg = isDarkMode ? '#0d111a' : '#f8f1e5';
-  const wallStripe = isDarkMode ? '#161c2b' : '#f0e5d5';
-  const deskBg = isDarkMode ? '#5a3a28' : '#e2b991';
-  const deskLip = isDarkMode ? '#422a1c' : '#d4a375';
-  const deskGrain = isDarkMode ? '#382215' : '#cd9766';
-  const computerBox = isDarkMode ? '#241e33' : '#a493e6';
-  const computerInner = isDarkMode ? '#332b47' : '#c0b3f0';
-  const computerScreen = isDarkMode ? '#060a12' : '#2a2038';
+  // Clean retro color tokens
+  const wallBg = '#f8f1e5';
+  const wallStripe = '#f0e5d5';
+  const deskBg = '#e2b991';
+  const deskLip = '#d4a375';
+  const deskGrain = '#cd9766';
+  const computerBox = '#a493e6';
+  const computerInner = '#c0b3f0';
+  const computerScreen = '#2a2038';
 
   // 1. Periodic eye blinking for CRT screen
   useEffect(() => {
@@ -103,7 +98,7 @@ export default function CozyRetroDesk({
     const handleKeyDown = (e: KeyboardEvent) => {
       const code = e.code.toLowerCase();
       setPressedCodes(prev => new Set(prev).add(code));
-      sfx.playKeySwitchClick(); // 🎹 Box Navy clicky switch sound
+      sfx.playKeySwitchClick();
     };
 
     const handleKeyUp = (e: KeyboardEvent) => {
@@ -125,7 +120,6 @@ export default function CozyRetroDesk({
 
   // 3. Mouse cursor tracking & left/right click listener + Mouse Click SFX
   useEffect(() => {
-    // Preload audio buffers so first click uses real sound
     sfx.preload();
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -176,16 +170,14 @@ export default function CozyRetroDesk({
   const isSpaceActive = pressedCodes.has('space');
 
   return (
-    <div style={{ position: 'relative', width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: isDarkMode ? '#111520' : '#f5ebe0', overflow: 'hidden', transition: 'background 0.4s ease' }}>
+    <div style={{ position: 'relative', width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f5ebe0', overflow: 'hidden' }}>
 
-      {/* Top Controls Bar: Sound Toggle & Theme Toggle */}
+      {/* Top Controls Bar: Sound Toggle */}
       <div style={{ position: 'absolute', top: 20, right: 24, zIndex: 100, display: 'flex', gap: 10 }}>
-        
-        {/* Sound SFX Mute/Unmute Pill */}
         <button
           onClick={onToggleSound}
           style={{
-            background: soundEnabled ? (isDarkMode ? '#1a1f2e' : '#ffffff') : '#f4a2af',
+            background: soundEnabled ? '#ffffff' : '#f4a2af',
             border: '2.5px solid #362840',
             borderRadius: 24,
             padding: '6px 14px',
@@ -203,71 +195,25 @@ export default function CozyRetroDesk({
         >
           <span>{soundEnabled ? '🔊 SFX ON' : '🔇 SFX MUTED'}</span>
         </button>
-
-        {/* Theme Pill */}
-        <button
-          onClick={onToggleTheme}
-          style={{
-            background: isDarkMode ? '#1a1f2e' : '#ffffff',
-            border: '2.5px solid #362840',
-            borderRadius: 24,
-            padding: '6px 14px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-            cursor: 'pointer',
-            boxShadow: '3px 3px 0px #362840',
-            fontFamily: 'monospace',
-            fontSize: '0.82rem',
-            fontWeight: 800,
-            color: isDarkMode ? '#ffd166' : '#362840',
-            transition: 'all 0.3s ease'
-          }}
-        >
-          <span>{isDarkMode ? '🌙 MIDNIGHT' : '☀️ COZY DAY'}</span>
-          <span style={{ padding: '2px 6px', background: isDarkMode ? '#ffd166' : '#b4a3e8', color: '#362840', borderRadius: 10, fontSize: '0.7rem' }}>
-            TOGGLE
-          </span>
-        </button>
-
       </div>
 
       {/* 2D Vector Inline SVG Scene (16:9 viewBox) */}
       <svg
         viewBox="0 0 1200 675"
-        style={{ width: '100%', height: '100%', maxHeight: '100vh', objectFit: 'contain', transition: 'all 0.4s ease' }}
+        style={{ width: '100%', height: '100%', maxHeight: '100vh', objectFit: 'contain' }}
       >
         <defs>
-          {/* Filters for soft glow */}
           <filter id="bulbGlow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation={isDarkMode ? 12 : 4} result="blur" />
+            <feGaussianBlur stdDeviation="4" result="blur" />
             <feMerge>
               <feMergeNode in="blur" />
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
-          {/* Monitor wall glow gradient */}
-          <radialGradient id="monitorWallGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#00f5d4" stopOpacity="0.4" />
-            <stop offset="45%" stopColor="#3a7bd5" stopOpacity="0.2" />
-            <stop offset="100%" stopColor="#0d111a" stopOpacity="0" />
-          </radialGradient>
-          {/* Monitor desk spill gradient */}
-          <radialGradient id="monitorDeskGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#00f5d4" stopOpacity="0.32" />
-            <stop offset="60%" stopColor="#3a7bd5" stopOpacity="0.12" />
-            <stop offset="100%" stopColor="#5a3a28" stopOpacity="0" />
-          </radialGradient>
-          {/* Lamp light cone gradient */}
-          <linearGradient id="lampConeGlow" x1="50%" y1="0%" x2="50%" y2="100%">
-            <stop offset="0%" stopColor="#ffb703" stopOpacity="0.45" />
-            <stop offset="50%" stopColor="#ff9e00" stopOpacity="0.18" />
-            <stop offset="100%" stopColor="#ff9e00" stopOpacity="0" />
-          </linearGradient>
         </defs>
 
         {/* ── 1. BACKGROUND WALL ── */}
-        <rect x="0" y="0" width="1200" height="490" fill={wallBg} style={{ transition: 'fill 0.4s ease' }} />
+        <rect x="0" y="0" width="1200" height="490" fill={wallBg} />
         
         {/* Soft Wall Stripe Pattern */}
         {Array.from({ length: 24 }).map((_, i) => (
@@ -279,42 +225,14 @@ export default function CozyRetroDesk({
             y2="490"
             stroke={wallStripe}
             strokeWidth="1.5"
-            style={{ transition: 'stroke 0.4s ease' }}
           />
         ))}
 
-        {/* ── MONITOR & LAMP GLOW LIGHTING EFFECTS (Dark Mode Only) ── */}
-        {isDarkMode && (
-          <g style={{ transition: 'opacity 0.6s ease' }} pointerEvents="none">
-            {/* Ambient wall glow behind CRT monitor — cool cyan/indigo aura */}
-            <ellipse
-              cx="380"
-              cy="270"
-              rx="340"
-              ry="220"
-              fill="url(#monitorWallGlow)"
-            />
-            {/* Desk surface light pool in front of monitor */}
-            <ellipse
-              cx="380"
-              cy="530"
-              rx="280"
-              ry="60"
-              fill="url(#monitorDeskGlow)"
-            />
-            {/* Cozy desk lamp warm golden light cone on right desk */}
-            <polygon
-              points="1065,340 910,675 1200,675 1100,340"
-              fill="url(#lampConeGlow)"
-            />
-          </g>
-        )}
-
         {/* ── 2. DESK SURFACE ── */}
-        <rect x="0" y="490" width="1200" height="185" fill={deskBg} stroke="#362840" strokeWidth="4" style={{ transition: 'fill 0.4s ease' }} />
+        <rect x="0" y="490" width="1200" height="185" fill={deskBg} stroke="#362840" strokeWidth="4" />
         
         {/* Desk Front Edge Lip */}
-        <rect x="0" y="490" width="1200" height="16" fill={deskLip} stroke="#362840" strokeWidth="3" style={{ transition: 'fill 0.4s ease' }} />
+        <rect x="0" y="490" width="1200" height="16" fill={deskLip} stroke="#362840" strokeWidth="3" />
         
         {/* Wood Texture Grain Lines */}
         <line x1="40" y1="530" x2="320" y2="530" stroke={deskGrain} strokeWidth="2" strokeDasharray="60 15 40 20" />
@@ -322,19 +240,17 @@ export default function CozyRetroDesk({
         <line x1="150" y1="620" x2="680" y2="620" stroke={deskGrain} strokeWidth="2" strokeDasharray="100 30 70 20" />
         <line x1="780" y1="600" x2="1140" y2="600" stroke={deskGrain} strokeWidth="2" strokeDasharray="90 20 40 30" />
 
-
-
         {/* ── 5. POTTED HOUSEPLANT (Desk Left) ── */}
         <g id="plant-group" transform="translate(60, 240)">
           <ellipse cx="60" cy="250" rx="55" ry="12" fill="#000000" opacity="0.25" />
-          <path d="M 20 160 L 35 245 L 85 245 L 100 160 Z" fill={isDarkMode ? '#8d5b53' : '#c88b83'} stroke="#362840" strokeWidth="3.5" />
-          <rect x="15" y="150" width="90" height="15" fill={isDarkMode ? '#9e6b63' : '#e0a098'} stroke="#362840" strokeWidth="3.5" rx="3" />
+          <path d="M 20 160 L 35 245 L 85 245 L 100 160 Z" fill="#c88b83" stroke="#362840" strokeWidth="3.5" />
+          <rect x="15" y="150" width="90" height="15" fill="#e0a098" stroke="#362840" strokeWidth="3.5" rx="3" />
           
-          <path d="M 55 150 Q 40 90 20 50 Q 55 80 55 150" fill={isDarkMode ? '#387044' : '#68c078'} stroke="#362840" strokeWidth="3" />
-          <path d="M 55 150 Q 80 80 100 35 Q 75 75 55 150" fill={isDarkMode ? '#2d6a4f' : '#52b788'} stroke="#362840" strokeWidth="3" />
-          <path d="M 55 150 Q 15 110 -10 90 Q 20 120 55 150" fill={isDarkMode ? '#40916c' : '#74c69d'} stroke="#362840" strokeWidth="3" />
-          <path d="M 55 150 Q 95 120 125 100 Q 85 130 55 150" fill={isDarkMode ? '#1b4332' : '#40916c'} stroke="#362840" strokeWidth="3" />
-          <path d="M 55 150 Q 55 60 55 10 Q 65 60 55 150" fill={isDarkMode ? '#52b788' : '#95d5b2'} stroke="#362840" strokeWidth="3" />
+          <path d="M 55 150 Q 40 90 20 50 Q 55 80 55 150" fill="#68c078" stroke="#362840" strokeWidth="3" />
+          <path d="M 55 150 Q 80 80 100 35 Q 75 75 55 150" fill="#52b788" stroke="#362840" strokeWidth="3" />
+          <path d="M 55 150 Q 15 110 -10 90 Q 20 120 55 150" fill="#74c69d" stroke="#362840" strokeWidth="3" />
+          <path d="M 55 150 Q 95 120 125 100 Q 85 130 55 150" fill="#40916c" stroke="#362840" strokeWidth="3" />
+          <path d="M 55 150 Q 55 60 55 10 Q 65 60 55 150" fill="#95d5b2" stroke="#362840" strokeWidth="3" />
         </g>
 
         {/* ── 5b. SNORLAX GIF (Bottom-left corner, below plant on desk) ── */}
@@ -353,10 +269,10 @@ export default function CozyRetroDesk({
           <ellipse cx="220" cy="325" rx="210" ry="20" fill="#000000" opacity="0.3" />
 
           {/* Floppy Drive Unit */}
-          <rect x="25" y="240" width="370" height="80" fill={isDarkMode ? '#342c48' : '#eddcc8'} stroke="#362840" strokeWidth="4" rx="8" />
+          <rect x="25" y="240" width="370" height="80" fill="#eddcc8" stroke="#362840" strokeWidth="4" rx="8" />
           <rect x="230" y="275" width="130" height="12" fill="#362840" rx="3" />
-          <rect x="230" y="255" width="60" height="8" fill={isDarkMode ? '#252040' : '#d8c5b0'} stroke="#362840" strokeWidth="2" rx="2" />
-          <circle cx="360" cy="260" r="7" fill={isDarkMode ? '#00f5d4' : '#f4a2af'} stroke="#362840" strokeWidth="2" />
+          <rect x="230" y="255" width="60" height="8" fill="#d8c5b0" stroke="#362840" strokeWidth="2" rx="2" />
+          <circle cx="360" cy="260" r="7" fill="#f4a2af" stroke="#362840" strokeWidth="2" />
           {Array.from({ length: 6 }).map((_, i) => (
             <line key={i} x1={50 + i * 22} y1="260" x2={50 + i * 22} y2="300" stroke="#362840" strokeWidth="3.5" strokeLinecap="round" />
           ))}
@@ -377,23 +293,23 @@ export default function CozyRetroDesk({
               <path d="M 65 48 C 120 42, 280 42, 335 48 C 345 90, 345 150, 335 185" fill="none" stroke="#3c2f4d" strokeWidth="4" opacity="0.6" />
 
               {!blink ? (
-                <g fill={isDarkMode ? '#00f5d4' : '#ffffff'}>
+                <g fill="#ffffff">
                   <rect x="120" y="88" width="30" height="8" rx="2" />
                   <rect x="130" y="78" width="10" height="10" rx="2" />
                   <rect x="250" y="88" width="30" height="8" rx="2" />
                   <rect x="260" y="78" width="10" height="10" rx="2" />
                 </g>
               ) : (
-                <g fill={isDarkMode ? '#00f5d4' : '#ffffff'}>
+                <g fill="#ffffff">
                   <rect x="120" y="88" width="30" height="6" rx="2" />
                   <rect x="250" y="88" width="30" height="6" rx="2" />
                 </g>
               )}
 
-              <rect x="185" y="118" width="50" height="24" fill={isDarkMode ? '#00f5d4' : '#ffffff'} rx="4" />
+              <rect x="185" y="118" width="50" height="24" fill="#ffffff" rx="4" />
               <rect x="190" y="122" width="40" height="16" fill={computerScreen} rx="2" />
 
-              <text x="210" y="185" fill={isDarkMode ? '#00f5d4' : '#a493e6'} fontSize="11" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
+              <text x="210" y="185" fill="#a493e6" fontSize="11" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
                 [ CLICK TO OPEN TERMINAL ]
               </text>
             </g>
@@ -401,9 +317,9 @@ export default function CozyRetroDesk({
 
           {/* Floating Zzz */}
           <g className="floating-zzz" pointerEvents="none">
-            <text x="360" y="35" fill={isDarkMode ? '#00f5d4' : '#ffffff'} fontSize="24" fontWeight="bold" fontFamily="sans-serif" stroke="#362840" strokeWidth="1.5">Z</text>
-            <text x="382" y="15" fill={isDarkMode ? '#00f5d4' : '#ffffff'} fontSize="18" fontWeight="bold" fontFamily="sans-serif" stroke="#362840" strokeWidth="1.5">z</text>
-            <text x="398" y="-2" fill={isDarkMode ? '#00f5d4' : '#ffffff'} fontSize="14" fontWeight="bold" fontFamily="sans-serif" stroke="#362840" strokeWidth="1.5">z</text>
+            <text x="360" y="35" fill="#ffffff" fontSize="24" fontWeight="bold" fontFamily="sans-serif" stroke="#362840" strokeWidth="1.5">Z</text>
+            <text x="382" y="15" fill="#ffffff" fontSize="18" fontWeight="bold" fontFamily="sans-serif" stroke="#362840" strokeWidth="1.5">z</text>
+            <text x="398" y="-2" fill="#ffffff" fontSize="14" fontWeight="bold" fontFamily="sans-serif" stroke="#362840" strokeWidth="1.5">z</text>
           </g>
 
           {/* 🟡 YELLOW POST-IT STICKER (Clickable -> About Me) */}
@@ -450,13 +366,13 @@ export default function CozyRetroDesk({
             <ellipse cx="110" cy="180" rx="115" ry="12" fill="#000000" opacity="0.2" />
 
             <g transform="translate(0, 120)">
-              <rect x="0" y="0" width="220" height="42" fill={isDarkMode ? '#a84e5b' : '#f4a2af'} stroke="#362840" strokeWidth="3.5" rx="5" />
+              <rect x="0" y="0" width="220" height="42" fill="#f4a2af" stroke="#362840" strokeWidth="3.5" rx="5" />
               <rect x="210" y="5" width="10" height="32" fill="#ffffff" stroke="#362840" strokeWidth="2" />
               <line x1="25" y1="21" x2="170" y2="21" stroke="#362840" strokeWidth="3" />
             </g>
 
             <g transform="translate(15, 75)">
-              <rect x="0" y="0" width="195" height="38" fill={isDarkMode ? '#6c5ce7' : '#b4a3e8'} stroke="#362840" strokeWidth="3.5" rx="5" />
+              <rect x="0" y="0" width="195" height="38" fill="#b4a3e8" stroke="#362840" strokeWidth="3.5" rx="5" />
               <rect x="185" y="5" width="10" height="28" fill="#ffffff" stroke="#362840" strokeWidth="2" />
               <line x1="20" y1="19" x2="150" y2="19" stroke="#362840" strokeWidth="3" />
             </g>
@@ -471,7 +387,7 @@ export default function CozyRetroDesk({
 
             <g transform="translate(90, -10)">
               <path d="M 10 30 L 15 45 L 35 45 L 40 30 Z" fill="#9d8189" stroke="#362840" strokeWidth="2" />
-              <circle cx="25" cy="20" r="12" fill={isDarkMode ? '#00f5d4' : '#68c078'} stroke="#362840" strokeWidth="2" />
+              <circle cx="25" cy="20" r="12" fill="#68c078" stroke="#362840" strokeWidth="2" />
             </g>
           </g>
         </g>
@@ -488,9 +404,9 @@ export default function CozyRetroDesk({
           <g className="retro-hover-lift">
             <ellipse cx="75" cy="100" rx="80" ry="12" fill="#000000" opacity="0.2" />
 
-            <rect x="0" y="0" width="150" height="95" fill={isDarkMode ? '#ffd166' : '#ffd166'} stroke="#362840" strokeWidth="3.5" rx="14" />
+            <rect x="0" y="0" width="150" height="95" fill="#ffd166" stroke="#362840" strokeWidth="3.5" rx="14" />
             
-            <rect x="15" y="15" width="120" height="24" fill={isDarkMode ? '#ff758f' : '#f4a2af'} stroke="#362840" strokeWidth="2.5" rx="4" />
+            <rect x="15" y="15" width="120" height="24" fill="#f4a2af" stroke="#362840" strokeWidth="2.5" rx="4" />
             <text x="75" y="32" fill="#362840" fontSize="12" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
               CONTACTS ☎
             </text>
@@ -507,22 +423,12 @@ export default function CozyRetroDesk({
 
         {/* ── 8b. COZY RETRO DESK LAMP ── */}
         <g id="desk-lamp-group" transform="translate(1075, 250)">
-          {/* Lamp Base Shadow */}
           <ellipse cx="30" cy="240" rx="28" ry="8" fill="#000000" opacity="0.35" />
-          {/* Lamp Base */}
-          <path d="M 12 240 L 15 234 C 20 228, 40 228, 45 234 L 48 240 Z" fill={isDarkMode ? '#3e3558' : '#ffd166'} stroke="#362840" strokeWidth="3" />
-          {/* Arm Curved Stem */}
+          <path d="M 12 240 L 15 234 C 20 228, 40 228, 45 234 L 48 240 Z" fill="#ffd166" stroke="#362840" strokeWidth="3" />
           <path d="M 30 232 Q 45 140 10 90" fill="none" stroke="#362840" strokeWidth="4.5" strokeLinecap="round" />
-          <path d="M 30 232 Q 45 140 10 90" fill="none" stroke={isDarkMode ? '#ffd166' : '#b4a3e8'} strokeWidth="2.5" strokeLinecap="round" />
-          {/* Lamp Shade Dome Head */}
-          <path d="M -16 105 L 24 75 C 30 97, 0 117, -16 105 Z" fill={isDarkMode ? '#e76f51' : '#f4a2af'} stroke="#362840" strokeWidth="3.5" />
-          
-          {/* Glowing Bulb inside Shade */}
-          {isDarkMode ? (
-            <circle cx="5" cy="98" r="9" fill="#ffea00" filter="url(#bulbGlow)" />
-          ) : (
-            <circle cx="5" cy="98" r="6" fill="#fefae0" stroke="#362840" strokeWidth="1.5" />
-          )}
+          <path d="M 30 232 Q 45 140 10 90" fill="none" stroke="#b4a3e8" strokeWidth="2.5" strokeLinecap="round" />
+          <path d="M -16 105 L 24 75 C 30 97, 0 117, -16 105 Z" fill="#f4a2af" stroke="#362840" strokeWidth="3.5" />
+          <circle cx="5" cy="98" r="6" fill="#fefae0" stroke="#362840" strokeWidth="1.5" />
         </g>
 
         {/* ── 9. AESTHETIC COMPLETE 5-ROW CUSTOM 65% MECHANICAL KEYBOARD ── */}
@@ -547,7 +453,7 @@ export default function CozyRetroDesk({
             y="0"
             width="470"
             height="136"
-            fill={isDarkMode ? '#2a243a' : '#eddcc8'}
+            fill="#eddcc8"
             stroke="#362840"
             strokeWidth="4"
             rx="16"
@@ -559,7 +465,7 @@ export default function CozyRetroDesk({
             y="8"
             width="450"
             height="120"
-            fill={isDarkMode ? '#1e1830' : '#d5c3b0'}
+            fill="#d5c3b0"
             stroke="#362840"
             strokeWidth="2.5"
             rx="10"
@@ -577,10 +483,10 @@ export default function CozyRetroDesk({
 
                 const active = isKeyActive(row, col);
 
-                let baseFill = isDarkMode ? '#352d4a' : '#fefae0';
+                let baseFill = '#fefae0';
                 if (row === 0 && col === 0) baseFill = '#f4a2af';
                 else if (row === 2 && col === 12) baseFill = '#ffd166';
-                else if (col === 0 || col === 13 || row === 4) baseFill = isDarkMode ? '#5a4a75' : '#b4a3e8';
+                else if (col === 0 || col === 13 || row === 4) baseFill = '#b4a3e8';
 
                 const keyFill = active ? '#ff4d6d' : baseFill;
                 const legendText = KEY_LEGENDS[row]?.[col] || '';
@@ -626,7 +532,7 @@ export default function CozyRetroDesk({
                       <text
                         x={kx + 13.5}
                         y={ky + 12}
-                        fill={active ? '#ffffff' : (isDarkMode ? '#ececec' : '#362840')}
+                        fill={active ? '#ffffff' : '#362840'}
                         fontSize={legendText.length > 3 ? '6' : (legendText.length > 1 ? '7' : '8.5')}
                         fontWeight="bold"
                         textAnchor="middle"
@@ -657,7 +563,7 @@ export default function CozyRetroDesk({
               y={isSpaceActive ? 103 : 101}
               width="182"
               height="18"
-              fill={isSpaceActive ? '#ff4d6d' : (isDarkMode ? '#6c5ce7' : '#a493e6')}
+              fill={isSpaceActive ? '#ff4d6d' : '#a493e6'}
               stroke="#362840"
               strokeWidth="2.5"
               rx="5"
@@ -675,7 +581,7 @@ export default function CozyRetroDesk({
             <text
               x="202"
               y={(isSpaceActive ? 103 : 101) + 12}
-              fill={isSpaceActive ? '#ffffff' : (isDarkMode ? '#ececec' : '#362840')}
+              fill={isSpaceActive ? '#ffffff' : '#362840'}
               fontSize="8"
               fontWeight="bold"
               textAnchor="middle"
@@ -703,7 +609,7 @@ export default function CozyRetroDesk({
             y="0"
             width="64"
             height="96"
-            fill={isDarkMode ? '#2e2845' : '#f4f1de'}
+            fill="#f4f1de"
             stroke="#362840"
             strokeWidth="3.5"
             rx="30"
@@ -712,7 +618,7 @@ export default function CozyRetroDesk({
           {/* Left Mouse Button */}
           <path
             d="M 4 30 L 30 30 L 30 6 C 18 8, 8 16, 4 30 Z"
-            fill={leftClick ? '#ff4d6d' : (isDarkMode ? '#3e3558' : '#ffffff')}
+            fill={leftClick ? '#ff4d6d' : '#ffffff'}
             stroke="#362840"
             strokeWidth="2"
             style={{ transition: 'fill 0.05s ease-out' }}
@@ -721,7 +627,7 @@ export default function CozyRetroDesk({
           {/* Right Mouse Button */}
           <path
             d="M 34 30 L 60 30 C 56 16, 46 8, 34 6 L 34 30 Z"
-            fill={rightClick ? '#ffd166' : (isDarkMode ? '#3e3558' : '#ffffff')}
+            fill={rightClick ? '#ffd166' : '#ffffff'}
             stroke="#362840"
             strokeWidth="2"
             style={{ transition: 'fill 0.05s ease-out' }}
@@ -733,7 +639,7 @@ export default function CozyRetroDesk({
             y="16"
             width="6"
             height="14"
-            fill={isDarkMode ? '#00f5d4' : '#b4a3e8'}
+            fill="#b4a3e8"
             stroke="#362840"
             strokeWidth="1.5"
             rx="3"
