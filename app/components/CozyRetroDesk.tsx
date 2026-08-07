@@ -273,75 +273,121 @@ export default function CozyRetroDesk({
         <line x1="150" y1="620" x2="680" y2="620" stroke={deskGrain} strokeWidth="2" strokeDasharray="100 30 70 20" />
         <line x1="780" y1="600" x2="1140" y2="600" stroke={deskGrain} strokeWidth="2" strokeDasharray="90 20 40 30" />
 
-        {/* ── 3. GARLAND STRING LIGHTS (Top Wall -> Clickable to Toggle Theme!) ── */}
-        <g style={{ cursor: 'pointer' }} onClick={onToggleTheme}>
-          <path
-            d="M 30 20 Q 200 90 380 30 Q 580 95 780 30 Q 980 90 1170 20"
-            fill="none"
-            stroke={isDarkMode ? '#3a3050' : '#c4a882'}
-            strokeWidth="2.5"
-          />
-          {/* Decorative lantern-style bulbs — no hover transform, no SVG filter = zero lag */}
-          {[
-            [80, 48], [150, 64], [230, 68], [310, 52],
-            [440, 68], [520, 72], [600, 68], [680, 52],
-            [840, 66], [920, 70], [1000, 62], [1090, 42]
-          ].map(([bx, by], i) => {
-            const colors = isDarkMode
-              ? ['#00f5d4', '#7b2cbf', '#ffd166', '#f4a2af']
-              : ['#ffd166', '#f4a2af', '#b4a3e8', '#68c078'];
-            const c = colors[i % colors.length];
-            return (
-              <g key={i}>
-                {/* Cap */}
-                <rect x={bx - 3} y={by - 8} width="6" height="7" fill={isDarkMode ? '#3a3050' : '#8d7b6a'} rx="1" />
-                {/* Bulb body — lantern shape */}
-                <ellipse cx={bx} cy={by + 6} rx="9" ry="11" fill={c} stroke={isDarkMode ? '#1a1226' : '#362840'} strokeWidth="1.5"
-                  style={{ opacity: isDarkMode ? 0.92 : 0.88 }}
-                />
-                {/* Shine dot */}
-                <ellipse cx={bx - 3} cy={by + 2} rx="2.5" ry="3" fill="white" style={{ opacity: 0.35 }} />
-              </g>
-            );
-          })}
-        </g>
-
-        {/* ── 4. ASTANA IT UNIVERSITY DIPLOMA BOARD (Right Wall -> Clickable) ── */}
+        {/* ── 3. LO-FI WOVEN WALL TAPESTRY (Cozy Tapestry on Wooden Hanger Rod) ── */}
         <g
-          id="aitu-board"
+          id="wall-tapestry"
           className="retro-interactive-group"
-          onClick={() => onSelectObject('university')}
-          transform="translate(780, 40)"
+          onClick={onToggleTheme}
+          transform="translate(820, 25)"
+          style={{ cursor: 'pointer' }}
         >
-          <rect x="-10" y="-10" width="340" height="260" fill="transparent" pointerEvents="all" />
-
           <g className="retro-hover-lift">
-            <rect x="6" y="6" width="320" height="235" fill="#000000" opacity="0.25" rx="10" />
-            <rect x="0" y="0" width="320" height="235" fill={isDarkMode ? '#1e2430' : '#ffffff'} stroke="#362840" strokeWidth="4" rx="10" />
+            {/* Wall Pin / Nail */}
+            <circle cx="110" cy="5" r="4.5" fill={isDarkMode ? '#00f5d4' : '#362840'} />
+            <circle cx="110" cy="5" r="2.5" fill="#ffd166" />
             
-            <rect x="0" y="0" width="320" height="48" fill={isDarkMode ? '#3b3260' : '#b4a3e8'} stroke="#362840" strokeWidth="4" rx="8" />
-            <text x="160" y="30" fill={isDarkMode ? '#ffd166' : '#362840'} fontSize="16" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif" letterSpacing="1.5">
-              🎓 ASTANA IT UNIVERSITY
-            </text>
+            {/* Hanging Cord / Rope */}
+            <path
+              d="M 110 5 L 15 42 M 110 5 L 205 42"
+              fill="none"
+              stroke={isDarkMode ? '#a493e6' : '#8d6e53'}
+              strokeWidth="2.5"
+              strokeLinecap="round"
+            />
 
-            <rect x="20" y="60" width="280" height="30" fill={isDarkMode ? '#141822' : '#f0ebff'} stroke="#362840" strokeWidth="2" rx="4" />
-            <text x="160" y="80" fill={isDarkMode ? '#a493e6' : '#6c5ce7'} fontSize="13" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
-              B.S. Software Engineering (2023-2026)
-            </text>
+            {/* Wooden Top Hanging Bar */}
+            <rect x="5" y="38" width="210" height="12" fill={isDarkMode ? '#3e2c1e' : '#a67c52'} stroke="#362840" strokeWidth="3" rx="5" />
+            {/* Wooden Finials (End Knobs) */}
+            <circle cx="3" cy="44" r="7" fill={isDarkMode ? '#593f2c' : '#c49563'} stroke="#362840" strokeWidth="2.5" />
+            <circle cx="217" cy="44" r="7" fill={isDarkMode ? '#593f2c' : '#c49563'} stroke="#362840" strokeWidth="2.5" />
 
-            <circle cx="65" cy="145" r="24" fill="#ffd166" stroke="#362840" strokeWidth="2.5" />
-            <text x="65" y="152" fill="#362840" fontSize="20" textAnchor="middle">🎓</text>
+            {/* Tapestry Fabric Shadow & Main Canvas Body */}
+            <rect x="23" y="53" width="174" height="215" fill="#000000" opacity="0.22" rx="4" />
+            <rect
+              x="18"
+              y="50"
+              width="184"
+              height="215"
+              fill={isDarkMode ? '#1a162b' : '#fdf6ed'}
+              stroke="#362840"
+              strokeWidth="3.5"
+              rx="4"
+            />
 
-            <line x1="110" y1="130" x2="295" y2="130" stroke={isDarkMode ? '#8d9198' : '#362840'} strokeWidth="3.5" strokeLinecap="round" />
-            <line x1="110" y1="145" x2="275" y2="145" stroke={isDarkMode ? '#8d9198' : '#362840'} strokeWidth="2.5" strokeDasharray="6 3" />
-            <line x1="110" y1="160" x2="255" y2="160" stroke={isDarkMode ? '#8d9198' : '#362840'} strokeWidth="2.5" strokeDasharray="6 3" />
+            {/* Inner Stitched Border Pattern */}
+            <rect
+              x="26"
+              y="58"
+              width="168"
+              height="199"
+              fill="none"
+              stroke={isDarkMode ? '#3d2e5c' : '#e4d4be'}
+              strokeWidth="2"
+              strokeDasharray="6 4"
+              rx="2"
+            />
 
-            <circle cx="280" cy="180" r="12" fill="#f4a2af" stroke="#362840" strokeWidth="2" />
+            {/* LO-FI ARTWORK: Moon Phases & Sunset Mountain Landscape */}
+            <g transform="translate(26, 58)">
+              {/* Sky Background inside canvas */}
+              <rect x="0" y="0" width="168" height="199" fill={isDarkMode ? '#24193d' : '#fdeddf'} rx="2" />
+              
+              {/* Moon Phases across top */}
+              {/* Crescent Left */}
+              <path d="M 22 18 A 6 6 0 0 0 22 30 A 4.5 4.5 0 0 1 22 18" fill={isDarkMode ? '#ffd166' : '#d97757'} />
+              {/* Half Moon Left */}
+              <path d="M 54 18 A 6 6 0 0 1 54 30 Z" fill={isDarkMode ? '#ffd166' : '#d97757'} />
+              {/* Full Glowing Moon Center */}
+              <circle cx="84" cy="24" r="6" fill={isDarkMode ? '#ffd166' : '#d97757'} />
+              {/* Half Moon Right */}
+              <path d="M 114 18 A 6 6 0 0 0 114 30 Z" fill={isDarkMode ? '#ffd166' : '#d97757'} />
+              {/* Crescent Right */}
+              <path d="M 146 18 A 6 6 0 0 1 146 30 A 4.5 4.5 0 0 0 146 18" fill={isDarkMode ? '#ffd166' : '#d97757'} />
 
-            <rect x="180" y="195" width="125" height="26" fill="#ffd166" stroke="#362840" strokeWidth="2" rx="4" />
-            <text x="242" y="212" fill="#362840" fontSize="11" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
-              ✦ VIEW DIPLOMA
-            </text>
+              {/* Big Radiant Sun / Moon Disk */}
+              <circle cx="84" cy="85" r="32" fill={isDarkMode ? '#ffb703' : '#f4a2af'} opacity="0.9" />
+              <circle cx="84" cy="85" r="42" fill="none" stroke={isDarkMode ? '#ffd166' : '#f4a2af'} strokeWidth="1.5" strokeDasharray="4 4" opacity="0.5" />
+
+              {/* Distant Mountain Range (Back Layer) */}
+              <polygon points="-10,145 35,92 85,145" fill={isDarkMode ? '#4a306d' : '#e8a598'} opacity="0.75" />
+              <polygon points="50,145 110,82 175,145" fill={isDarkMode ? '#3b2559' : '#e08f80'} opacity="0.8" />
+
+              {/* Middle Mountain Range (Mid Layer) */}
+              <polygon points="10,155 68,106 132,155" fill={isDarkMode ? '#311b47' : '#cf7366'} />
+              <polygon points="82,155 138,102 185,155" fill={isDarkMode ? '#28133d' : '#b85b50'} />
+
+              {/* Foreground Hills & Ridge (Front Layer) */}
+              <path d="M -10 165 Q 45 130 102 170 Q 148 138 185 170 L 185 199 L -10 199 Z" fill={isDarkMode ? '#1a0c2e' : '#8d4745'} />
+
+              {/* Tiny Lo-Fi Pine Trees on Ridge */}
+              <polygon points="32,145 36,134 40,145" fill={isDarkMode ? '#ffd166' : '#fdeddf'} />
+              <polygon points="44,150 47,141 50,150" fill={isDarkMode ? '#ffd166' : '#fdeddf'} />
+              <polygon points="122,152 125,143 128,152" fill={isDarkMode ? '#ffd166' : '#fdeddf'} />
+
+              {/* Calm Water Reflection Lines */}
+              <line x1="35" y1="180" x2="75" y2="180" stroke={isDarkMode ? '#ffd166' : '#fdeddf'} strokeWidth="1.5" strokeDasharray="8 4" opacity="0.85" />
+              <line x1="55" y1="187" x2="115" y2="187" stroke={isDarkMode ? '#ffd166' : '#fdeddf'} strokeWidth="1.5" strokeDasharray="12 4" opacity="0.75" />
+              <line x1="95" y1="193" x2="145" y2="193" stroke={isDarkMode ? '#ffd166' : '#fdeddf'} strokeWidth="1.5" strokeDasharray="6 3" opacity="0.65" />
+            </g>
+
+            {/* Wooden Bottom Weight Rod */}
+            <rect x="12" y="265" width="196" height="8" fill={isDarkMode ? '#3e2c1e' : '#a67c52'} stroke="#362840" strokeWidth="2.5" rx="3" />
+
+            {/* Bottom Woven Fringe / Tassels */}
+            {[22, 37, 52, 67, 82, 97, 112, 127, 142, 157, 172, 187, 198].map((tx, idx) => (
+              <g key={idx}>
+                <line
+                  x1={tx}
+                  y1="273"
+                  x2={tx + (idx % 2 === 0 ? -2 : 2)}
+                  y2="291"
+                  stroke={isDarkMode ? '#b4a3e8' : '#8d6e53'}
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                />
+                <circle cx={tx + (idx % 2 === 0 ? -2 : 2)} cy="292" r="2.5" fill={isDarkMode ? '#ffd166' : '#d97757'} />
+              </g>
+            ))}
           </g>
         </g>
 
