@@ -481,23 +481,23 @@ export default function CozyRetroDesk({
           id="phone-group"
           className="retro-interactive-group"
           onClick={() => onSelectObject('phone')}
-          transform="translate(940, 390)"
+          transform="translate(900, 390)"
         >
-          <rect x="-20" y="-10" width="190" height="120" fill="transparent" pointerEvents="all" />
+          <rect x="-20" y="-10" width="180" height="120" fill="transparent" pointerEvents="all" />
 
           <g className="retro-hover-lift">
-            <ellipse cx="80" cy="100" rx="85" ry="12" fill="#000000" opacity="0.2" />
+            <ellipse cx="75" cy="100" rx="80" ry="12" fill="#000000" opacity="0.2" />
 
-            <rect x="0" y="0" width="160" height="95" fill="#ffd166" stroke="#362840" strokeWidth="3.5" rx="14" />
+            <rect x="0" y="0" width="150" height="95" fill={isDarkMode ? '#ffd166' : '#ffd166'} stroke="#362840" strokeWidth="3.5" rx="14" />
             
-            <rect x="20" y="15" width="120" height="24" fill="#f4a2af" stroke="#362840" strokeWidth="2.5" rx="4" />
-            <text x="80" y="32" fill="#362840" fontSize="12" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
+            <rect x="15" y="15" width="120" height="24" fill={isDarkMode ? '#ff758f' : '#f4a2af'} stroke="#362840" strokeWidth="2.5" rx="4" />
+            <text x="75" y="32" fill="#362840" fontSize="12" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
               CONTACTS ☎
             </text>
 
             {[
-              [30, 48], [65, 48], [100, 48],
-              [30, 68], [65, 68], [100, 68]
+              [25, 48], [60, 48], [95, 48],
+              [25, 68], [60, 68], [95, 68]
             ].map(([kx, ky], i) => (
               <rect key={i} x={kx} y={ky} width="24" height="14" fill="#ffffff" stroke="#362840" strokeWidth="2" rx="3" />
             ))}
@@ -506,22 +506,22 @@ export default function CozyRetroDesk({
         </g>
 
         {/* ── 8b. COZY RETRO DESK LAMP ── */}
-        <g id="desk-lamp-group" transform="translate(1060, 310)">
+        <g id="desk-lamp-group" transform="translate(1075, 250)">
           {/* Lamp Base Shadow */}
-          <ellipse cx="30" cy="180" rx="28" ry="8" fill="#000000" opacity="0.3" />
+          <ellipse cx="30" cy="240" rx="28" ry="8" fill="#000000" opacity="0.35" />
           {/* Lamp Base */}
-          <path d="M 12 180 L 15 174 C 20 168, 40 168, 45 174 L 48 180 Z" fill={isDarkMode ? '#3e3558' : '#ffd166'} stroke="#362840" strokeWidth="3" />
+          <path d="M 12 240 L 15 234 C 20 228, 40 228, 45 234 L 48 240 Z" fill={isDarkMode ? '#3e3558' : '#ffd166'} stroke="#362840" strokeWidth="3" />
           {/* Arm Curved Stem */}
-          <path d="M 30 172 Q 42 100 12 65" fill="none" stroke="#362840" strokeWidth="4.5" strokeLinecap="round" />
-          <path d="M 30 172 Q 42 100 12 65" fill="none" stroke={isDarkMode ? '#ffd166' : '#b4a3e8'} strokeWidth="2.5" strokeLinecap="round" />
+          <path d="M 30 232 Q 45 140 10 90" fill="none" stroke="#362840" strokeWidth="4.5" strokeLinecap="round" />
+          <path d="M 30 232 Q 45 140 10 90" fill="none" stroke={isDarkMode ? '#ffd166' : '#b4a3e8'} strokeWidth="2.5" strokeLinecap="round" />
           {/* Lamp Shade Dome Head */}
-          <path d="M -12 80 L 26 50 C 32 72, 2 92, -12 80 Z" fill={isDarkMode ? '#e76f51' : '#f4a2af'} stroke="#362840" strokeWidth="3.5" />
+          <path d="M -16 105 L 24 75 C 30 97, 0 117, -16 105 Z" fill={isDarkMode ? '#e76f51' : '#f4a2af'} stroke="#362840" strokeWidth="3.5" />
           
           {/* Glowing Bulb inside Shade */}
           {isDarkMode ? (
-            <circle cx="8" cy="74" r="8" fill="#ffea00" filter="url(#bulbGlow)" />
+            <circle cx="5" cy="98" r="9" fill="#ffea00" filter="url(#bulbGlow)" />
           ) : (
-            <circle cx="8" cy="74" r="6" fill="#fefae0" stroke="#362840" strokeWidth="1.5" />
+            <circle cx="5" cy="98" r="6" fill="#fefae0" stroke="#362840" strokeWidth="1.5" />
           )}
         </g>
 
