@@ -7,16 +7,16 @@ interface BootSequenceProps {
 }
 
 const BOOT_LINES = [
-  { text: '> booting workspace...', delay: 300 },
-  { text: '> checking environment... [OK]', delay: 550 },
-  { text: '> loading projects & modules... [OK]', delay: 850 },
-  { text: '> mounting workspace... [OK]', delay: 1100 },
-  { text: '> initializing personality... [OK]', delay: 1350 },
-  { text: '> starting portfolio...', delay: 1600 },
+  { text: '> INITIALIZING WORKSPACE ENVIRONMENT...', delay: 250 },
+  { text: '> CHECKING FASTAPI & NEXT.JS SYSTEM MODULES... [OK]', delay: 500 },
+  { text: '> LOADING PROJECTS & SKILLS DATABASE... [OK]', delay: 750 },
+  { text: '> MOUNTING 16-BIT RETRO WORKSTATION... [OK]', delay: 1000 },
+  { text: '> INITIALIZING PERSONALITY ENGINE... [OK]', delay: 1250 },
+  { text: '> STARTING CRT MONITOR & AUDIO SFX...', delay: 1500 },
 ];
 
-const TOTAL_DURATION = 2500; // ms — total boot sequence
-const FADE_START = 2000; // ms — when fade-out begins
+const TOTAL_DURATION = 2600; // ms — total boot sequence
+const FADE_START = 2100; // ms — when fade-out begins
 const FADE_DURATION = 500; // ms — fade-out transition length
 
 export default function BootSequence({ onComplete }: BootSequenceProps) {
@@ -64,8 +64,8 @@ export default function BootSequence({ onComplete }: BootSequenceProps) {
       setTimeout(() => setVisibleLines(i + 1), line.delay)
     );
 
-    // Show "workspace ready" at 1800ms
-    const readyTimer = setTimeout(() => setShowReady(true), 1800);
+    // Show "workspace ready" at 1750ms
+    const readyTimer = setTimeout(() => setShowReady(true), 1750);
 
     // Start fade-out at FADE_START
     const fadeTimer = setTimeout(() => setFadingOut(true), FADE_START);
@@ -88,6 +88,17 @@ export default function BootSequence({ onComplete }: BootSequenceProps) {
     };
   }, [shouldRender, animateProgress, onComplete]);
 
+  const handleSkip = () => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('nurgissa_boot_seen', 'true');
+    }
+    setFadingOut(true);
+    setTimeout(() => {
+      setShouldRender(false);
+      onComplete();
+    }, 200);
+  };
+
   if (!shouldRender) return null;
 
   // Build the ASCII progress bar
@@ -97,6 +108,7 @@ export default function BootSequence({ onComplete }: BootSequenceProps) {
 
   return (
     <div
+      onClick={handleSkip}
       style={{
         position: 'fixed',
         top: 0,
@@ -104,16 +116,17 @@ export default function BootSequence({ onComplete }: BootSequenceProps) {
         width: '100vw',
         height: '100vh',
         zIndex: 99999,
-        background: '#0a0c14',
+        background: '#140e1d',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         fontFamily: "'Press Start 2P', monospace",
         overflow: 'hidden',
         opacity: fadingOut ? 0 : 1,
-        transform: fadingOut ? 'scale(1.05)' : 'scale(1)',
+        transform: fadingOut ? 'scale(1.04)' : 'scale(1)',
         transition: `opacity ${FADE_DURATION}ms ease-out, transform ${FADE_DURATION}ms ease-out`,
         pointerEvents: fadingOut ? 'none' : 'auto',
+        cursor: 'pointer',
       }}
     >
       {/* CRT Scanlines overlay */}
@@ -125,13 +138,13 @@ export default function BootSequence({ onComplete }: BootSequenceProps) {
           width: '100%',
           height: '100%',
           backgroundImage:
-            'repeating-linear-gradient(0deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 3px)',
+            'repeating-linear-gradient(0deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 1px, transparent 1px, transparent 3px)',
           pointerEvents: 'none',
           zIndex: 2,
         }}
       />
 
-      {/* Subtle CRT vignette */}
+      {/* CRT Vignette */}
       <div
         style={{
           position: 'absolute',
@@ -139,31 +152,38 @@ export default function BootSequence({ onComplete }: BootSequenceProps) {
           left: 0,
           width: '100%',
           height: '100%',
-          background: 'radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.6) 100%)',
+          background: 'radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.7) 100%)',
           pointerEvents: 'none',
           zIndex: 2,
         }}
       />
 
-      {/* Terminal content */}
+      {/* Terminal Content */}
       <div
         style={{
           position: 'relative',
           zIndex: 3,
-          maxWidth: 520,
-          width: '90%',
+          maxWidth: 580,
+          width: '92%',
           padding: '0 20px',
         }}
       >
-        {/* Prompt header */}
-        <div style={{ marginBottom: 20 }}>
+        {/* BIOS Header */}
+        <div style={{ marginBottom: 20, color: '#9d8189', fontSize: '0.45rem', lineHeight: 1.8 }}>
+          NURGISSA WORKSHOP BIOS v1.0 (C) 2026<br />
+          SOFTWARE ENGINEERING WORKSTATION · ASTANA IT<br />
+          MEMORY TEST: 640KB OK
+        </div>
+
+        {/* Prompt Header */}
+        <div style={{ marginBottom: 16 }}>
           <span style={{ color: '#F2C14E', fontSize: '0.55rem' }}>
             nurgissa@workshop
           </span>
           <span style={{ color: '#666', fontSize: '0.55rem' }}>:</span>
           <span style={{ color: '#62C9D9', fontSize: '0.55rem' }}>~</span>
           <span style={{ color: '#E8E3ED', fontSize: '0.55rem' }}>$ </span>
-          <span style={{ color: '#E8E3ED', fontSize: '0.55rem' }}>boot</span>
+          <span style={{ color: '#E8E3ED', fontSize: '0.55rem' }}>boot --system</span>
           <span
             style={{
               display: 'inline-block',
@@ -171,14 +191,14 @@ export default function BootSequence({ onComplete }: BootSequenceProps) {
               height: '1em',
               background: visibleLines === 0 ? '#F2C14E' : 'transparent',
               verticalAlign: 'text-bottom',
-              marginLeft: 3,
+              marginLeft: 4,
               animation: visibleLines === 0 ? 'bootCursorBlink 0.8s step-end infinite' : 'none',
             }}
           />
         </div>
 
-        {/* Boot lines */}
-        <div style={{ fontSize: '0.45rem', lineHeight: 2.4 }}>
+        {/* Boot Lines */}
+        <div style={{ fontSize: '0.42rem', lineHeight: 2.3 }}>
           {BOOT_LINES.slice(0, visibleLines).map((line, i) => {
             const isOK = line.text.includes('[OK]');
             const parts = isOK ? line.text.split('[OK]') : [line.text];
@@ -198,7 +218,7 @@ export default function BootSequence({ onComplete }: BootSequenceProps) {
           })}
         </div>
 
-        {/* Progress bar — shows after first line */}
+        {/* Progress Bar */}
         {visibleLines > 0 && (
           <div
             style={{
@@ -216,11 +236,11 @@ export default function BootSequence({ onComplete }: BootSequenceProps) {
           </div>
         )}
 
-        {/* "workspace ready." — final green message */}
+        {/* WORKSPACE READY */}
         {showReady && (
           <div
             style={{
-              marginTop: 14,
+              marginTop: 16,
               fontSize: '0.5rem',
               fontWeight: 'bold',
               color: '#63C174',
@@ -228,7 +248,7 @@ export default function BootSequence({ onComplete }: BootSequenceProps) {
               animation: 'bootLineIn 0.3s ease-out forwards',
             }}
           >
-            {'> '}workspace ready.
+            {'> '}WORKSPACE READY. CLICK TO ENTER.
           </div>
         )}
       </div>
