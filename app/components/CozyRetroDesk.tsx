@@ -273,102 +273,138 @@ export default function CozyRetroDesk({
         <line x1="150" y1="620" x2="680" y2="620" stroke={deskGrain} strokeWidth="2" strokeDasharray="100 30 70 20" />
         <line x1="780" y1="600" x2="1140" y2="600" stroke={deskGrain} strokeWidth="2" strokeDasharray="90 20 40 30" />
 
-        {/* ── 3. MODERN LOFT PANORAMIC TRANSOM WINDOW (Top Wall Skylight Window) ── */}
-        {/* Soft Ambient Light Beam Cast Downward onto Wall */}
-        <polygon
-          points="110,86 1090,86 1170,300 30,300"
-          fill={isDarkMode ? '#00f5d4' : '#ffd166'}
-          opacity={isDarkMode ? 0.035 : 0.07}
-          pointerEvents="none"
-        />
-
+        {/* ── 3. TALL MODERN LOFT PANORAMIC WINDOW (30% Wall Height, Astana Skyline View) ── */}
         <g
           id="loft-transom-window"
           className="retro-interactive-group"
           onClick={onToggleTheme}
-          transform="translate(100, 16)"
+          transform="translate(80, 12)"
           style={{ cursor: 'pointer' }}
         >
           <g className="retro-hover-lift">
-            {/* Window Recess / Wall Cutout Shadow */}
-            <rect x="-4" y="-4" width="1008" height="78" fill="#000000" opacity="0.3" rx="8" />
+            {/* Soft Wall Recess Drop Shadow Behind Outer Frame */}
+            <rect x="-4" y="-4" width="1048" height="153" fill="#000000" opacity="0.28" rx="10" />
 
             {/* Loft Steel Outer Frame */}
             <rect
               x="0"
               y="0"
-              width="1000"
-              height="70"
-              fill={isDarkMode ? '#1a1f2c' : '#362840'}
+              width="1040"
+              height="145"
+              fill={isDarkMode ? '#171c28' : '#362840'}
               stroke="#362840"
               strokeWidth="4"
-              rx="6"
+              rx="8"
             />
 
-            {/* Inner Glass Opening Area */}
+            {/* Inner Glass Opening Area (1024 x 129) */}
             <g transform="translate(8, 8)">
-              {/* Sky Background inside Window Panes */}
+              {/* Sky Background inside Window */}
               <rect
                 x="0"
                 y="0"
-                width="984"
-                height="54"
-                fill={isDarkMode ? '#0b1120' : '#fde6d2'}
-                rx="3"
+                width="1024"
+                height="129"
+                fill={isDarkMode ? '#0a0f1d' : '#fce4d6'}
+                rx="4"
               />
 
-              {/* Sky & Horizon Gradient / Elements */}
+              {/* DYNAMIC SKY & ASTANA SKYLINE PANORAMA */}
               {isDarkMode ? (
-                /* Dark Mode Sky (Midnight Starry Sky & Distant City Skyline) */
+                /* MIDNIGHT MODE: Deep Indigo Sky, Large Glowing Moon, Stars & Glowing Astana Skyline */
                 <g>
-                  {/* Glowing Moon */}
-                  <circle cx="860" cy="20" r="12" fill="#fff3b0" opacity="0.9" />
-                  <circle cx="860" cy="20" r="18" fill="#ffd166" opacity="0.2" />
+                  {/* Deep Night Sky Soft Gradient Bands */}
+                  <rect x="0" y="0" width="1024" height="65" fill="#14112e" opacity="0.6" />
+                  <rect x="0" y="65" width="1024" height="64" fill="#0c1938" opacity="0.5" />
 
-                  {/* Stars */}
-                  {[[40, 12], [120, 28], [210, 14], [310, 32], [420, 10], [530, 25], [640, 15], [740, 30], [920, 12]].map(([sx, sy], idx) => (
-                    <circle key={idx} cx={sx} cy={sy} r={idx % 2 === 0 ? 1.5 : 1} fill="#ffffff" opacity={0.8} />
+                  {/* Large Rounded Moon & Glow */}
+                  <circle cx="860" cy="38" r="22" fill="#fff5c0" opacity="0.95" />
+                  <circle cx="860" cy="38" r="32" fill="#ffd166" opacity="0.22" />
+
+                  {/* Twinkling Night Stars */}
+                  {[
+                    [50, 20], [140, 45], [230, 25], [340, 50], [440, 18],
+                    [540, 40], [630, 22], [750, 48], [940, 26], [990, 52]
+                  ].map(([sx, sy], idx) => (
+                    <g key={idx}>
+                      <circle cx={sx} cy={sy} r={idx % 2 === 0 ? 1.8 : 1.2} fill="#ffffff" opacity={0.85} />
+                      {idx % 3 === 0 && <path d={`M ${sx-3} ${sy} L ${sx+3} ${sy} M ${sx} ${sy-3} L ${sx} ${sy+3}`} stroke="#ffffff" strokeWidth="0.8" opacity="0.7" />}
+                    </g>
                   ))}
 
-                  {/* Distant City Skyline Silhouettes */}
-                  <path d="M 0 54 L 30 38 L 55 38 L 70 54 L 110 32 L 140 32 L 160 54 L 210 24 L 235 24 L 250 54 L 320 36 L 360 36 L 380 54 L 450 28 L 480 28 L 510 54 L 600 34 L 630 34 L 660 54 L 730 22 L 760 22 L 790 54 L 880 30 L 910 30 L 940 54 L 984 54 Z" fill="#060913" />
+                  {/* ASTANA SKYLINE SILHOUETTE (MIDNIGHT) */}
+                  {/* Khan Shatyr Cone (Left Sector) */}
+                  <polygon points="180,129 230,48 280,129" fill="#070a14" />
+                  <line x1="230" y1="48" x2="230" y2="129" stroke="#00f5d4" strokeWidth="1" opacity="0.5" />
 
-                  {/* Tiny Glowing City Window Dots */}
-                  {[[40, 42], [122, 38], [220, 30], [335, 42], [462, 34], [612, 40], [742, 28], [892, 36]].map(([wx, wy], idx) => (
-                    <rect key={idx} x={wx} y={wy} width="3" height="4" fill={idx % 2 === 0 ? '#00f5d4' : '#ffd166'} opacity="0.85" />
+                  {/* Skyscrapers & City Towers */}
+                  <path d="M 0 129 L 40 85 L 85 85 L 110 129 L 140 70 L 170 70 L 180 129 Z" fill="#080c19" />
+                  <path d="M 280 129 L 310 75 L 340 75 L 355 129 L 380 60 L 420 60 L 435 129 L 470 80 L 510 80 L 530 129 Z" fill="#060913" />
+                  <path d="M 530 129 L 560 65 L 595 65 L 610 129 L 770 129 Z" fill="#080c19" />
+                  <path d="M 770 129 L 800 68 L 840 68 L 860 129 L 900 82 L 950 82 L 980 129 L 1024 129 Z" fill="#060913" />
+
+                  {/* BAITEREK TOWER ASTANA (Center-Right Sector x=680..730) */}
+                  <path d="M 695 129 L 702 70 L 710 129 M 715 129 L 708 70 L 700 129" stroke="#050710" strokeWidth="3" />
+                  <path d="M 695 72 Q 705 60 715 72" fill="none" stroke="#00f5d4" strokeWidth="2" opacity="0.8" />
+                  {/* Golden Glowing Sphere atop Baiterek */}
+                  <circle cx="705" cy="54" r="13" fill="#ffc300" opacity="0.9" />
+                  <circle cx="705" cy="54" r="19" fill="#00f5d4" opacity="0.3" />
+
+                  {/* Glowing City Windows */}
+                  {[
+                    [50, 95], [65, 105], [150, 82], [158, 98], [320, 88], [395, 72], [405, 92],
+                    [485, 95], [572, 78], [582, 98], [810, 82], [822, 100], [915, 96]
+                  ].map(([wx, wy], idx) => (
+                    <rect key={idx} x={wx} y={wy} width="4" height="6" fill={idx % 2 === 0 ? '#00f5d4' : '#ffd166'} opacity="0.85" rx="1" />
                   ))}
                 </g>
               ) : (
-                /* Light Mode Sky (Warm Sunset Horizon & Clouds) */
+                /* COZY DAY / DUSK MODE: Warm Peach Sky, Soft Clouds & Astana Horizon */
                 <g>
-                  {/* Warm Sun */}
-                  <circle cx="200" cy="28" r="16" fill="#f4a2af" opacity="0.95" />
-                  <circle cx="200" cy="28" r="24" fill="#ffd166" opacity="0.35" />
+                  {/* Soft Dusk Sky Horizon Gradient Bands */}
+                  <rect x="0" y="0" width="1024" height="45" fill="#fbcfe8" opacity="0.4" />
+                  <rect x="0" y="45" width="1024" height="45" fill="#fed7aa" opacity="0.5" />
 
-                  {/* Soft Lo-Fi Clouds */}
-                  <path d="M 80 20 Q 95 12 115 20 Q 130 15 145 22 L 75 22 Z" fill="#ffffff" opacity="0.6" />
-                  <path d="M 450 18 Q 470 10 495 18 Q 515 12 535 22 L 440 22 Z" fill="#ffffff" opacity="0.65" />
-                  <path d="M 780 22 Q 800 14 825 22 Q 845 16 865 26 L 770 26 Z" fill="#ffffff" opacity="0.55" />
+                  {/* Soft Warm Sun */}
+                  <circle cx="280" cy="48" r="28" fill="#f4a2af" opacity="0.9" />
+                  <circle cx="280" cy="48" r="40" fill="#ffd166" opacity="0.3" />
 
-                  {/* Tree Canopy Silhouettes at Bottom */}
-                  <path d="M 0 54 Q 40 36 90 54 Q 160 38 230 54 Q 340 32 440 54 Q 540 35 640 54 Q 750 36 850 54 Q 920 40 984 54 Z" fill="#7a6252" opacity="0.7" />
+                  {/* Floating Lo-Fi Clouds */}
+                  <path d="M 80 32 Q 105 18 135 32 Q 160 22 185 35 L 70 35 Z" fill="#ffffff" opacity="0.75" />
+                  <path d="M 480 25 Q 510 12 545 25 Q 575 16 605 30 L 465 30 Z" fill="#ffffff" opacity="0.8" />
+                  <path d="M 820 38 Q 845 26 875 38 Q 898 28 925 42 L 805 42 Z" fill="#ffffff" opacity="0.7" />
+
+                  {/* ASTANA SKYLINE SILHOUETTE (DAY / DUSK) */}
+                  {/* Khan Shatyr Tent Silhouette */}
+                  <polygon points="180,129 230,48 280,129" fill="#9b7364" />
+
+                  {/* Skyline City Buildings */}
+                  <path d="M 0 129 L 40 85 L 85 85 L 110 129 L 140 70 L 170 70 L 180 129 Z" fill="#8c6456" />
+                  <path d="M 280 129 L 310 75 L 340 75 L 355 129 L 380 60 L 420 60 L 435 129 L 470 80 L 510 80 L 530 129 Z" fill="#80574a" />
+                  <path d="M 530 129 L 560 65 L 595 65 L 610 129 L 770 129 Z" fill="#8c6456" />
+                  <path d="M 770 129 L 800 68 L 840 68 L 860 129 L 900 82 L 950 82 L 980 129 L 1024 129 Z" fill="#80574a" />
+
+                  {/* BAITEREK TOWER ASTANA (DAY / DUSK) */}
+                  <path d="M 695 129 L 702 70 L 710 129 M 715 129 L 708 70 L 700 129" stroke="#684236" strokeWidth="3" />
+                  <path d="M 695 72 Q 705 60 715 72" fill="none" stroke="#ffd166" strokeWidth="2.5" />
+                  {/* Golden Sphere atop Baiterek */}
+                  <circle cx="705" cy="54" r="13" fill="#ffd166" stroke="#362840" strokeWidth="2" />
                 </g>
               )}
 
-              {/* Vertical Metal Window Dividers (Loft Mullions) */}
-              {[164, 328, 492, 656, 820].map((mx, idx) => (
-                <rect key={idx} x={mx - 3} y="0" width="6" height="54" fill={isDarkMode ? '#1a1f2c' : '#362840'} />
-              ))}
+              {/* ONLY 3 LARGE PANES (2 Thin Vertical Mullion Dividers at x=340 & x=684) */}
+              <rect x="337" y="0" width="7" height="129" fill={isDarkMode ? '#171c28' : '#362840'} />
+              <rect x="681" y="0" width="7" height="129" fill={isDarkMode ? '#171c28' : '#362840'} />
 
-              {/* Diagonal Glass Highlight / Reflection Streaks */}
-              <polygon points="40,0 80,0 20,54 -20,54" fill="#ffffff" opacity="0.1" />
-              <polygon points="360,0 400,0 340,54 300,54" fill="#ffffff" opacity="0.08" />
-              <polygon points="680,0 720,0 660,54 620,54" fill="#ffffff" opacity="0.08" />
+              {/* Subtle Glass Glare / Reflection Streaks */}
+              <polygon points="50,0 110,0 30,129 -30,129" fill="#ffffff" opacity="0.08" />
+              <polygon points="450,0 510,0 420,129 360,129" fill="#ffffff" opacity="0.07" />
+              <polygon points="800,0 860,0 770,129 710,129" fill="#ffffff" opacity="0.07" />
             </g>
 
-            {/* Metallic Bolts / Rivets on Frame Corners */}
-            {[[12, 10], [988, 10], [12, 60], [988, 60], [336, 10], [664, 10]].map(([bx, by], idx) => (
-              <circle key={idx} cx={bx} cy={by} r="2.5" fill="#4a5568" stroke="#1a1f2c" strokeWidth="1" />
+            {/* Corner Bolts on Outer Metal Frame */}
+            {[[14, 14], [1026, 14], [14, 131], [1026, 131], [345, 14], [689, 14]].map(([bx, by], idx) => (
+              <circle key={idx} cx={bx} cy={by} r="3" fill="#4a5568" stroke="#171c28" strokeWidth="1" />
             ))}
           </g>
         </g>
