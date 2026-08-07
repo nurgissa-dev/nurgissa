@@ -38,7 +38,7 @@ class RetroSFX {
     if (this.mouseBuffer || this.mouseLoading || !this.ctx) return;
     this.mouseLoading = true;
     try {
-      const res = await fetch('/mouseclick.mp3');
+      const res = await fetch('/klik-myshki-9.mp3');
       const arrayBuf = await res.arrayBuffer();
       this.mouseBuffer = await this.ctx.decodeAudioData(arrayBuf);
     } catch {
