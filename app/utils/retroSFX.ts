@@ -4,7 +4,29 @@ class RetroSFX {
   private ctx: AudioContext | null = null;
   public enabled: boolean = true;
 
+  // Auto-detected base path for GitHub Pages (/nurgissa) vs local dev ('')
+  private basePath: string = '';
 
+  private getBasePath(): string {
+    if (this.basePath) return this.basePath;
+    if (typeof document !== 'undefined') {
+      // Extract basePath from <base> tag or document.baseURI
+      // e.g. "https://nurgissa-dev.github.io/nurgissa/" → "/nurgissa"
+      try {
+        const base = new URL(document.baseURI);
+        const path = base.pathname.replace(/\/+$/, ''); // trim trailing slashes
+        this.basePath = path || '';
+      } catch {
+        this.basePath = '';
+      }
+    }
+    return this.basePath;
+  }
+
+  // Helper to build correct audio URL with basePath
+  private audioUrl(filename: string): string {
+    return `${this.getBasePath()}/${filename}`;
+  }
 
   private initCtx() {
     if (!this.ctx && typeof window !== 'undefined') {
@@ -30,7 +52,7 @@ class RetroSFX {
     }
   }
 
-  // Real mouse click audio buffer (loaded lazily from /mouseclick.mp3)
+  // Real mouse click audio buffer
   private mouseBuffer: AudioBuffer | null = null;
   private mouseLoading: boolean = false;
 
@@ -38,7 +60,7 @@ class RetroSFX {
     if (this.mouseBuffer || this.mouseLoading || !this.ctx) return;
     this.mouseLoading = true;
     try {
-      const res = await fetch('/klik-myshki-9.mp3');
+      const res = await fetch(this.audioUrl('klik-myshki-9.mp3'));
       const arrayBuf = await res.arrayBuffer();
       this.mouseBuffer = await this.ctx.decodeAudioData(arrayBuf);
     } catch {
@@ -47,7 +69,7 @@ class RetroSFX {
     this.mouseLoading = false;
   }
 
-  // Real keyswitch audio buffer (loaded lazily from /keyswitch.mp3)
+  // Real keyswitch audio buffer
   private keyswitchBuffer: AudioBuffer | null = null;
   private keyswitchLoading: boolean = false;
 
@@ -55,7 +77,7 @@ class RetroSFX {
     if (this.keyswitchBuffer || this.keyswitchLoading || !this.ctx) return;
     this.keyswitchLoading = true;
     try {
-      const res = await fetch('/keyswitch.mp3');
+      const res = await fetch(this.audioUrl('keyswitch.mp3'));
       const arrayBuf = await res.arrayBuffer();
       this.keyswitchBuffer = await this.ctx.decodeAudioData(arrayBuf);
     } catch {
@@ -64,7 +86,7 @@ class RetroSFX {
     this.keyswitchLoading = false;
   }
 
-  // Real typing keyboard audio buffer (loaded lazily from /keyboard.mp3)
+  // Real typing keyboard audio buffer
   private keyboardBuffer: AudioBuffer | null = null;
   private keyboardBufferLoading: boolean = false;
 
@@ -72,7 +94,7 @@ class RetroSFX {
     if (this.keyboardBuffer || this.keyboardBufferLoading || !this.ctx) return;
     this.keyboardBufferLoading = true;
     try {
-      const res = await fetch('/keyboard.mp3');
+      const res = await fetch(this.audioUrl('keyboard.mp3'));
       const arrayBuf = await res.arrayBuffer();
       this.keyboardBuffer = await this.ctx.decodeAudioData(arrayBuf);
     } catch {
