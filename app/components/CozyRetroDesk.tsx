@@ -273,120 +273,102 @@ export default function CozyRetroDesk({
         <line x1="150" y1="620" x2="680" y2="620" stroke={deskGrain} strokeWidth="2" strokeDasharray="100 30 70 20" />
         <line x1="780" y1="600" x2="1140" y2="600" stroke={deskGrain} strokeWidth="2" strokeDasharray="90 20 40 30" />
 
-        {/* ── 3. LO-FI WOVEN WALL TAPESTRY (Cozy Tapestry on Wooden Hanger Rod) ── */}
+        {/* ── 3. MODERN LOFT PANORAMIC TRANSOM WINDOW (Top Wall Skylight Window) ── */}
+        {/* Soft Ambient Light Beam Cast Downward onto Wall */}
+        <polygon
+          points="110,86 1090,86 1170,300 30,300"
+          fill={isDarkMode ? '#00f5d4' : '#ffd166'}
+          opacity={isDarkMode ? 0.035 : 0.07}
+          pointerEvents="none"
+        />
+
         <g
-          id="wall-tapestry"
+          id="loft-transom-window"
           className="retro-interactive-group"
           onClick={onToggleTheme}
-          transform="translate(820, 25)"
+          transform="translate(100, 16)"
           style={{ cursor: 'pointer' }}
         >
           <g className="retro-hover-lift">
-            {/* Wall Pin / Nail */}
-            <circle cx="110" cy="5" r="4.5" fill={isDarkMode ? '#00f5d4' : '#362840'} />
-            <circle cx="110" cy="5" r="2.5" fill="#ffd166" />
-            
-            {/* Hanging Cord / Rope */}
-            <path
-              d="M 110 5 L 15 42 M 110 5 L 205 42"
-              fill="none"
-              stroke={isDarkMode ? '#a493e6' : '#8d6e53'}
-              strokeWidth="2.5"
-              strokeLinecap="round"
-            />
+            {/* Window Recess / Wall Cutout Shadow */}
+            <rect x="-4" y="-4" width="1008" height="78" fill="#000000" opacity="0.3" rx="8" />
 
-            {/* Wooden Top Hanging Bar */}
-            <rect x="5" y="38" width="210" height="12" fill={isDarkMode ? '#3e2c1e' : '#a67c52'} stroke="#362840" strokeWidth="3" rx="5" />
-            {/* Wooden Finials (End Knobs) */}
-            <circle cx="3" cy="44" r="7" fill={isDarkMode ? '#593f2c' : '#c49563'} stroke="#362840" strokeWidth="2.5" />
-            <circle cx="217" cy="44" r="7" fill={isDarkMode ? '#593f2c' : '#c49563'} stroke="#362840" strokeWidth="2.5" />
-
-            {/* Tapestry Fabric Shadow & Main Canvas Body */}
-            <rect x="23" y="53" width="174" height="215" fill="#000000" opacity="0.22" rx="4" />
+            {/* Loft Steel Outer Frame */}
             <rect
-              x="18"
-              y="50"
-              width="184"
-              height="215"
-              fill={isDarkMode ? '#1a162b' : '#fdf6ed'}
+              x="0"
+              y="0"
+              width="1000"
+              height="70"
+              fill={isDarkMode ? '#1a1f2c' : '#362840'}
               stroke="#362840"
-              strokeWidth="3.5"
-              rx="4"
+              strokeWidth="4"
+              rx="6"
             />
 
-            {/* Inner Stitched Border Pattern */}
-            <rect
-              x="26"
-              y="58"
-              width="168"
-              height="199"
-              fill="none"
-              stroke={isDarkMode ? '#3d2e5c' : '#e4d4be'}
-              strokeWidth="2"
-              strokeDasharray="6 4"
-              rx="2"
-            />
+            {/* Inner Glass Opening Area */}
+            <g transform="translate(8, 8)">
+              {/* Sky Background inside Window Panes */}
+              <rect
+                x="0"
+                y="0"
+                width="984"
+                height="54"
+                fill={isDarkMode ? '#0b1120' : '#fde6d2'}
+                rx="3"
+              />
 
-            {/* LO-FI ARTWORK: Moon Phases & Sunset Mountain Landscape */}
-            <g transform="translate(26, 58)">
-              {/* Sky Background inside canvas */}
-              <rect x="0" y="0" width="168" height="199" fill={isDarkMode ? '#24193d' : '#fdeddf'} rx="2" />
-              
-              {/* Moon Phases across top */}
-              {/* Crescent Left */}
-              <path d="M 22 18 A 6 6 0 0 0 22 30 A 4.5 4.5 0 0 1 22 18" fill={isDarkMode ? '#ffd166' : '#d97757'} />
-              {/* Half Moon Left */}
-              <path d="M 54 18 A 6 6 0 0 1 54 30 Z" fill={isDarkMode ? '#ffd166' : '#d97757'} />
-              {/* Full Glowing Moon Center */}
-              <circle cx="84" cy="24" r="6" fill={isDarkMode ? '#ffd166' : '#d97757'} />
-              {/* Half Moon Right */}
-              <path d="M 114 18 A 6 6 0 0 0 114 30 Z" fill={isDarkMode ? '#ffd166' : '#d97757'} />
-              {/* Crescent Right */}
-              <path d="M 146 18 A 6 6 0 0 1 146 30 A 4.5 4.5 0 0 0 146 18" fill={isDarkMode ? '#ffd166' : '#d97757'} />
+              {/* Sky & Horizon Gradient / Elements */}
+              {isDarkMode ? (
+                /* Dark Mode Sky (Midnight Starry Sky & Distant City Skyline) */
+                <g>
+                  {/* Glowing Moon */}
+                  <circle cx="860" cy="20" r="12" fill="#fff3b0" opacity="0.9" />
+                  <circle cx="860" cy="20" r="18" fill="#ffd166" opacity="0.2" />
 
-              {/* Big Radiant Sun / Moon Disk */}
-              <circle cx="84" cy="85" r="32" fill={isDarkMode ? '#ffb703' : '#f4a2af'} opacity="0.9" />
-              <circle cx="84" cy="85" r="42" fill="none" stroke={isDarkMode ? '#ffd166' : '#f4a2af'} strokeWidth="1.5" strokeDasharray="4 4" opacity="0.5" />
+                  {/* Stars */}
+                  {[[40, 12], [120, 28], [210, 14], [310, 32], [420, 10], [530, 25], [640, 15], [740, 30], [920, 12]].map(([sx, sy], idx) => (
+                    <circle key={idx} cx={sx} cy={sy} r={idx % 2 === 0 ? 1.5 : 1} fill="#ffffff" opacity={0.8} />
+                  ))}
 
-              {/* Distant Mountain Range (Back Layer) */}
-              <polygon points="-10,145 35,92 85,145" fill={isDarkMode ? '#4a306d' : '#e8a598'} opacity="0.75" />
-              <polygon points="50,145 110,82 175,145" fill={isDarkMode ? '#3b2559' : '#e08f80'} opacity="0.8" />
+                  {/* Distant City Skyline Silhouettes */}
+                  <path d="M 0 54 L 30 38 L 55 38 L 70 54 L 110 32 L 140 32 L 160 54 L 210 24 L 235 24 L 250 54 L 320 36 L 360 36 L 380 54 L 450 28 L 480 28 L 510 54 L 600 34 L 630 34 L 660 54 L 730 22 L 760 22 L 790 54 L 880 30 L 910 30 L 940 54 L 984 54 Z" fill="#060913" />
 
-              {/* Middle Mountain Range (Mid Layer) */}
-              <polygon points="10,155 68,106 132,155" fill={isDarkMode ? '#311b47' : '#cf7366'} />
-              <polygon points="82,155 138,102 185,155" fill={isDarkMode ? '#28133d' : '#b85b50'} />
+                  {/* Tiny Glowing City Window Dots */}
+                  {[[40, 42], [122, 38], [220, 30], [335, 42], [462, 34], [612, 40], [742, 28], [892, 36]].map(([wx, wy], idx) => (
+                    <rect key={idx} x={wx} y={wy} width="3" height="4" fill={idx % 2 === 0 ? '#00f5d4' : '#ffd166'} opacity="0.85" />
+                  ))}
+                </g>
+              ) : (
+                /* Light Mode Sky (Warm Sunset Horizon & Clouds) */
+                <g>
+                  {/* Warm Sun */}
+                  <circle cx="200" cy="28" r="16" fill="#f4a2af" opacity="0.95" />
+                  <circle cx="200" cy="28" r="24" fill="#ffd166" opacity="0.35" />
 
-              {/* Foreground Hills & Ridge (Front Layer) */}
-              <path d="M -10 165 Q 45 130 102 170 Q 148 138 185 170 L 185 199 L -10 199 Z" fill={isDarkMode ? '#1a0c2e' : '#8d4745'} />
+                  {/* Soft Lo-Fi Clouds */}
+                  <path d="M 80 20 Q 95 12 115 20 Q 130 15 145 22 L 75 22 Z" fill="#ffffff" opacity="0.6" />
+                  <path d="M 450 18 Q 470 10 495 18 Q 515 12 535 22 L 440 22 Z" fill="#ffffff" opacity="0.65" />
+                  <path d="M 780 22 Q 800 14 825 22 Q 845 16 865 26 L 770 26 Z" fill="#ffffff" opacity="0.55" />
 
-              {/* Tiny Lo-Fi Pine Trees on Ridge */}
-              <polygon points="32,145 36,134 40,145" fill={isDarkMode ? '#ffd166' : '#fdeddf'} />
-              <polygon points="44,150 47,141 50,150" fill={isDarkMode ? '#ffd166' : '#fdeddf'} />
-              <polygon points="122,152 125,143 128,152" fill={isDarkMode ? '#ffd166' : '#fdeddf'} />
+                  {/* Tree Canopy Silhouettes at Bottom */}
+                  <path d="M 0 54 Q 40 36 90 54 Q 160 38 230 54 Q 340 32 440 54 Q 540 35 640 54 Q 750 36 850 54 Q 920 40 984 54 Z" fill="#7a6252" opacity="0.7" />
+                </g>
+              )}
 
-              {/* Calm Water Reflection Lines */}
-              <line x1="35" y1="180" x2="75" y2="180" stroke={isDarkMode ? '#ffd166' : '#fdeddf'} strokeWidth="1.5" strokeDasharray="8 4" opacity="0.85" />
-              <line x1="55" y1="187" x2="115" y2="187" stroke={isDarkMode ? '#ffd166' : '#fdeddf'} strokeWidth="1.5" strokeDasharray="12 4" opacity="0.75" />
-              <line x1="95" y1="193" x2="145" y2="193" stroke={isDarkMode ? '#ffd166' : '#fdeddf'} strokeWidth="1.5" strokeDasharray="6 3" opacity="0.65" />
+              {/* Vertical Metal Window Dividers (Loft Mullions) */}
+              {[164, 328, 492, 656, 820].map((mx, idx) => (
+                <rect key={idx} x={mx - 3} y="0" width="6" height="54" fill={isDarkMode ? '#1a1f2c' : '#362840'} />
+              ))}
+
+              {/* Diagonal Glass Highlight / Reflection Streaks */}
+              <polygon points="40,0 80,0 20,54 -20,54" fill="#ffffff" opacity="0.1" />
+              <polygon points="360,0 400,0 340,54 300,54" fill="#ffffff" opacity="0.08" />
+              <polygon points="680,0 720,0 660,54 620,54" fill="#ffffff" opacity="0.08" />
             </g>
 
-            {/* Wooden Bottom Weight Rod */}
-            <rect x="12" y="265" width="196" height="8" fill={isDarkMode ? '#3e2c1e' : '#a67c52'} stroke="#362840" strokeWidth="2.5" rx="3" />
-
-            {/* Bottom Woven Fringe / Tassels */}
-            {[22, 37, 52, 67, 82, 97, 112, 127, 142, 157, 172, 187, 198].map((tx, idx) => (
-              <g key={idx}>
-                <line
-                  x1={tx}
-                  y1="273"
-                  x2={tx + (idx % 2 === 0 ? -2 : 2)}
-                  y2="291"
-                  stroke={isDarkMode ? '#b4a3e8' : '#8d6e53'}
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                />
-                <circle cx={tx + (idx % 2 === 0 ? -2 : 2)} cy="292" r="2.5" fill={isDarkMode ? '#ffd166' : '#d97757'} />
-              </g>
+            {/* Metallic Bolts / Rivets on Frame Corners */}
+            {[[12, 10], [988, 10], [12, 60], [988, 60], [336, 10], [664, 10]].map(([bx, by], idx) => (
+              <circle key={idx} cx={bx} cy={by} r="2.5" fill="#4a5568" stroke="#1a1f2c" strokeWidth="1" />
             ))}
           </g>
         </g>
