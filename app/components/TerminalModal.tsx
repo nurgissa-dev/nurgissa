@@ -51,10 +51,50 @@ export default function TerminalModal({ isDarkMode, onClose }: TerminalModalProp
   const [phase, setPhase] = useState<'typing' | 'responding' | 'pausing' | 'done'>('typing');
   const [cursorVisible, setCursorVisible] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const typingAudioRef = useRef<HTMLAudioElement | null>(null);
 
-  const CHAR_DELAY = 60;   // ms per character when typing command
+  // Sound duration ~2s → typing should finish slightly before it ends
+  const TYPING_SOUND_DURATION = 1800; // ms — effective typing window from the 2s sound
   const RESPONSE_DELAY = 250; // ms pause before response appears
   const NEXT_CMD_DELAY = 700; // ms pause before next command starts
+
+  // Calculate per-character delay based on command length so the whole command
+  // finishes typing in ~TYPING_SOUND_DURATION ms
+  const getCharDelay = (cmdLength: number) => {
+    const delay = Math.floor(TYPING_SOUND_DURATION / Math.max(cmdLength, 1));
+    // Clamp between 30ms (fast) and 120ms (slow for very short commands)
+    return Math.max(30, Math.min(delay, 120));
+  };
+
+  // Preload typing.mp3
+  useEffect(() => {
+    const audio = new Audio('typing.mp3');
+    audio.volume = 0.6;
+    audio.preload = 'auto';
+    typingAudioRef.current = audio;
+    return () => {
+      audio.pause();
+      audio.src = '';
+    };
+  }, []);
+
+  // Play typing sound from the start
+  const playTypingSound = () => {
+    const audio = typingAudioRef.current;
+    if (audio && sfx.enabled) {
+      audio.currentTime = 0;
+      audio.play().catch(() => { /* autoplay blocked */ });
+    }
+  };
+
+  // Stop typing sound
+  const stopTypingSound = () => {
+    const audio = typingAudioRef.current;
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+  };
 
   // Blinking cursor
   useEffect(() => {
@@ -72,15 +112,20 @@ export default function TerminalModal({ isDarkMode, onClose }: TerminalModalProp
     const script = TERMINAL_SCRIPT[currentIdx];
 
     if (phase === 'typing') {
+      // Start sound when first character begins
+      if (currentTyped.length === 0) {
+        playTypingSound();
+      }
+
       if (currentTyped.length < script.command.length) {
+        const charDelay = getCharDelay(script.command.length);
         const id = setTimeout(() => {
-          const nextChar = script.command[currentTyped.length];
           setCurrentTyped(prev => script.command.slice(0, prev.length + 1));
-          sfx.playTypingClick(nextChar); // ⌨️ realistic typing sound per character
-        }, CHAR_DELAY);
+        }, charDelay);
         return () => clearTimeout(id);
       } else {
-        // Full command typed — pause then show response
+        // Full command typed — stop sound, pause then show response
+        stopTypingSound();
         const id = setTimeout(() => setPhase('responding'), RESPONSE_DELAY);
         return () => clearTimeout(id);
       }
