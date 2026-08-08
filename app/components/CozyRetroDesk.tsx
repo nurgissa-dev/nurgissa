@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { sfx } from '../utils/retroSFX';
+import type { AIMood } from './WorkshopAI/workshopAIConfig';
+import DesktopCreature from './DesktopCreature/DesktopCreature';
 
 export type RetroTarget = 'sticker' | 'monitor' | 'books' | 'phone' | 'university' | null;
 
@@ -9,6 +11,8 @@ interface CozyRetroDeskProps {
   onSelectObject: (target: RetroTarget) => void;
   soundEnabled: boolean;
   onToggleSound: () => void;
+  aiMood?: AIMood;
+  isIdle?: boolean;
 }
 
 // 1-to-1 Exact Physical Keyboard e.code Mapping
@@ -61,7 +65,9 @@ const KEY_LEGENDS = [
 export default function CozyRetroDesk({
   onSelectObject,
   soundEnabled,
-  onToggleSound
+  onToggleSound,
+  aiMood = 'neutral',
+  isIdle = false
 }: CozyRetroDeskProps) {
   const [blink, setBlink] = useState(false);
   const [pressedCodes, setPressedCodes] = useState<Set<string>>(new Set());
@@ -265,6 +271,9 @@ export default function CozyRetroDesk({
           style={{ imageRendering: 'pixelated' }}
         />
 
+        {/* ── 5c. DESKTOP CREATURE (Keyboard Gremlin — behind CRT, walks out to gap) ── */}
+        <DesktopCreature />
+
         {/* ── 6. RETRO CRT COMPUTER (Central-Left) ── */}
         <g id="computer-group" transform="translate(180, 170)">
           <ellipse cx="220" cy="325" rx="210" ry="20" fill="#000000" opacity="0.3" />
@@ -290,25 +299,131 @@ export default function CozyRetroDesk({
               <rect x="10" y="0" width="400" height="240" fill={computerBox} stroke="#362840" strokeWidth="4" rx="14" />
               <rect x="30" y="18" width="360" height="204" fill={computerInner} stroke="#362840" strokeWidth="3" rx="10" />
 
-              <rect x="50" y="32" width="320" height="176" fill={computerScreen} stroke="#362840" strokeWidth="3.5" rx="18" />
+              <rect x="50" y="32" width="320" height="176" fill={computerScreen} stroke="#362840" strokeWidth="3.5" rx="18" className={isIdle ? 'crt-idle-glow' : ''} />
               <path d="M 65 48 C 120 42, 280 42, 335 48 C 345 90, 345 150, 335 185" fill="none" stroke="#3c2f4d" strokeWidth="4" opacity="0.6" />
 
-              {!blink ? (
-                <g fill="#ffffff">
-                  <rect x="120" y="88" width="30" height="8" rx="2" />
-                  <rect x="130" y="78" width="10" height="10" rx="2" />
-                  <rect x="250" y="88" width="30" height="8" rx="2" />
-                  <rect x="260" y="78" width="10" height="10" rx="2" />
-                </g>
-              ) : (
-                <g fill="#ffffff">
-                  <rect x="120" y="88" width="30" height="6" rx="2" />
-                  <rect x="250" y="88" width="30" height="6" rx="2" />
-                </g>
-              )}
+              {/* CRT Face — mood-reactive expressions */}
+              {(() => {
+                // Eyes
+                const renderEyes = () => {
+                  if (blink) {
+                    // Blinking — thin lines for all moods
+                    return (
+                      <g fill="#ffffff">
+                        <rect x="120" y="88" width="30" height="4" rx="2" />
+                        <rect x="250" y="88" width="30" height="4" rx="2" />
+                      </g>
+                    );
+                  }
+                  switch (aiMood) {
+                    case 'curious':
+                      return (
+                        <g fill="#ffffff">
+                          {/* Wide open eyes */}
+                          <circle cx="135" cy="86" r="12" />
+                          <circle cx="265" cy="86" r="12" />
+                          {/* Pupils shifted slightly */}
+                          <circle cx="138" cy="86" r="5" fill="#2a2038" />
+                          <circle cx="268" cy="86" r="5" fill="#2a2038" />
+                        </g>
+                      );
+                    case 'happy':
+                      return (
+                        <g fill="#ffffff">
+                          {/* Happy squinted eyes (upside-down arcs) */}
+                          <path d="M 118 90 Q 135 78 152 90" stroke="#ffffff" strokeWidth="4" fill="none" />
+                          <path d="M 248 90 Q 265 78 282 90" stroke="#ffffff" strokeWidth="4" fill="none" />
+                        </g>
+                      );
+                    case 'sad':
+                      return (
+                        <g fill="#ffffff">
+                          {/* Droopy eyes */}
+                          <rect x="120" y="88" width="30" height="8" rx="2" />
+                          <rect x="250" y="88" width="30" height="8" rx="2" />
+                          {/* Sad eyebrows */}
+                          <line x1="118" y1="78" x2="152" y2="82" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" />
+                          <line x1="282" y1="82" x2="248" y2="78" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" />
+                        </g>
+                      );
+                    case 'sarcastic':
+                      return (
+                        <g fill="#ffffff">
+                          {/* One eye normal, one half-closed */}
+                          <rect x="120" y="86" width="30" height="10" rx="2" />
+                          <rect x="250" y="88" width="30" height="5" rx="2" />
+                          {/* Raised eyebrow on right */}
+                          <line x1="248" y1="78" x2="282" y2="82" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" />
+                        </g>
+                      );
+                    case 'surprised':
+                      return (
+                        <g fill="#ffffff">
+                          {/* Big round eyes */}
+                          <circle cx="135" cy="86" r="14" />
+                          <circle cx="265" cy="86" r="14" />
+                          <circle cx="135" cy="86" r="6" fill="#2a2038" />
+                          <circle cx="265" cy="86" r="6" fill="#2a2038" />
+                          {/* Raised eyebrows */}
+                          <line x1="118" y1="68" x2="152" y2="68" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" />
+                          <line x1="248" y1="68" x2="282" y2="68" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" />
+                        </g>
+                      );
+                    default: // neutral
+                      return (
+                        <g fill="#ffffff">
+                          <rect x="120" y="88" width="30" height="8" rx="2" />
+                          <rect x="130" y="78" width="10" height="10" rx="2" />
+                          <rect x="250" y="88" width="30" height="8" rx="2" />
+                          <rect x="260" y="78" width="10" height="10" rx="2" />
+                        </g>
+                      );
+                  }
+                };
 
-              <rect x="185" y="118" width="50" height="24" fill="#ffffff" rx="4" />
-              <rect x="190" y="122" width="40" height="16" fill={computerScreen} rx="2" />
+                // Mouth
+                const renderMouth = () => {
+                  switch (aiMood) {
+                    case 'happy':
+                      return (
+                        <path d="M 190 125 Q 210 140 230 125" stroke="#ffffff" strokeWidth="3" fill="none" strokeLinecap="round" />
+                      );
+                    case 'sad':
+                      return (
+                        <path d="M 190 135 Q 210 122 230 135" stroke="#ffffff" strokeWidth="3" fill="none" strokeLinecap="round" />
+                      );
+                    case 'surprised':
+                      return (
+                        <circle cx="210" cy="130" rx="10" ry="12" fill="none" stroke="#ffffff" strokeWidth="3" />
+                      );
+                    case 'sarcastic':
+                      return (
+                        <line x1="192" y1="130" x2="228" y2="128" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" />
+                      );
+                    case 'curious':
+                      return (
+                        <>
+                          <rect x="185" y="118" width="50" height="24" fill="#ffffff" rx="4" />
+                          <rect x="190" y="122" width="40" height="16" fill={computerScreen} rx="2" />
+                        </>
+                      );
+                    default: // neutral
+                      return (
+                        <>
+                          <rect x="185" y="118" width="50" height="24" fill="#ffffff" rx="4" />
+                          <rect x="190" y="122" width="40" height="16" fill={computerScreen} rx="2" />
+                        </>
+                      );
+                  }
+                };
+
+                return (
+                  <>
+                    {renderEyes()}
+                    {renderMouth()}
+                  </>
+                );
+              })()}
 
               <text x="210" y="185" fill="#a493e6" fontSize="11" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
                 [ CLICK TO OPEN TERMINAL ]
@@ -423,7 +538,7 @@ export default function CozyRetroDesk({
         </g>
 
         {/* ── 8b. COZY RETRO DESK LAMP ── */}
-        <g id="desk-lamp-group" transform="translate(1075, 250)">
+        <g id="desk-lamp-group" transform="translate(1075, 250)" className={isIdle ? 'lamp-idle-flicker' : ''}>
           <ellipse cx="30" cy="240" rx="28" ry="8" fill="#000000" opacity="0.35" />
           <path d="M 12 240 L 15 234 C 20 228, 40 228, 45 234 L 48 240 Z" fill="#ffd166" stroke="#362840" strokeWidth="3" />
           <path d="M 30 232 Q 45 140 10 90" fill="none" stroke="#362840" strokeWidth="4.5" strokeLinecap="round" />

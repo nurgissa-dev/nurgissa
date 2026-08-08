@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { emitAIEvent } from '../utils/aiEvents';
 
 interface BootSequenceProps {
   onComplete: () => void;
@@ -76,6 +77,7 @@ export default function BootSequence({ onComplete }: BootSequenceProps) {
         sessionStorage.setItem('nurgissa_boot_seen', 'true');
       }
       setShouldRender(false);
+      emitAIEvent({ type: 'SITE_LOADED' });
       onComplete();
     }, TOTAL_DURATION);
 

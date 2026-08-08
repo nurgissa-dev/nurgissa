@@ -148,6 +148,31 @@ body {
   animation: crtBlink 1.2s infinite;
 }
 
+/* ── IDLE AMBIENT ANIMATIONS ── */
+
+@keyframes lampFlicker {
+  0%, 100% { opacity: 1; }
+  15% { opacity: 0.88; }
+  30% { opacity: 1; }
+  45% { opacity: 0.92; }
+  60% { opacity: 1; }
+  75% { opacity: 0.85; }
+  90% { opacity: 0.97; }
+}
+
+@keyframes crtIdleGlow {
+  0%, 100% { filter: brightness(1) drop-shadow(0 0 6px rgba(98, 201, 217, 0.15)); }
+  50% { filter: brightness(1.06) drop-shadow(0 0 14px rgba(98, 201, 217, 0.35)); }
+}
+
+.lamp-idle-flicker {
+  animation: lampFlicker 4s ease-in-out infinite;
+}
+
+.crt-idle-glow {
+  animation: crtIdleGlow 3.5s ease-in-out infinite;
+}
+
 /* ── MODAL STYLES ── */
 
 .retro-modal-overlay {

@@ -4,6 +4,10 @@ import React, { useState, useCallback, useEffect } from 'react';
 import CozyRetroDesk, { RetroTarget } from './components/CozyRetroDesk';
 import TerminalModal from './components/TerminalModal';
 import BootSequence from './components/BootSequence';
+import WorkshopAI from './components/WorkshopAI/WorkshopAI';
+import type { AIMood } from './components/WorkshopAI/workshopAIConfig';
+import DraggableModal from './components/DraggableModal';
+import { emitAIEvent, onAIEvent } from './utils/aiEvents';
 import { sfx } from './utils/retroSFX';
 
 const PROJECTS = [
@@ -108,6 +112,8 @@ export default function Portfolio() {
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [mobileTerminalCmd, setMobileTerminalCmd] = useState<'whoami' | 'skills' | 'edu' | 'contact'>('whoami');
   const [booting, setBooting] = useState(true);
+  const [aiMood, setAiMood] = useState<AIMood>('neutral');
+  const [isIdle, setIsIdle] = useState(false);
 
   // Detect mobile screen on mount & resize
   useEffect(() => {
@@ -121,17 +127,38 @@ export default function Portfolio() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Listen for IDLE / activity events to toggle ambient animations
+  useEffect(() => {
+    return onAIEvent((event) => {
+      if (event.type === 'IDLE') {
+        setIsIdle(true);
+      } else if (event.type !== 'PROJECT_CLOSED' && event.type !== 'SITE_LOADED') {
+        setIsIdle(false);
+      }
+    });
+  }, []);
+
   const selectObject = useCallback((target: RetroTarget) => {
     setActiveModal(target);
     if (target) {
       sfx.playModalOpen();
+      // Emit semantic AI events based on what was opened
+      if (target === 'books') emitAIEvent({ type: 'PROJECTS_OPENED' });
+      else if (target === 'monitor') emitAIEvent({ type: 'TERMINAL_OPENED' });
+      else if (target === 'sticker') emitAIEvent({ type: 'ABOUT_OPENED' });
+      else if (target === 'phone') emitAIEvent({ type: 'CONTACTS_OPENED' });
+      else if (target === 'university') emitAIEvent({ type: 'EDUCATION_OPENED' });
     }
   }, []);
 
   const closeModal = useCallback(() => {
+    // Emit PROJECT_CLOSED if closing Projects modal
+    if (activeModal === 'books') {
+      emitAIEvent({ type: 'PROJECT_CLOSED' });
+    }
     setActiveModal(null);
     sfx.playModalClose();
-  }, []);
+  }, [activeModal]);
 
   const toggleSound = useCallback(() => {
     setSoundEnabled(prev => !prev);
@@ -437,96 +464,99 @@ export default function Portfolio() {
             onSelectObject={selectObject}
             soundEnabled={soundEnabled}
             onToggleSound={toggleSound}
+            aiMood={aiMood}
+            isIdle={isIdle}
           />
+
+          {/* ── WORKSHOP AI — Speech Bubble & State Manager ── */}
+          <WorkshopAI onMoodChange={setAiMood} />
 
           {/* ── RETRO MODAL OVERLAYS ── */}
 
           {/* 🟡 1. ABOUT ME (Sticker) */}
           {activeModal === 'sticker' && (
-            <div className="retro-modal-overlay" onClick={closeModal}>
-              <div className="retro-card" style={{ maxWidth: 580, background: cardBg, borderColor: cardBorder, color: textColor }} onClick={e => e.stopPropagation()}>
-                <button
-                  onClick={closeModal}
-                  style={{ position: 'absolute', top: 14, right: 18, background: '#f4a2af', border: '2.5px solid #362840', borderRadius: '50%', width: 28, height: 28, fontSize: 16, fontWeight: 'bold', color: '#362840', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            <DraggableModal onClose={closeModal} modalId="sticker" style={{ maxWidth: 580, background: cardBg, borderColor: cardBorder, color: textColor }}>
+              <button
+                onClick={closeModal}
+                style={{ position: 'absolute', top: 14, right: 18, background: '#f4a2af', border: '2.5px solid #362840', borderRadius: '50%', width: 28, height: 28, fontSize: 16, fontWeight: 'bold', color: '#362840', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              >
+                ×
+              </button>
+              <div style={{ display: 'inline-block', padding: '4px 10px', background: '#ffd166', border: '2px solid #362840', borderRadius: 6, fontSize: 12, fontWeight: 'bold', fontFamily: 'monospace', color: '#362840', marginBottom: 12 }}>
+                🟡 ABOUT ME / BIO
+              </div>
+              <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: textColor, marginBottom: 4, fontFamily: 'sans-serif' }}>
+                Nurgissa Zhetkizgen
+              </h2>
+              <div style={{ fontSize: '0.85rem', fontWeight: 600, color: subTextColor, marginBottom: 14, fontFamily: 'monospace' }}>
+                Software Engineer · Astana, Kazakhstan
+              </div>
+
+              {/* 🎓 ASTANA IT UNIVERSITY BADGE */}
+              <div style={{ background: 'linear-gradient(135deg, #f0ebff, #e8deff)', border: '2.5px solid #362840', borderRadius: 8, padding: 12, marginBottom: 14, boxShadow: '3px 3px 0px #362840' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <span style={{ fontSize: '1.2rem' }}>🎓</span>
+                    <span style={{ fontSize: '0.95rem', fontWeight: 800, color: '#362840' }}>Astana IT University</span>
+                  </div>
+                  <span style={{ padding: '2px 8px', background: '#ffd166', border: '1.5px solid #362840', borderRadius: 4, fontSize: '0.7rem', fontWeight: 'bold', fontFamily: 'monospace', color: '#362840' }}>
+                    2023 — 2026
+                  </span>
+                </div>
+                <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#6c5ce7', marginBottom: 6, fontFamily: 'monospace' }}>
+                  B.S. Software Engineering Student
+                </div>
+                <a
+                  href="https://astanait.edu.kz/en"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 10px', background: '#362840', color: '#ffffff', textDecoration: 'none', borderRadius: 6, fontSize: '0.72rem', fontWeight: 'bold', fontFamily: 'monospace' }}
                 >
-                  ×
-                </button>
-                <div style={{ display: 'inline-block', padding: '4px 10px', background: '#ffd166', border: '2px solid #362840', borderRadius: 6, fontSize: 12, fontWeight: 'bold', fontFamily: 'monospace', color: '#362840', marginBottom: 12 }}>
-                  🟡 ABOUT ME / BIO
-                </div>
-                <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: textColor, marginBottom: 4, fontFamily: 'sans-serif' }}>
-                  Nurgissa Zhetkizgen
-                </h2>
-                <div style={{ fontSize: '0.85rem', fontWeight: 600, color: subTextColor, marginBottom: 14, fontFamily: 'monospace' }}>
-                  Software Engineer · Astana, Kazakhstan
-                </div>
+                  Visit Astana IT University Website ↗
+                </a>
+              </div>
 
-                {/* 🎓 ASTANA IT UNIVERSITY BADGE */}
-                <div style={{ background: 'linear-gradient(135deg, #f0ebff, #e8deff)', border: '2.5px solid #362840', borderRadius: 8, padding: 12, marginBottom: 14, boxShadow: '3px 3px 0px #362840' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <span style={{ fontSize: '1.2rem' }}>🎓</span>
-                      <span style={{ fontSize: '0.95rem', fontWeight: 800, color: '#362840' }}>Astana IT University</span>
-                    </div>
-                    <span style={{ padding: '2px 8px', background: '#ffd166', border: '1.5px solid #362840', borderRadius: 4, fontSize: '0.7rem', fontWeight: 'bold', fontFamily: 'monospace', color: '#362840' }}>
-                      2023 — 2026
+              <p style={{ fontSize: '0.88rem', lineHeight: 1.65, color: textColor, marginBottom: 14 }}>
+                Hi! I&apos;m a Software Engineering student at Astana IT University passionate about building clean, efficient, and thoughtful applications. I specialize in Python backend engineering (FastAPI), modern frontend development (React/Next.js), and AI-driven solutions.
+              </p>
+
+              {/* 📄 DIRECT RESUME (Nurgissa_Resume.pdf) DOWNLOAD / VIEW BUTTONS */}
+              <div style={{ display: 'flex', gap: 8, marginBottom: 14 }}>
+                <a
+                  href="Nurgissa_Resume.pdf?v=2"
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => { sfx.playKeyClick(); emitAIEvent({ type: 'RESUME_VIEWED' }); }}
+                  style={{ flex: 1, textDecoration: 'none', padding: '9px 12px', background: '#f4a2af', border: '2.5px solid #362840', borderRadius: 8, fontWeight: 800, color: '#362840', fontFamily: 'monospace', fontSize: '0.8rem', boxShadow: '2px 3px 0px #362840', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
+                >
+                  📄 OPEN RESUME (PDF) ↗
+                </a>
+                <a
+                  href="Nurgissa_Resume.pdf?v=2"
+                  download="Nurgissa_Resume.pdf"
+                  onClick={() => { sfx.playKeyClick(); emitAIEvent({ type: 'RESUME_VIEWED' }); }}
+                  style={{ flex: 1, textDecoration: 'none', padding: '9px 12px', background: '#ffd166', border: '2.5px solid #362840', borderRadius: 8, fontWeight: 800, color: '#362840', fontFamily: 'monospace', fontSize: '0.8rem', boxShadow: '2px 3px 0px #362840', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
+                >
+                  📥 DOWNLOAD CV ↗
+                </a>
+              </div>
+
+              <div style={{ background: innerBoxBg, border: '2px stroke #362840', borderStyle: 'solid', borderRadius: 8, padding: 10, marginBottom: 14 }}>
+                <div style={{ fontSize: '0.72rem', fontWeight: 'bold', color: '#362840', marginBottom: 6, fontFamily: 'monospace' }}>TECH TOOLKIT</div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
+                  {['Python', 'FastAPI', 'React', 'Next.js', 'PostgreSQL', 'Docker', 'OpenAI', 'Git'].map(t => (
+                    <span key={t} style={{ padding: '3px 8px', background: '#e0a09822', border: '1.5px solid #362840', borderRadius: 4, fontSize: '0.72rem', fontWeight: 600, color: '#362840', fontFamily: 'monospace' }}>
+                      {t}
                     </span>
-                  </div>
-                  <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#6c5ce7', marginBottom: 6, fontFamily: 'monospace' }}>
-                    B.S. Software Engineering Student
-                  </div>
-                  <a
-                    href="https://astanait.edu.kz/en"
-                    target="_blank"
-                    rel="noreferrer"
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 10px', background: '#362840', color: '#ffffff', textDecoration: 'none', borderRadius: 6, fontSize: '0.72rem', fontWeight: 'bold', fontFamily: 'monospace' }}
-                  >
-                    Visit Astana IT University Website ↗
-                  </a>
-                </div>
-
-                <p style={{ fontSize: '0.88rem', lineHeight: 1.65, color: textColor, marginBottom: 14 }}>
-                  Hi! I&apos;m a Software Engineering student at Astana IT University passionate about building clean, efficient, and thoughtful applications. I specialize in Python backend engineering (FastAPI), modern frontend development (React/Next.js), and AI-driven solutions.
-                </p>
-
-                {/* 📄 DIRECT RESUME (Nurgissa_Resume.pdf) DOWNLOAD / VIEW BUTTONS */}
-                <div style={{ display: 'flex', gap: 8, marginBottom: 14 }}>
-                  <a
-                    href="Nurgissa_Resume.pdf?v=2"
-                    target="_blank"
-                    rel="noreferrer"
-                    onClick={() => sfx.playKeyClick()}
-                    style={{ flex: 1, textDecoration: 'none', padding: '9px 12px', background: '#f4a2af', border: '2.5px solid #362840', borderRadius: 8, fontWeight: 800, color: '#362840', fontFamily: 'monospace', fontSize: '0.8rem', boxShadow: '2px 3px 0px #362840', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
-                  >
-                    📄 OPEN RESUME (PDF) ↗
-                  </a>
-                  <a
-                    href="Nurgissa_Resume.pdf?v=2"
-                    download="Nurgissa_Resume.pdf"
-                    onClick={() => sfx.playKeyClick()}
-                    style={{ flex: 1, textDecoration: 'none', padding: '9px 12px', background: '#ffd166', border: '2.5px solid #362840', borderRadius: 8, fontWeight: 800, color: '#362840', fontFamily: 'monospace', fontSize: '0.8rem', boxShadow: '2px 3px 0px #362840', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
-                  >
-                    📥 DOWNLOAD CV ↗
-                  </a>
-                </div>
-
-                <div style={{ background: innerBoxBg, border: '2px stroke #362840', borderStyle: 'solid', borderRadius: 8, padding: 10, marginBottom: 14 }}>
-                  <div style={{ fontSize: '0.72rem', fontWeight: 'bold', color: '#362840', marginBottom: 6, fontFamily: 'monospace' }}>TECH TOOLKIT</div>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
-                    {['Python', 'FastAPI', 'React', 'Next.js', 'PostgreSQL', 'Docker', 'OpenAI', 'Git'].map(t => (
-                      <span key={t} style={{ padding: '3px 8px', background: '#e0a09822', border: '1.5px solid #362840', borderRadius: 4, fontSize: '0.72rem', fontWeight: 600, color: '#362840', fontFamily: 'monospace' }}>
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <div style={{ textAlign: 'right' }}>
-                  <button onClick={closeModal} style={{ padding: '8px 18px', background: '#b4a3e8', border: '2px solid #362840', borderRadius: 6, fontWeight: 'bold', color: '#362840', cursor: 'pointer', fontFamily: 'monospace' }}>
-                    CLOSE ✕
-                  </button>
+                  ))}
                 </div>
               </div>
-            </div>
+              <div style={{ textAlign: 'right' }}>
+                <button onClick={closeModal} style={{ padding: '8px 18px', background: '#b4a3e8', border: '2px solid #362840', borderRadius: 6, fontWeight: 'bold', color: '#362840', cursor: 'pointer', fontFamily: 'monospace' }}>
+                  CLOSE ✕
+                </button>
+              </div>
+            </DraggableModal>
           )}
 
           {/* 🖥️ 2. TERMINAL (CRT Monitor Screen) — with typewriter animation */}
@@ -536,8 +566,7 @@ export default function Portfolio() {
 
           {/* 📚 3. PROJECTS (Stack of Books) */}
           {activeModal === 'books' && (
-            <div className="retro-modal-overlay" onClick={closeModal}>
-              <div className="retro-card" style={{ maxWidth: 640, background: cardBg, borderColor: cardBorder, color: textColor }} onClick={e => e.stopPropagation()}>
+            <DraggableModal onClose={closeModal} modalId="books" style={{ maxWidth: 640, background: cardBg, borderColor: cardBorder, color: textColor }}>
                 <button
                   onClick={closeModal}
                   style={{ position: 'absolute', top: 14, right: 18, background: '#f4a2af', border: '2.5px solid #362840', borderRadius: '50%', width: 28, height: 28, fontSize: 16, fontWeight: 'bold', color: '#362840', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
@@ -559,11 +588,11 @@ export default function Portfolio() {
                       <p style={{ fontSize: '0.85rem', color: textColor, lineHeight: 1.5, marginBottom: 8 }}>{p.desc}</p>
                       <div style={{ fontSize: '0.72rem', fontWeight: 'bold', color: subTextColor, fontFamily: 'monospace', marginBottom: 10 }}>{p.tech}</div>
                       <div style={{ display: 'flex', gap: 8 }}>
-                        <a href={p.href} target="_blank" rel="noreferrer" onClick={() => sfx.playKeyClick()} style={{ textDecoration: 'none', padding: '5px 12px', background: '#f4a2af', border: '2px solid #362840', borderRadius: 4, fontSize: '0.75rem', fontWeight: 'bold', color: '#362840', fontFamily: 'monospace' }}>
+                        <a href={p.href} target="_blank" rel="noreferrer" onClick={() => { sfx.playKeyClick(); emitAIEvent({ type: 'GITHUB_CLICKED', project: p.id }); }} style={{ textDecoration: 'none', padding: '5px 12px', background: '#f4a2af', border: '2px solid #362840', borderRadius: 4, fontSize: '0.75rem', fontWeight: 'bold', color: '#362840', fontFamily: 'monospace' }}>
                           GitHub ↗
                         </a>
                         {p.demo && (
-                          <a href={p.demo} target="_blank" rel="noreferrer" onClick={() => sfx.playKeyClick()} style={{ textDecoration: 'none', padding: '5px 12px', background: '#ffd166', border: '2px solid #362840', borderRadius: 4, fontSize: '0.75rem', fontWeight: 'bold', color: '#362840', fontFamily: 'monospace' }}>
+                          <a href={p.demo} target="_blank" rel="noreferrer" onClick={() => { sfx.playKeyClick(); emitAIEvent({ type: 'DEMO_CLICKED', project: p.id }); }} style={{ textDecoration: 'none', padding: '5px 12px', background: '#ffd166', border: '2px solid #362840', borderRadius: 4, fontSize: '0.75rem', fontWeight: 'bold', color: '#362840', fontFamily: 'monospace' }}>
                             Live Demo ↗
                           </a>
                         )}
@@ -571,83 +600,79 @@ export default function Portfolio() {
                     </div>
                   ))}
                 </div>
-              </div>
-            </div>
+            </DraggableModal>
           )}
 
           {/* 📞 4. CONTACTS (Vintage Phone / Calculator) */}
           {activeModal === 'phone' && (
-            <div className="retro-modal-overlay" onClick={closeModal}>
-              <div className="retro-card" style={{ background: cardBg, borderColor: cardBorder, color: textColor, maxWidth: 620 }} onClick={e => e.stopPropagation()}>
-                <button
-                  onClick={closeModal}
-                  style={{ position: 'absolute', top: 14, right: 18, background: '#f4a2af', border: '2.5px solid #362840', borderRadius: '50%', width: 28, height: 28, fontSize: 16, fontWeight: 'bold', color: '#362840', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                >
-                  ×
-                </button>
-                <div style={{ display: 'inline-block', padding: '4px 10px', background: '#ffd166', border: '2px solid #362840', borderRadius: 6, fontSize: 12, fontWeight: 'bold', fontFamily: 'monospace', color: '#362840', marginBottom: 14 }}>
-                  📞 CONTACTS & SOCIALS
-                </div>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: textColor, marginBottom: 16 }}>
-                  Let&apos;s Connect & Build Together
-                </h3>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 18 }}>
-                  {CONTACT_ITEMS.map(c => (
-                    <a
-                      key={c.id}
-                      href={c.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      onClick={() => sfx.playKeyClick()}
-                      style={{
-                        textDecoration: 'none',
-                        background: innerBoxBg,
-                        border: `2.5px solid ${contactBorderColor}`,
-                        borderRadius: 10,
-                        padding: 14,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: 6,
-                        boxShadow: '3px 3px 0px #362840',
-                        transition: 'transform 0.2s ease, border-color 0.2s ease'
-                      }}
-                      onMouseEnter={e => {
-                        e.currentTarget.style.transform = 'translateY(-3px)';
-                        e.currentTarget.style.borderColor = '#6c5ce7';
-                      }}
-                      onMouseLeave={e => {
-                        e.currentTarget.style.transform = 'none';
-                        e.currentTarget.style.borderColor = contactBorderColor;
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                          {c.icon}
-                          <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#4a5568', fontFamily: 'monospace' }}>
-                            {c.label}
-                          </span>
-                        </div>
-                        <span style={{ fontSize: '0.75rem', fontWeight: 'bold', color: subTextColor }}>↗</span>
-                      </div>
-                      <span style={{ fontSize: '0.9rem', fontWeight: 800, color: textColor, wordBreak: 'break-all', fontFamily: 'sans-serif' }}>
-                        {c.value}
-                      </span>
-                    </a>
-                  ))}
-                </div>
-                <div style={{ textAlign: 'right' }}>
-                  <button onClick={closeModal} style={{ padding: '8px 18px', background: '#f4a2af', border: '2.5px solid #362840', borderRadius: 6, fontWeight: 'bold', color: '#362840', cursor: 'pointer', fontFamily: 'monospace' }}>
-                    CLOSE ✕
-                  </button>
-                </div>
+            <DraggableModal onClose={closeModal} modalId="phone" style={{ background: cardBg, borderColor: cardBorder, color: textColor, maxWidth: 620 }}>
+              <button
+                onClick={closeModal}
+                style={{ position: 'absolute', top: 14, right: 18, background: '#f4a2af', border: '2.5px solid #362840', borderRadius: '50%', width: 28, height: 28, fontSize: 16, fontWeight: 'bold', color: '#362840', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              >
+                ×
+              </button>
+              <div style={{ display: 'inline-block', padding: '4px 10px', background: '#ffd166', border: '2px solid #362840', borderRadius: 6, fontSize: 12, fontWeight: 'bold', fontFamily: 'monospace', color: '#362840', marginBottom: 14 }}>
+                📞 CONTACTS & SOCIALS
               </div>
-            </div>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: textColor, marginBottom: 16 }}>
+                Let&apos;s Connect & Build Together
+              </h3>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 18 }}>
+                {CONTACT_ITEMS.map(c => (
+                  <a
+                    key={c.id}
+                    href={c.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => sfx.playKeyClick()}
+                    style={{
+                      textDecoration: 'none',
+                      background: innerBoxBg,
+                      border: `2.5px solid ${contactBorderColor}`,
+                      borderRadius: 10,
+                      padding: 14,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 6,
+                      boxShadow: '3px 3px 0px #362840',
+                      transition: 'transform 0.2s ease, border-color 0.2s ease'
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.transform = 'translateY(-3px)';
+                      e.currentTarget.style.borderColor = '#6c5ce7';
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.transform = 'none';
+                      e.currentTarget.style.borderColor = contactBorderColor;
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        {c.icon}
+                        <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#4a5568', fontFamily: 'monospace' }}>
+                          {c.label}
+                        </span>
+                      </div>
+                      <span style={{ fontSize: '0.75rem', fontWeight: 'bold', color: subTextColor }}>↗</span>
+                    </div>
+                    <span style={{ fontSize: '0.9rem', fontWeight: 800, color: textColor, wordBreak: 'break-all', fontFamily: 'sans-serif' }}>
+                      {c.value}
+                    </span>
+                  </a>
+                ))}
+              </div>
+              <div style={{ textAlign: 'right' }}>
+                <button onClick={closeModal} style={{ padding: '8px 18px', background: '#f4a2af', border: '2.5px solid #362840', borderRadius: 6, fontWeight: 'bold', color: '#362840', cursor: 'pointer', fontFamily: 'monospace' }}>
+                  CLOSE ✕
+                </button>
+              </div>
+            </DraggableModal>
           )}
 
           {/* 🎓 5. ASTANA IT UNIVERSITY (Wall Diploma Board) */}
           {activeModal === 'university' && (
-            <div className="retro-modal-overlay" onClick={closeModal}>
-              <div className="retro-card" style={{ maxWidth: 620, background: cardBg, borderColor: cardBorder, color: textColor }} onClick={e => e.stopPropagation()}>
+            <DraggableModal onClose={closeModal} modalId="university" style={{ maxWidth: 620, background: cardBg, borderColor: cardBorder, color: textColor }}>
                 <button
                   onClick={closeModal}
                   style={{ position: 'absolute', top: 14, right: 18, background: '#f4a2af', border: '2.5px solid #362840', borderRadius: '50%', width: 28, height: 28, fontSize: 16, fontWeight: 'bold', color: '#362840', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
@@ -693,8 +718,7 @@ export default function Portfolio() {
                     CLOSE DIPLOMA ✕
                   </button>
                 </div>
-              </div>
-            </div>
+            </DraggableModal>
           )}
 
         </div>

@@ -1,0 +1,294 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Desktop Creature — Keyboard Gremlin (Native SVG Layer)
+   ═══════════════════════════════════════════════════════════════════════════
+
+   SVG LAYER & EMERGENCE:
+   Rendered inside CozyRetroDesk SVG BEFORE <g id="computer-group">.
+   CRT monitor box is at x=190..590, y=170..410.
+   Desk surface top line is y=490.
+
+   - Hidden: translate(510px, 410px) — 100% hidden behind CRT monitor box!
+   - Peek: translate(565px, 410px)   — Right ear and eye peek past right CRT edge (x=580).
+   - Emerged: translate(625px, 410px) — Standing in open gap on desk surface (y=490).
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Root group ──────────────────────────────────────────────────────────── */
+.creature-root-g {
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ── Slider group (horizontal movement behind/out of CRT) ───────────────── */
+.creature-slider-g {
+  transform: translate(505px, 436px); /* Hidden behind CRT monitor */
+}
+
+.creature-slider--peek {
+  animation: svgSlidePeek 0.4s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
+}
+
+.creature-slider--emerge {
+  animation: svgSlideEmerge 0.8s linear forwards;
+}
+
+.creature-slider--emerged {
+  transform: translate(595px, 436px);
+}
+
+.creature-slider--leave {
+  transform: translate(595px, 436px);
+  animation: svgSlideLeave 0.75s linear forwards;
+}
+
+@keyframes svgSlidePeek {
+  from { transform: translate(505px, 436px); }
+  to   { transform: translate(548px, 436px); } /* Peek right ear & eye past CRT right edge (580) */
+}
+
+@keyframes svgSlideEmerge {
+  from { transform: translate(548px, 436px); }
+  to   { transform: translate(595px, 436px); } /* Step out into open desk gap (580..680) */
+}
+
+@keyframes svgSlideLeave {
+  from { transform: translate(595px, 436px); }
+  to   { transform: translate(505px, 436px); } /* Step back behind CRT */
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BODY PART TRANSFORM-ORIGINS
+   Coordinates relative to 0 0 72 80 creature viewBox space.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.creature-part-head {
+  transform-origin: 36px 34px;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.creature-part-eyes {
+  transform-origin: 36px 29px;
+  transition: transform 0.25s ease;
+}
+
+.creature-brow-left {
+  transform-origin: 21px 19.75px;
+  opacity: 0;
+  transition: transform 0.25s ease, opacity 0.2s;
+}
+.creature-brow-right {
+  transform-origin: 51px 19.75px;
+  opacity: 0;
+  transition: transform 0.25s ease, opacity 0.2s;
+}
+
+.creature-part-arm-left  { transform-origin: 15px 44px; transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.creature-part-arm-right { transform-origin: 57px 44px; transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+.creature-part-leg-left  { transform-origin: 26px 66px; transition: transform 0.3s ease; }
+.creature-part-leg-right { transform-origin: 46px 66px; transition: transform 0.3s ease; }
+
+.creature-part-hammer {
+  transform-origin: 61px 22px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   WALK CYCLE ANIMATIONS (active during 'emerging' and 'leaving')
+   Legs step, arms swing in counter-motion, head and body bob.
+   Synchronized at 0.26s per step = 3 steps in 0.8s. ZERO SLIDING!
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.emotion-walk .creature-part-leg-left {
+  animation: walkLegLeft 0.26s ease-in-out infinite alternate;
+}
+.emotion-walk .creature-part-leg-right {
+  animation: walkLegRight 0.26s ease-in-out infinite alternate;
+}
+.emotion-walk .creature-part-arm-left {
+  animation: walkArmLeft 0.26s ease-in-out infinite alternate;
+}
+.emotion-walk .creature-part-arm-right {
+  animation: walkArmRight 0.26s ease-in-out infinite alternate;
+}
+.emotion-walk .creature-part-head {
+  animation: walkHeadBob 0.13s ease-in-out infinite alternate;
+}
+.emotion-walk {
+  animation: walkBodyBob 0.13s ease-in-out infinite alternate;
+}
+
+@keyframes walkLegLeft {
+  0%   { transform: rotate(-26deg) translateY(-2px); }
+  50%  { transform: rotate(0deg) translateY(0); }
+  100% { transform: rotate(26deg) translateY(-3px); }
+}
+@keyframes walkLegRight {
+  0%   { transform: rotate(26deg) translateY(-3px); }
+  50%  { transform: rotate(0deg) translateY(0); }
+  100% { transform: rotate(-26deg) translateY(-2px); }
+}
+@keyframes walkArmLeft {
+  0%   { transform: rotate(22deg); }
+  100% { transform: rotate(-22deg); }
+}
+@keyframes walkArmRight {
+  0%   { transform: rotate(-22deg); }
+  100% { transform: rotate(22deg); }
+}
+@keyframes walkHeadBob {
+  0%   { transform: translateY(0) rotate(-1.5deg); }
+  100% { transform: translateY(-3px) rotate(1.5deg); }
+}
+@keyframes walkBodyBob {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-2px); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   IDLE ANIMATIONS (subtle breath & blink when standing in gap)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.emotion-idle .creature-part-head  { animation: idleBreath 3.2s ease-in-out infinite; }
+.emotion-idle .creature-part-eyes  { animation: idleBlink 5.5s ease-in-out infinite; }
+
+@keyframes idleBreath {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-1.5px); }
+}
+@keyframes idleBlink {
+  0%, 88%, 100% { transform: scaleY(1); }
+  91%           { transform: scaleY(0.08); }
+  94%           { transform: scaleY(1); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   EMOTION STATES (applied when creature stops walking in the gap)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.emotion-annoyed .creature-brow-left  { opacity: 1; transform: rotate(10deg); }
+.emotion-annoyed .creature-brow-right { opacity: 1; transform: rotate(-10deg); }
+.emotion-annoyed .creature-part-eyes  { transform: scaleY(0.78); }
+.emotion-annoyed .creature-part-head  { animation: headShake 0.65s ease; }
+.emotion-annoyed .creature-part-arm-left  { transform: rotate(-22deg); }
+.emotion-annoyed .creature-part-arm-right { transform: rotate(22deg); }
+
+.emotion-angry .creature-brow-left  { opacity: 1; transform: rotate(18deg); }
+.emotion-angry .creature-brow-right { opacity: 1; transform: rotate(-18deg); }
+.emotion-angry .creature-part-eyes  { transform: scaleY(0.48); }
+.emotion-angry .creature-part-head  { animation: headShake 0.5s ease; }
+.emotion-angry .creature-part-arm-left  { transform: rotate(-30deg) translateY(-2px); }
+.emotion-angry .creature-part-arm-right { transform: rotate(30deg) translateY(-2px); }
+.emotion-angry .creature-part-leg-left  { animation: angryStamp 0.4s ease 0.35s; }
+
+.emotion-shocked .creature-part-eyes { transform: scaleY(1.18); }
+.emotion-shocked .creature-part-head { transform: translateY(-2px); }
+.emotion-shocked .creature-part-arm-left  { transform: rotate(-50deg) translateY(-6px); }
+.emotion-shocked .creature-part-arm-right { transform: rotate(50deg) translateY(-6px); }
+
+.emotion-facepalm .creature-part-head { transform: translateY(3px) rotate(-5deg); }
+.emotion-facepalm .creature-part-eyes { transform: scaleY(0.2); }
+.emotion-facepalm .creature-part-arm-left {
+  transform: rotate(-105deg) translate(14px, -14px);
+}
+.emotion-facepalm .creature-part-arm-right { transform: rotate(8deg); }
+
+.emotion-hammer .creature-brow-left  { opacity: 1; transform: rotate(18deg); }
+.emotion-hammer .creature-brow-right { opacity: 1; transform: rotate(-18deg); }
+.emotion-hammer .creature-part-eyes  { transform: scaleY(0.48); }
+.emotion-hammer .creature-part-arm-right { transform: rotate(-95deg) translateY(-8px); }
+.emotion-hammer .creature-part-arm-left  { transform: rotate(-18deg); }
+.emotion-hammer .creature-part-hammer    {
+  opacity: 1;
+  animation: hammerSwing 0.38s ease-in-out 0.2s infinite alternate;
+}
+
+@keyframes headShake {
+  0%   { transform: rotate(0); }
+  18%  { transform: rotate(-9deg); }
+  36%  { transform: rotate(9deg); }
+  52%  { transform: rotate(-6deg); }
+  68%  { transform: rotate(6deg); }
+  84%  { transform: rotate(-2deg); }
+  100% { transform: rotate(0); }
+}
+
+@keyframes angryStamp {
+  0%, 100% { transform: rotate(0); }
+  50%      { transform: rotate(-12deg) translateY(2px); }
+}
+
+@keyframes hammerSwing {
+  from { transform: rotate(-28deg); }
+  to   { transform: rotate(22deg); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SPEECH BUBBLE & OVERLAYS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.creature-bubble-g {
+  animation: svgBubblePop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes svgBubblePop {
+  0%   { opacity: 0; transform: translate(36px, -10px) scale(0.6); }
+  70%  { opacity: 1; transform: translate(36px, -18px) scale(1.05); }
+  100% { opacity: 1; transform: translate(36px, -16px) scale(1); }
+}
+
+.creature-crt-glitch-overlay {
+  position: absolute;
+  left: 20%;
+  bottom: 37%;
+  width: 18%;
+  height: 22%;
+  pointer-events: none;
+  z-index: 490;
+  border-radius: 10px;
+  animation: crtGlitchFx 0.5s steps(1) forwards;
+}
+
+@keyframes crtGlitchFx {
+  0%   { background: transparent; transform: none; }
+  8%   { background: rgba(98,201,217,.25); transform: translateX(-5px);
+         box-shadow: -4px 0 0 rgba(244,162,175,.55), 4px 0 0 rgba(180,163,232,.55); }
+  18%  { background: rgba(244,162,175,.2); transform: translateX(4px);
+         box-shadow: 3px 0 0 rgba(98,201,217,.45); }
+  32%  { background: rgba(255,255,255,.14); transform: translateX(-2px) scaleY(.96); }
+  52%  { background: rgba(98,201,217,.09); transform: translateX(1px); }
+  78%  { background: rgba(255,209,102,.05); transform: translateX(-1px); }
+  100% { background: transparent; transform: none; }
+}
+
+.creature-kbd-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 9999;
+  background: rgba(25,20,36,.72);
+  font-family: monospace;
+  backdrop-filter: blur(2px);
+}
+.creature-kbd-overlay-text {
+  color: #f4a2af;
+  font-size: 1.4rem;
+  font-weight: 900;
+  letter-spacing: .12em;
+  text-shadow: 0 0 16px rgba(244,162,175,.7), 2px 2px 0 #362840;
+}
+.creature-kbd-overlay-text--ok {
+  color: #63C174;
+  text-shadow: 0 0 16px rgba(99,193,116,.7), 2px 2px 0 #362840;
+}
+.creature-kbd-overlay-sub {
+  color: #ffd166;
+  font-size: .88rem;
+  font-weight: 700;
+  margin-top: 10px;
+  opacity: 0;
+}

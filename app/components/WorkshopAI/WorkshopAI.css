@@ -1,0 +1,98 @@
+/* Workshop AI — Speech Bubble Styles */
+
+.workshop-ai-bubble {
+  position: absolute;
+  z-index: 1001;
+  pointer-events: none;
+  /* Desktop: positioned relative to CRT area within the scene container */
+  top: 14%;
+  left: 42%;
+  transform: translateX(-50%);
+  max-width: 260px;
+}
+
+.workshop-ai-bubble-inner {
+  background: #fefae0;
+  border: 2.5px solid #362840;
+  border-radius: 10px;
+  padding: 10px 14px;
+  box-shadow: 3px 3px 0px #362840;
+  font-family: monospace;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #362840;
+  line-height: 1.5;
+  position: relative;
+  /* Entry animation */
+  animation: workshopBubbleIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Speech bubble tail (pointing down-left toward monitor) */
+.workshop-ai-bubble-inner::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 24px;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 10px solid #362840;
+}
+
+.workshop-ai-bubble-inner::before {
+  content: '';
+  position: absolute;
+  bottom: -7px;
+  left: 25px;
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 9px solid #fefae0;
+  z-index: 1;
+}
+
+/* Fade-out class */
+.workshop-ai-bubble.workshop-ai-bubble-exit .workshop-ai-bubble-inner {
+  animation: workshopBubbleOut 0.3s ease-in forwards;
+}
+
+/* Mobile: floating top banner */
+@media (max-width: 767px) {
+  .workshop-ai-bubble {
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 90vw;
+  }
+
+  .workshop-ai-bubble-inner::after,
+  .workshop-ai-bubble-inner::before {
+    display: none;
+  }
+}
+
+/* ── Animations ── */
+
+@keyframes workshopBubbleIn {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes workshopBubbleOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.95);
+  }
+}
